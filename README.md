@@ -1,6 +1,18 @@
 # Les Réseaunnés
 
+## Backlog
 
+- ETQ utilisateur, je veux pouvoir ajouter un ordinateur
+- ETQ utilisateur, je veux pouvoir ajouter un commutateur
+- ETQ utilisateur, je veux pouvoir ajouter un routeur
+- ETQ utilisateur, je veux pouvoir ajouter une carte réseau (interface) à un ordinateur ou un routeur
+- ETQ utilisateur, je veux pouvoir associer une carte réseau à un commutateur
+- ETQ utilisateur, je veux pouvoir configurer l'adresse IP d'une interface (l'adresse MAC sera automatique)
+- ETQ utilisateur, je veux voir la configuration générale d'un ordinateur
+- ETQ utilisateur, je veux voir la configuration générale de mon réseau (ordinateur et liaison entre eux)
+- ETQ utilisateur, je veux lancer un test ping entre deux ordinateurs
+- ETQ utilisateur, je veux connaitre la trace MAC, IP de ma trame suite à un ping (aller et retour)
+- ETQ utilisateur, je veux une visualisation graphique
 
 ## Getting started
 
