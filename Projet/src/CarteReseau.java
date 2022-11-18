@@ -2,32 +2,33 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package licence.annee2.reseaunnes;
-import java.io.ObjectInputStream.GetField;
-import java.util.ArrayList;
-import java.util.Set;
+package réseaunnés;
+
+import java.net.UnknownHostException;
+
 /**
  *
- * @author victo
+ * @author colin
  */
 public class CarteReseau {
+
     //Atributs
-    private IP ip;
-    private String adresseMAC;
+    private IP adresseIP;
+    private MAC adresseMAC;
     private String nominterface;
     private String masque;
     private String passerelle;
 
     //Constructeurs
-    public CarteReseau() {
-        this.ip = new IP(); //Besoin code Baptiste
-        this.adresseMAC = new MAC(); //Besoin code Baptiste
+    public CarteReseau() throws UnknownHostException {
+        this.adresseIP = new IP(); //Pas encore fait
+        this.adresseMAC = new MAC();
         this.nominterface = "eth";
         this.masque = "";
         this.passerelle = "";
     }
-    public CarteReseau(IP ip, String adresseMAC, String nominerface, String masque, String passerelle)  {
-        this.ip = ip;
+    public CarteReseau(IP ip, MAC adresseMAC, String nominerface, String masque, String passerelle)  {
+        this.adresseIP = ip;
         this.adresseMAC = adresseMAC; 
         this.nominterface = nominerface;
         this.masque = masque;
@@ -35,11 +36,11 @@ public class CarteReseau {
     }
 
     //Getters
-    public String getAdresseMAC() {
+    public MAC getAdresseMAC() {
         return adresseMAC;
     }
     public IP getIp() {
-        return ip;
+        return adresseIP;
     }
     public String getMasque() {
         return masque;
@@ -52,11 +53,11 @@ public class CarteReseau {
     }
     
     //Setters
-    public void setAdresseMAC(String adresseMAC) {
+    public void setAdresseMAC(MAC adresseMAC) {
         this.adresseMAC = adresseMAC;
     }
     public void setIp(IP ip) {
-        this.ip = ip;
+        this.adresseIP = ip;
     }
     public void setMasque(String masque) {
         this.masque = masque;
@@ -68,5 +69,7 @@ public class CarteReseau {
         this.passerelle = passerelle;
     }
     
-   
+    //
+
+
 }
