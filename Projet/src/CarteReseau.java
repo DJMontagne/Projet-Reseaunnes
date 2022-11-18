@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package licence.annee2.reseaunnes;
-
+import java.io.ObjectInputStream.GetField;
+import java.util.ArrayList;
+import java.util.Set;
 /**
  *
  * @author victo
