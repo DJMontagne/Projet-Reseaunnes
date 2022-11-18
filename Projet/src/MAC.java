@@ -1,4 +1,14 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
 import java.util.ArrayList;
+
+/**
+ *
+ * @author bpotetma
+ */
 
 public class MAC {
 
@@ -6,7 +16,7 @@ public class MAC {
     private String adresseMAC;
     private static ArrayList<String> adressesMAC = new ArrayList<String>();
 
-    //Constructeurs
+    //Constructeur
 
     public MAC() {
         this.adresseMAC = genererMacUnique();
