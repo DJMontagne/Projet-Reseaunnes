@@ -6,7 +6,6 @@
 import java.util.ArrayList;
 
 /**
- *
  * @author bpotetma
  */
 
@@ -103,6 +102,6 @@ public class MAC {
     //Affichage pour une instance de MAC
     @Override
     public String toString() {
-        return "Infos de l'adresse MAC" + "\n Adresse MAC : " + this.getMAC();
+        return "Adresse MAC : " + this.getMAC();
     }
 }
