@@ -1,33 +1,41 @@
-import java.util.ArrayList;
+package réseaunnés;
 
 public class MAC {
 
     //Attributs
-    private String adresseMAC;
-    private static ArrayList<String> adressesMAC = new ArrayList<String>();
+    private String MAC;
 
     //Constructeurs
-
     public MAC() {
-        this.adresseMAC = genererMacUnique();
+        String mac = genererMAC();
+        this.MAC = mac;
+    }
+    public MAC(String MAC) {
+        this.MAC = MAC;
     }
 
     //Geters
     public String getMAC() {
-        return this.adresseMAC;
+        return MAC;
     }
 
     //Setters
-    public void setMAC(String mac) {
-        this.adresseMAC = mac;
+    public void setMAC(String mAC) {
+        MAC = mAC;
     }
 
     //Méthodes
 
+    //toString
+    @Override
+    public String toString() {
+        return "Infos de l'adresse MAC" + "\n Adresse MAC : " + this.getMAC();
+    }
+    
     /**
      * @return Une adresse MAC viable en String
      */
-    public String genererMac() {
+    public String genererMAC() {
         
         // Nombre de caractère dans une @MAC
         final int NB_CARACTERE_MAC = 12;
@@ -50,46 +58,5 @@ public class MAC {
             cpt++;
         }
         return adresseMAC;
-    }
-
-    /**
-     * @return un booléen, VRAI si l'adresse MAC passée en paramètre 
-     * a déjà était utilisé par une instance de MAC sinon FAUX 
-     */
-    public boolean existenceMac(String mac) {
-
-        boolean existenceMAC = false;
-        // Parcours du tableau dynamique static "adressesMAC"
-        for (int i = 0; i < MAC.adressesMAC.size(); i++) {
-            /* *
-            * Si l'argument "mac" existe dans le tableau dynamique "adressesMAC", on affecte
-            * la valeur TRUE à la variable "existenceMAC"
-            */
-            if (MAC.adressesMAC.get(i).equals(mac)) {
-                existenceMAC = true;
-            }
-        }
-        return existenceMAC;
-    }
-
-    public String genererMacUnique() {
-        // On génère une adresse MAC sans vérifier son existence potentielle
-        String mac = genererMac(); 
-        // Tant que l'adresse MAC générée existe on reaffecte une nouvelle adresse MAC à la variable "mac"
-        while (existenceMac(mac)) {
-            mac = genererMac();
-        }
-        /**
-        * On ajoute l'adresse MAC unique au tableau dynamique "adressesMAC" comportant ainsi 
-        * toutes les adresses MAC uniques qui sont utilisés par les instances de la classe MAC
-        */
-        MAC.adressesMAC.add(mac);
-        return mac;
-    } 
-
-    //Affichage pour une instance de MAC
-    @Override
-    public String toString() {
-        return "Infos de l'adresse MAC" + "\n Adresse MAC : " + this.getMAC();
     }
 }
