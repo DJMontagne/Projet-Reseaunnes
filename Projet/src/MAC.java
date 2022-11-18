@@ -72,6 +72,9 @@ public class MAC {
         return existenceMAC;
     }
 
+    /**
+     * @return une adresse MAC non utilisée de type String 
+     */
     public String genererMacUnique() {
         // On génère une adresse MAC sans vérifier son existence potentielle
         String mac = genererMac(); 
