@@ -21,7 +21,7 @@ public class CarteReseau {
     //Constructeurs
     public CarteReseau() {
         this.ip = new IP(); //Besoin code Baptiste
-        this.adresseMAC = this.genererMAC(); //Besoin code Baptiste
+        this.adresseMAC = new MAC(); //Besoin code Baptiste
         this.nominterface = "eth";
         this.masque = "";
         this.passerelle = "";
