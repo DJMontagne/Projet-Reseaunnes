@@ -27,6 +27,9 @@ public class MAC {
     }
 
     //Setters
+    /**
+     * @param mAdresse => nouvelle adresse MAC
+     */
     public void setAdresse(String mAdresse) {
         this.adresse = mAdresse;
     }
@@ -62,6 +65,7 @@ public class MAC {
     }
 
     /**
+     * @param mac => adresse MAC à vérifier l'existence
      * @return un booléen, VRAI si l'adresse MAC passée en paramètre 
      * a déjà était utilisé par une instance de MAC sinon FAUX 
      */
@@ -72,7 +76,7 @@ public class MAC {
         for (int i = 0; i < MAC.adresses.size(); i++) {
             /* *
             * Si l'argument "mac" existe dans le tableau dynamique "adresses", on affecte
-            * la valeur TRUE à la variable "existenceMAC"
+            * la valeur TRUE à la variable "existenceAdresse"
             */
             if (MAC.adresses.get(i).equals(mac)) {
                 existenceMAC = true;
@@ -85,7 +89,7 @@ public class MAC {
      * @return une adresse MAC non utilisée de type String 
      */
     public String genererAdresseUnique() {
-        // On génère une adresse MAC sans vérifier son existence potentielle
+        // On génère une adresse MAC sans vérifier sa potentielle existence
         String mac = genererAdresse(); 
         // Tant que l'adresse MAC générée existe on reaffecte une nouvelle adresse MAC à la variable "mac"
         while (existenceAdresse(mac)) {
