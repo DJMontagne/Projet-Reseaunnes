@@ -76,7 +76,7 @@ public class MAC {
         for (int i = 0; i < MAC.adresses.size(); i++) {
             /* *
             * Si l'argument "mac" existe dans le tableau dynamique "adresses", on affecte
-            * la valeur TRUE à la variable "existenceAdresse"
+            * la valeur TRUE à la variable "existenceMAC"
             */
             if (MAC.adresses.get(i).equals(mac)) {
                 existenceMAC = true;
