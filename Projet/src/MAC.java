@@ -12,23 +12,23 @@ import java.util.ArrayList;
 public class MAC {
 
     //Attributs
-    private String adresseMAC;
-    private static ArrayList<String> adressesMAC = new ArrayList<String>();
+    private String adresse;
+    private static ArrayList<String> adresses = new ArrayList<String>();
 
     //Constructeur
 
     public MAC() {
-        this.adresseMAC = genererMacUnique();
+        this.adresse = genererAdresseUnique();
     }
 
     //Geters
-    public String getMAC() {
-        return this.adresseMAC;
+    public String getAdresse() {
+        return this.adresse;
     }
 
     //Setters
-    public void setMAC(String mac) {
-        this.adresseMAC = mac;
+    public void setAdresse(String mAdresse) {
+        this.adresse = mAdresse;
     }
 
     //Méthodes
@@ -36,7 +36,7 @@ public class MAC {
     /**
      * @return Une adresse MAC viable en String
      */
-    public String genererMac() {
+    public String genererAdresse() {
         
         // Nombre de caractère dans une @MAC
         final int NB_CARACTERE_MAC = 12;
@@ -65,16 +65,16 @@ public class MAC {
      * @return un booléen, VRAI si l'adresse MAC passée en paramètre 
      * a déjà était utilisé par une instance de MAC sinon FAUX 
      */
-    public boolean existenceMac(String mac) {
+    public boolean existenceAdresse(String mac) {
 
         boolean existenceMAC = false;
-        // Parcours du tableau dynamique static "adressesMAC"
-        for (int i = 0; i < MAC.adressesMAC.size(); i++) {
+        // Parcours du tableau dynamique static "adresses"
+        for (int i = 0; i < MAC.adresses.size(); i++) {
             /* *
-            * Si l'argument "mac" existe dans le tableau dynamique "adressesMAC", on affecte
+            * Si l'argument "mac" existe dans le tableau dynamique "adresses", on affecte
             * la valeur TRUE à la variable "existenceMAC"
             */
-            if (MAC.adressesMAC.get(i).equals(mac)) {
+            if (MAC.adresses.get(i).equals(mac)) {
                 existenceMAC = true;
             }
         }
@@ -84,24 +84,24 @@ public class MAC {
     /**
      * @return une adresse MAC non utilisée de type String 
      */
-    public String genererMacUnique() {
+    public String genererAdresseUnique() {
         // On génère une adresse MAC sans vérifier son existence potentielle
-        String mac = genererMac(); 
+        String mac = genererAdresse(); 
         // Tant que l'adresse MAC générée existe on reaffecte une nouvelle adresse MAC à la variable "mac"
-        while (existenceMac(mac)) {
-            mac = genererMac();
+        while (existenceAdresse(mac)) {
+            mac = genererAdresse();
         }
         /**
-        * On ajoute l'adresse MAC unique au tableau dynamique "adressesMAC" comportant ainsi 
+        * On ajoute l'adresse MAC unique au tableau dynamique "adresses" comportant ainsi 
         * toutes les adresses MAC uniques qui sont utilisés par les instances de la classe MAC
         */
-        MAC.adressesMAC.add(mac);
+        MAC.adresses.add(mac);
         return mac;
     } 
 
     //Affichage pour une instance de MAC
     @Override
     public String toString() {
-        return "Adresse MAC : " + this.getMAC();
+        return "Adresse MAC : " + this.getAdresse();
     }
 }
