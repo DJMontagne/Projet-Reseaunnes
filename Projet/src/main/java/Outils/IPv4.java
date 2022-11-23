@@ -1,10 +1,20 @@
 package Outils;
 
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
+/**
+ * @author bpotetma
+ */
+
 public class IPv4 {
 
 	private final int NBR_OCTET = 4;
 	private Octet[] adresseIP = {new Octet(), new Octet(), new Octet(), new Octet()};
 	private Octet[] masque = {new Octet(), new Octet(), new Octet(), new Octet()};
+	private int masqueDecimal;
 	private Octet[] adresseReseau = {new Octet(), new Octet(), new Octet(), new Octet()};
 
 	public IPv4() {
@@ -67,9 +77,8 @@ public class IPv4 {
 	public Octet[] genererMasque(Octet[] addrIP) {
 
 		Octet[] masque = {new Octet(), new Octet(), new Octet(), new Octet()};
-		if (adresseValide(addrIP)) {
+		if (adresseIPValide(addrIP)) {
 			for (int i = 0; i < NBR_OCTET; i++) {
-				System.out.println(addrIP[i].getDecimal());
 				if (addrIP[0].getDecimal() > 0 && addrIP[0].getDecimal() < 127) {
 					masque[0].setOctet(255);
 				}
@@ -96,7 +105,8 @@ public class IPv4 {
 		for (int i = 0; i < NBR_OCTET; i++) {
 			for (int j = 0; j < Octet.NBR_BIT; j++) {
 				if (masque[i].getOctet()[j] == 1) {
-					addrReseau[i].getOctet()[j] = addrIP[i].getOctet()[j];  
+					this.masqueDecimal++;
+					addrReseau[i].getOctet()[j] = addrIP[i].getOctet()[j];
 				}
 			}
 		}
@@ -106,6 +116,11 @@ public class IPv4 {
 	public Octet[] getAdresse() {
 		
 		return this.adresseIP;
+	}
+	
+	public int getMasqueDecimal() {
+
+		return this.masqueDecimal;
 	}
 
 	public Octet[] getMasque() {
@@ -120,38 +135,46 @@ public class IPv4 {
 
 	public void setAdresse(Octet[] addrIP) {
 		
-		if (adresseValide(addrIP)) {
+		if (adresseIPValide(addrIP)) {
 			for (int i = 0; i < NBR_OCTET; i++) {
 				this.adresseIP[i].setOctet(addrIP[i].getDecimal());
 			}
 		}
 	}
 
-	public void setAdresse(String addrIP) {
+	public void setAdresse(String strAddrIP) {
 
-		String[] sectionAddrIP = addrIP.split("\\.");
+		String[] sectionAddrIP = strAddrIP.split("\\.");
+		Octet[] addrIP = {new Octet(), new Octet(), new Octet(), new Octet()};
 		for (int i = 0; i < NBR_OCTET; i++) {
-			if (!sectionAddrIP[0].equals("0")) {
-				this.adresseIP[i].setOctet(Integer.parseInt(sectionAddrIP[i]));
+			addrIP[i].setOctet(Integer.parseInt(sectionAddrIP[i]));
+		}
+		if (adresseIPValide(addrIP)) {
+			for (int i = 0; i < NBR_OCTET; i++) {
+				this.adresseIP[i].setOctet(addrIP[i].getDecimal());
 			}
 		}
 	}
 
 	public void setMasque(Octet[] masque) {
 		
-		if (adresseValide(masque)) {
+		if (masqueValide(masque)) {
 			for (int i = 0; i < NBR_OCTET; i++) {
 				this.masque[i].setOctet(masque[i].getDecimal());
 			}
 		}
 	}
 
-	public void setMasque(String masque) {
+	public void setMasque(String strMasque) {
 
-		String[] sectionMasque = masque.split("\\.");
+		String[] sectionMasque = strMasque.split("\\.");
+		Octet[] masque = {new Octet(), new Octet(), new Octet(), new Octet()};
 		for (int i = 0; i < NBR_OCTET; i++) {
-			if (!sectionMasque[0].equals("0")) {
-				this.masque[i].setOctet(Integer.parseInt(sectionMasque[i]));
+			masque[i].setOctet(Integer.parseInt(sectionMasque[i]));
+		}
+		if (masqueValide(masque)) {
+			for (int i = 0; i < NBR_OCTET; i++) {
+				this.masque[i].setOctet(masque[i].getDecimal());
 			}
 		}
 	}
@@ -167,15 +190,27 @@ public class IPv4 {
 		return existence;
 	}
 
-	public boolean adresseValide(Octet[] addrIP) {
+	public boolean adresseIPValide(Octet[] addrIP) {
 
-		boolean validite = false;
-		if (addrIP[0].getDecimal() != 0 && addrIP[0].getDecimal() != 127 && addrIP[0].getDecimal() != 255) {
-			validite = true;
+		boolean validite = true;
+		if (addrIP[0].getDecimal() == 0 && addrIP[0].getDecimal() == 127 && addrIP[0].getDecimal() == 255) {
+			validite = false;
 		}
 		return validite;
 	}
 
+	public boolean masqueValide(Octet[] masque) {
+
+		boolean validite = true;
+		for (int i = 0; i < NBR_OCTET; i++) {
+			for (int j = 0; j < Octet.NBR_BIT - 1; j++) {
+				if (masque[i].getOctet()[j] == 0 && masque[i].getOctet()[j + 1] == 1) {
+					validite = false;
+				}
+			}
+		}
+		return validite;
+	}
 	/*	
 	public int[] getAdresseBroadcast() {
 
@@ -193,37 +228,92 @@ public class IPv4 {
 	@Override
 	public String toString() {
 
-		String adresseIPtoString = "";
-		String masqueToString = "";
-		String adresseReseauToString = "";
+		return "Adresse IP\n" + "    " + this.affichageAdresseIP() + "\n"
+			+ "Masque\n" + "    " + this.affichageMasque() + "\n"
+			+ "Adresse Réseau\n" + "    " + this.affichageAdresseReseau() + "/" + this.getMasqueDecimal();
+	}
+
+	public String affichageAdresseIP() {
+		
+		String strAddrIP = "";
 		for (int i = 0; i < NBR_OCTET; i++) {
 			if (i != NBR_OCTET - 1) {
-				adresseIPtoString += this.adresseIP[i].getDecimal() + ".";
-				masqueToString += this.masque[i].getDecimal() + ".";
-				adresseReseauToString += this.adresseReseau[i].getDecimal() + ".";
+				strAddrIP += this.adresseIP[i].getDecimal() + ".";
 			}
 			else {
-				adresseIPtoString += this.adresseIP[i].getDecimal();
-				masqueToString += this.masque[i].getDecimal();
-				adresseReseauToString += this.adresseReseau[i].getDecimal();
+				strAddrIP += this.adresseIP[i].getDecimal();
 			}
 		}
-		return "Adresse IP\n" + "    " + adresseIPtoString + "\n"
-			+ "Masque\n" + "    " + masqueToString + "\n"
-			+ "Adresse Réseau\n" + "    " + adresseReseauToString;
+		return strAddrIP;
 	}
 
 	public String affichageAdresseIPBinaire() {
 		
-		String strBinaire = "";
+		String strAddrIPBinaire = "";
 		for (int i = 0; i < NBR_OCTET; i++) {
 			if (i != NBR_OCTET - 1) {
-				strBinaire += this.adresseIP[i].toString() + ".";
+				strAddrIPBinaire += this.adresseIP[i].toString() + ".";
 			}
 			else {
-				strBinaire += this.adresseIP[i].toString();
+				strAddrIPBinaire += this.adresseIP[i].toString();
 			}
 		}
-		return strBinaire;
+		return strAddrIPBinaire;
+	}
+
+	public String affichageMasque() {
+		
+		String strMasque = "";
+		for (int i = 0; i < NBR_OCTET; i++) {
+			if (i != NBR_OCTET - 1) {
+				strMasque += this.masque[i].getDecimal() + ".";
+			}
+			else {
+				strMasque += this.masque[i].getDecimal();
+			}
+		}
+		return strMasque;
+	}
+
+	public String affichageMasqueBinaire() {
+		
+		String strMasqueBinaire = "";
+		for (int i = 0; i < NBR_OCTET; i++) {
+			if (i != NBR_OCTET - 1) {
+				strMasqueBinaire += this.masque[i].toString() + ".";
+			}
+			else {
+				strMasqueBinaire += this.masque[i].toString();
+			}
+		}
+		return strMasqueBinaire;
+	}
+
+	public String affichageAdresseReseau() {
+		
+		String strAddrReseau = "";
+		for (int i = 0; i < NBR_OCTET; i++) {
+			if (i != NBR_OCTET - 1) {
+				strAddrReseau += this.adresseReseau[i].getDecimal() + ".";
+			}
+			else {
+				strAddrReseau += this.adresseReseau[i].getDecimal();
+			}
+		}
+		return strAddrReseau;
+	}
+
+	public String affichageAdresseReseauBinaire() {
+		
+		String strAddrReseauBinaire = "";
+		for (int i = 0; i < NBR_OCTET; i++) {
+			if (i != NBR_OCTET - 1) {
+				strAddrReseauBinaire += this.masque[i].toString() + ".";
+			}
+			else {
+				strAddrReseauBinaire += this.masque[i].toString();
+			}
+		}
+		return strAddrReseauBinaire;
 	}
 }
