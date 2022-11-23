@@ -10,7 +10,7 @@ CAHIER DES CHARGES :
 - idée : Switch est un objet qui relie deux ordis (arraylist ? tableau ?) si deux ordis sont reliés au switch, ils communiquent entre eux PHYSIQUEMENT
 - mise  en place de serveur (DHCP)
 
-regarder packet tracer pour s'inspirer
+regarder packet tracer pour s'inspirer d
 
 
 
