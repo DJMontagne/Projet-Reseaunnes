@@ -3,7 +3,7 @@ package Outils;
 public class Octet {
 
 	private int[] octet = {-1, -1, -1, -1, -1, -1, -1, -1};
-	private final int NBR_BIT = 8;
+	static final int NBR_BIT = 8;
 
 	public Octet(int mOctet) {
 		this.setOctet(mOctet);
