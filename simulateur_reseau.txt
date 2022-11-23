@@ -9,7 +9,7 @@ CAHIER DES CHARGES :
 - envoyer des requêtes ping entre machines pour voir si elles sont connectés ou non 
 - idée : Switch est un objet qui relie deux ordis (arraylist ? tableau ?) si deux ordis sont reliés au switch, ils communiquent entre eux PHYSIQUEMENT
 - mise  en place de serveur (DHCP)
-
+sdc
 regarder packet tracer pour s'inspirer d
 
 
