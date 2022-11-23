@@ -1,11 +1,21 @@
 package Outils;
 
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+
+/**
+ * @author bpotetma
+ */
+
 public class Octet {
 
-	private int[] octet = {-1, -1, -1, -1, -1, -1, -1, -1};
 	static final int NBR_BIT = 8;
+	private int[] octet = new int[NBR_BIT];
 
 	public Octet(int mOctet) {
+
 		this.setOctet(mOctet);
 	}
 
@@ -14,6 +24,7 @@ public class Octet {
 	}
 
 	public int[] getOctet() {
+		
 		return this.octet;
 	}
 

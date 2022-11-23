@@ -11,37 +11,42 @@ package Outils;
 
 public class IPv4 {
 
-	private final int NBR_OCTET = 4;
+	static final int NBR_OCTET = 4;
 	private Octet[] adresseIP = {new Octet(), new Octet(), new Octet(), new Octet()};
 	private Octet[] masque = {new Octet(), new Octet(), new Octet(), new Octet()};
-	private int masqueDecimal;
 	private Octet[] adresseReseau = {new Octet(), new Octet(), new Octet(), new Octet()};
+	private int masqueDecimal;
 
 	public IPv4() {
+
 		this.adresseIP = genererAdresseApipa();
 		this.masque = genererMasque(this.adresseIP);
 		this.adresseReseau = genererAdresseReseau(this.adresseIP, this.masque);
 	}
 
 	public IPv4(String mAdresseIP) {
+
 		this.setAdresse(mAdresseIP);
 		this.masque = genererMasque(this.adresseIP);
 		this.adresseReseau = genererAdresseReseau(this.adresseIP, this.masque);
 	}
 
 	public IPv4(Octet[] mAdresseIP) {
+
 		this.setAdresse(mAdresseIP);
 		this.masque = genererMasque(this.adresseIP);
 		this.adresseReseau = genererAdresseReseau(this.adresseIP, this.masque);
 	}
 
 	public IPv4(Octet[] mAdresseIP, Octet[] masque) {
+
 		this.setAdresse(mAdresseIP);
 		this.setMasque(masque);
 		this.adresseReseau = genererAdresseReseau(this.adresseIP, this.masque);
 	}
 
 	public IPv4(String mAdresseIP, String masque) {
+
 		this.setAdresse(mAdresseIP);
 		this.setMasque(masque);
 		this.adresseReseau = genererAdresseReseau(this.adresseIP, this.masque);
@@ -105,8 +110,8 @@ public class IPv4 {
 		for (int i = 0; i < NBR_OCTET; i++) {
 			for (int j = 0; j < Octet.NBR_BIT; j++) {
 				if (masque[i].getOctet()[j] == 1) {
+					addrReseau[i].getOctet()[j] = addrIP[i].getOctet()[j];					
 					this.masqueDecimal++;
-					addrReseau[i].getOctet()[j] = addrIP[i].getOctet()[j];
 				}
 			}
 		}
@@ -193,7 +198,7 @@ public class IPv4 {
 	public boolean adresseIPValide(Octet[] addrIP) {
 
 		boolean validite = true;
-		if (addrIP[0].getDecimal() == 0 && addrIP[0].getDecimal() == 127 && addrIP[0].getDecimal() == 255) {
+		if (addrIP[0].getDecimal() == 0 || addrIP[0].getDecimal() == 127 || addrIP[0].getDecimal() == 255) {
 			validite = false;
 		}
 		return validite;
