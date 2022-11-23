@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package licence.annee2.reseaunnes;
+import Outils.*;
 import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.Set;
@@ -12,21 +12,21 @@ import java.util.Set;
  */
 public class CarteReseau {
     //Atributs
-    private IP ip;
-    private String adresseMAC;
+    private IPv4 ip;
+    private MAC adresseMAC;
     private String nominterface;
     private String masque;
     private String passerelle;
 
     //Constructeurs
     public CarteReseau() {
-        this.ip = new IP(); //Besoin code Baptiste
+        this.ip = new IPv4(); //Besoin code Baptiste
         this.adresseMAC = new MAC(); //Besoin code Baptiste
         this.nominterface = "eth";
         this.masque = "";
         this.passerelle = "";
     }
-    public CarteReseau(IP ip, String adresseMAC, String nominerface, String masque, String passerelle)  {
+    public CarteReseau(IPv4 ip, MAC adresseMAC, String nominerface, String masque, String passerelle)  {
         this.ip = ip;
         this.adresseMAC = adresseMAC; 
         this.nominterface = nominerface;
@@ -35,10 +35,10 @@ public class CarteReseau {
     }
 
     //Getters
-    public String getAdresseMAC() {
+    public MAC getAdresseMAC() {
         return adresseMAC;
     }
-    public IP getIp() {
+    public IPv4 getIp() {
         return ip;
     }
     public String getMasque() {
@@ -52,10 +52,10 @@ public class CarteReseau {
     }
     
     //Setters
-    public void setAdresseMAC(String adresseMAC) {
+    public void setAdresseMAC(MAC adresseMAC) {
         this.adresseMAC = adresseMAC;
     }
-    public void setIp(IP ip) {
+    public void setIp(IPv4 ip) {
         this.ip = ip;
     }
     public void setMasque(String masque) {
