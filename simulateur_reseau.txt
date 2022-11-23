@@ -1,0 +1,44 @@
+simulateur réseau 
+
+modéliser des interactions entre machines en java (orienté objet)
+
+utilisable par des étudiants pour voir s'ils ont compris les concepts réseau (interface graphique)
+
+CAHIER DES CHARGES : 
+- pouvoir configurer cartes réseau (adresse mac aléatoire ou pas, adresse IP)
+- envoyer des requêtes ping entre machines pour voir si elles sont connectés ou non 
+- idée : Switch est un objet qui relie deux ordis (arraylist ? tableau ?) si deux ordis sont reliés au switch, ils communiquent entre eux PHYSIQUEMENT
+- mise  en place de serveur (DHCP)
+
+regarder packet tracer pour s'inspirer
+
+
+
+
+mettre des contraintes pour les attributs (adresse ip, mac etc..)
+
+
+ETQ utilisateur, je veux pouvoir ajouter un ordinateur
+ETQ utilisateur, je veux pouvoir ajouter un commutateur
+ETQ utilisateur, je veux pouvoir ajouter un routeur
+ETQ utilisateur, je veux pouvoir ajouter une carte réseau (interface) à un ordinateur ou un routeur
+ETQ utilisateur, je veux pouvoir associer une carte réseau à un commutateur
+ETQ utilisateur, je veux pouvoir configurer l'adresse IP d'une interface (l'adresse MAC sera automatique)
+ETQ utilisateur, je veux voir la configuration générale d'un ordinateur
+ETQ utilisateur, je veux voir la configuration générale de mon réseau (ordinateur et liaison entre eux)
+ETQ utilisateur, je veux lancer un test ping entre deux ordinateurs
+ETQ utilisateur, je veux connaitre la trace MAC, IP de ma trame suite à un ping (aller et retour)
+ETQ utilisateur, je veux une visualisation graphique
+
+
+
+Dès que l'utilisateur arrive sur l'automate/application, il doit savoir ce qu'il peut faire, par exemple, on lui dit qu'il peut créer un ordniateur pour commencer avec telle commande, un tuto.
+
+
+METTRE DES COMMENTAIRES
+
+
+Batpiste : méthode générer adresse mac
+Victor : machine, commutateur, routeur
+Colin : carte réseau
+Arthur : tables
