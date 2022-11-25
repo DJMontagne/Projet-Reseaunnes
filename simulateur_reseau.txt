@@ -1,5 +1,6 @@
-simulateur réseau 
+simulateur réseau (ce document est une trace de tout ce qu'on a fait par séance, et ce qu'on a à faire) mis à jour régulièrement
 
+1ère séance
 modéliser des interactions entre machines en java (orienté objet)
 
 utilisable par des étudiants pour voir s'ils ont compris les concepts réseau (interface graphique)
@@ -17,7 +18,7 @@ regarder packet tracer pour s'inspirer d
 
 mettre des contraintes pour les attributs (adresse ip, mac etc..)
 
-
+2ème séance
 ETQ utilisateur, je veux pouvoir ajouter un ordinateur
 ETQ utilisateur, je veux pouvoir ajouter un commutateur
 ETQ utilisateur, je veux pouvoir ajouter un routeur
@@ -42,3 +43,18 @@ Batpiste : méthode générer adresse mac
 Victor : machine, commutateur, routeur
 Colin : carte réseau
 Arthur : tables
+
+Séance du 22/11/2022
+Dans cette séance on a finalisé le code pour la génération aléatoire d'adresse MAC, IP en prenant en compte le masque
+pour pouvoir continuer le code des autres parties, qui en avaient besoin
+Nettoyage du GIT pour un environnement de travail plus propre, git push facilité, et aide avec le code des autres 
+Création des premières commandes du terminal, à continuer pour la prochaine séance, notamment le ping qui avait besoin des adresses ip et mac
+Finalisation du code de la carte réseau
+A FAIRE :
+Ping
+ifconfig
+config du réseau
+commutateur
+tables arp mac et routage
+graphique
+rajouter des trucs ensuite
