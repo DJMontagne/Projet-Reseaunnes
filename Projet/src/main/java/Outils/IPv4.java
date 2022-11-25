@@ -1,20 +1,25 @@
 package Outils;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
 /**
+ * Cette classe permet d'initialiser une adresse IP, si l'adresse IP est donné comme argument
+ * du constructeur (type String ou Octet[]) un masque par défaut ainsi qu'une adresse réseau
+ * et broadcast sont générées. Si cet object est instancié sans paramètre une adresse par défaut 
+ * APIPA est généré automatiquement. Enfin si l'adresse IP, et un masque sont donnés en argument 
+ * du constructeur alors, une adresse réseau et broadcast associées sont générées.
  * @author bpotetma
  */
 
 public class IPv4 {
 
+	// nombre d'octets d'une adresse IP
 	static final int NBR_OCTET = 4;
+	// adresses initialisées par 4 octets dont les bits sont nuls
 	private Octet[] adresseIP = {new Octet(), new Octet(), new Octet(), new Octet()};
 	private Octet[] masque = {new Octet(), new Octet(), new Octet(), new Octet()};
 	private Octet[] adresseReseau = {new Octet(), new Octet(), new Octet(), new Octet()};
+	private Octet[] adresseBroadcast = {new Octet(), new Octet(), new Octet(), new Octet()};
+	// nombre de bit 
 	private int masqueDecimal;
 
 	public IPv4() {
@@ -22,6 +27,7 @@ public class IPv4 {
 		this.adresseIP = genererAdresseApipa();
 		this.masque = genererMasque(this.adresseIP);
 		this.adresseReseau = genererAdresseReseau(this.adresseIP, this.masque);
+		this.adresseBroadcast = genererAdresseBroadcast(this.adresseReseau, this.masque);
 	}
 
 	public IPv4(String mAdresseIP) {
@@ -29,6 +35,7 @@ public class IPv4 {
 		this.setAdresse(mAdresseIP);
 		this.masque = genererMasque(this.adresseIP);
 		this.adresseReseau = genererAdresseReseau(this.adresseIP, this.masque);
+		this.adresseBroadcast = genererAdresseBroadcast(this.adresseReseau, this.masque);
 	}
 
 	public IPv4(Octet[] mAdresseIP) {
@@ -36,6 +43,7 @@ public class IPv4 {
 		this.setAdresse(mAdresseIP);
 		this.masque = genererMasque(this.adresseIP);
 		this.adresseReseau = genererAdresseReseau(this.adresseIP, this.masque);
+		this.adresseBroadcast = genererAdresseBroadcast(this.adresseReseau, this.masque);
 	}
 
 	public IPv4(Octet[] mAdresseIP, Octet[] masque) {
@@ -43,6 +51,7 @@ public class IPv4 {
 		this.setAdresse(mAdresseIP);
 		this.setMasque(masque);
 		this.adresseReseau = genererAdresseReseau(this.adresseIP, this.masque);
+		this.adresseBroadcast = genererAdresseBroadcast(this.adresseReseau, this.masque);
 	}
 
 	public IPv4(String mAdresseIP, String masque) {
@@ -50,8 +59,10 @@ public class IPv4 {
 		this.setAdresse(mAdresseIP);
 		this.setMasque(masque);
 		this.adresseReseau = genererAdresseReseau(this.adresseIP, this.masque);
+		this.adresseBroadcast = genererAdresseBroadcast(this.adresseReseau, this.masque);
 	}
 
+	// Génère une adresse APIPA, utilisé si aucune adresse IP est donné en argument du constructeur
 	public Octet[] genererAdresseApipa() {
 		
 		Octet[] adresseAPIPA = {new Octet(), new Octet(), new Octet(), new Octet()};
@@ -66,6 +77,7 @@ public class IPv4 {
 			else if (i == 2) {
 				int min = 0;
 				int max = 255;
+				// nombre aléatoire généré entre min et max inclus
 				int nbrAlea = min + (int) (Math.random() * ((max - min) + 1));
 				adresseAPIPA[i].setOctet(nbrAlea);
 			}
@@ -79,6 +91,7 @@ public class IPv4 {
 		return adresseAPIPA;
 	}
 
+	// génère un masque par défaut en fonction l'adresse IP donné en argument de cette méthode
 	public Octet[] genererMasque(Octet[] addrIP) {
 
 		Octet[] masque = {new Octet(), new Octet(), new Octet(), new Octet()};
@@ -104,6 +117,7 @@ public class IPv4 {
 		return masque;
 	}
 
+	// génère une adresse réseau en fonction de l'adresse IP et du masque donnés en argument de cette méthode
 	public Octet[] genererAdresseReseau(Octet[] addrIP, Octet[] masque) {
 		
 		Octet[] addrReseau = {new Octet(), new Octet(), new Octet(), new Octet()};
@@ -116,6 +130,23 @@ public class IPv4 {
 			}
 		}
 		return addrReseau;
+	}
+
+	// génère une adresse de diffusion en fonction de l'adresse Réseau et du masque donnés en argument de cette méthode
+	public Octet[] genererAdresseBroadcast(Octet[] addrReseau, Octet[] masque) {
+
+		Octet[] adresseBroadcast = {new Octet(), new Octet(), new Octet(), new Octet()};
+		for (int i = 0; i < NBR_OCTET; i++) {
+			for (int j = 0; j < Octet.NBR_BIT; j++) {
+				if (masque[i].getOctet()[j] == 1) {
+					adresseBroadcast[i].getOctet()[j] = addrReseau[i].getOctet()[j];
+				}
+				else {
+					adresseBroadcast[i].getOctet()[j] = 1;
+				}
+			}
+		}
+		return adresseBroadcast;
 	}
 
 	public Octet[] getAdresse() {
@@ -184,17 +215,19 @@ public class IPv4 {
 		}
 	}
 
+	// retourne VRAI si l'adresse donné en argument est vide, elle est vide si au moins un octet est vide
 	public boolean adresseVide(Octet[] addr) {
 	
-		boolean existence = true;
+		boolean adresseVide = false;
 		for (int i = 0; i < NBR_OCTET; i++) {
 			if (addr[i].estVide()) {
-				existence = false;
+				adresseVide = true;
 			}
 		}
-		return existence;
+		return adresseVide;
 	}
 
+	// retourne VRAI si l'adresse IP donné en argument est valide
 	public boolean adresseIPValide(Octet[] addrIP) {
 
 		boolean validite = true;
@@ -204,6 +237,7 @@ public class IPv4 {
 		return validite;
 	}
 
+	// retourne VRAI si le masque donné en argument est valide
 	public boolean masqueValide(Octet[] masque) {
 
 		boolean validite = true;
@@ -216,29 +250,27 @@ public class IPv4 {
 		}
 		return validite;
 	}
-	/*	
-	public int[] getAdresseBroadcast() {
-
-		if (existenceAdresseIP()) {
-
-			int[] getAdresseBroadcast = this.adresseIP;
-			for (int i = 0; i < NBR_OCTET; i++) {
-
-			}
-		}
-	}
-	*/
 	
-
+	// affichage d'une instance de cette classe
 	@Override
 	public String toString() {
 
-		return "Adresse IP\n" + "    " + this.affichageAdresseIP() + "\n"
-			+ "Masque\n" + "    " + this.affichageMasque() + "\n"
-			+ "Adresse Réseau\n" + "    " + this.affichageAdresseReseau() + "/" + this.getMasqueDecimal();
+		return "Adresse IP\n" + "    " + this.getStrAdresseIP() + "\n"
+			+ "Masque\n" + "    " + this.getStrMasque() + "\n"
+			+ "Adresse Réseau\n" + "    " + this.getStrAdresseReseau() + "/" + this.getMasqueDecimal() + "\n"
+			+ "Adresse Broadcast\n" + "    " + this.getStrAdresseBroadcast();
 	}
 
-	public String affichageAdresseIP() {
+	public void afficher() {
+		
+		System.out.println(this.toString());
+	}
+
+	/**
+	 * Récupération d'une adresse sous la forme X.X.X.X, de type String X représentant un octet dont les valeurs sont
+	 * représentées soit en binaire, soti en décimal selon la méthode.  
+	 */
+	public String getStrAdresseIP() {
 		
 		String strAddrIP = "";
 		for (int i = 0; i < NBR_OCTET; i++) {
@@ -252,7 +284,7 @@ public class IPv4 {
 		return strAddrIP;
 	}
 
-	public String affichageAdresseIPBinaire() {
+	public String getStrAdresseIPBinaire() {
 		
 		String strAddrIPBinaire = "";
 		for (int i = 0; i < NBR_OCTET; i++) {
@@ -266,7 +298,7 @@ public class IPv4 {
 		return strAddrIPBinaire;
 	}
 
-	public String affichageMasque() {
+	public String getStrMasque() {
 		
 		String strMasque = "";
 		for (int i = 0; i < NBR_OCTET; i++) {
@@ -280,7 +312,7 @@ public class IPv4 {
 		return strMasque;
 	}
 
-	public String affichageMasqueBinaire() {
+	public String getStrMasqueBinaire() {
 		
 		String strMasqueBinaire = "";
 		for (int i = 0; i < NBR_OCTET; i++) {
@@ -294,7 +326,7 @@ public class IPv4 {
 		return strMasqueBinaire;
 	}
 
-	public String affichageAdresseReseau() {
+	public String getStrAdresseReseau() {
 		
 		String strAddrReseau = "";
 		for (int i = 0; i < NBR_OCTET; i++) {
@@ -308,7 +340,7 @@ public class IPv4 {
 		return strAddrReseau;
 	}
 
-	public String affichageAdresseReseauBinaire() {
+	public String getStrAdresseReseauBinaire() {
 		
 		String strAddrReseauBinaire = "";
 		for (int i = 0; i < NBR_OCTET; i++) {
@@ -320,5 +352,33 @@ public class IPv4 {
 			}
 		}
 		return strAddrReseauBinaire;
+	}
+
+	public String getStrAdresseBroadcast() {
+		
+		String strAddrBroadcast = "";
+		for (int i = 0; i < NBR_OCTET; i++) {
+			if (i != NBR_OCTET - 1) {
+				strAddrBroadcast += this.adresseBroadcast[i].getDecimal() + ".";
+			}
+			else {
+				strAddrBroadcast += this.adresseBroadcast[i].getDecimal();
+			}
+		}
+		return strAddrBroadcast;
+	}
+
+	public String getStrAdresseBroadcastBinaire() {
+		
+		String strAddrBroadcastBinaire = "";
+		for (int i = 0; i < NBR_OCTET; i++) {
+			if (i != NBR_OCTET - 1) {
+				strAddrBroadcastBinaire += this.adresseBroadcast[i].toString() + ".";
+			}
+			else {
+				strAddrBroadcastBinaire += this.adresseBroadcast[i].toString();
+			}
+		}
+		return strAddrBroadcastBinaire;
 	}
 }

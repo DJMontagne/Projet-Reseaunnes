@@ -12,7 +12,7 @@ package Outils;
 public class Octet {
 
 	static final int NBR_BIT = 8;
-	private int[] octet = new int[NBR_BIT];
+	private int[] octet = {-1, -1, -1, -1, -1, -1, -1, -1};
 
 	public Octet(int mOctet) {
 
