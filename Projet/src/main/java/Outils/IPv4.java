@@ -257,8 +257,24 @@ public class IPv4 {
 		}
 	}
 
+	// retourne VRAI si les 2 addressses possèdent les mêmes octets
+	public static boolean estEgale(Octet[] addr1, Octet[] addr2) {
+
+		boolean estEgale = false;
+		int nbrOctetEgale = 0;
+		for (int i = 0; i < NBR_OCTET; i++) {
+			if (addr1[i].estEgale(addr2[i])) {
+				nbrOctetEgale++;
+			}
+		}
+		if (nbrOctetEgale == NBR_OCTET) {
+			estEgale = true;
+		}
+		return estEgale;
+	}
+
 	// retourne VRAI si l'adresse donné en argument est vide, elle est vide si au moins un octet est vide
-	static boolean adresseVide(Octet[] addr) {
+	public static boolean adresseVide(Octet[] addr) {
 	
 		boolean adresseVide = false;
 		for (int i = 0; i < NBR_OCTET; i++) {
@@ -270,7 +286,7 @@ public class IPv4 {
 	}
 
 	// retourne VRAI si l'adresse IP donné en argument est valide
-	static boolean adresseIPValide(Octet[] addrIP) {
+	public static boolean adresseIPValide(Octet[] addrIP) {
 
 		boolean validite = true;
 		if (addrIP[0].getDecimal() == 0 || addrIP[0].getDecimal() == 127 || addrIP[0].getDecimal() == 255) {

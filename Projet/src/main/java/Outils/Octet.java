@@ -47,6 +47,21 @@ public class Octet {
 		} 
 	}
 
+	public boolean estEgale(Octet mOctet) {
+
+		boolean estEgale = false;
+		int nbrBitEgale = 0;
+		for (int i = 0; i < NBR_BIT; i++) {
+			if (this.octet[i] == mOctet.octet[i]) {
+				nbrBitEgale++;
+			}
+		}
+		if (nbrBitEgale == NBR_BIT) {
+			estEgale = true;
+		}
+		return estEgale;
+	}
+
 	public boolean estVide() {
 
 		boolean estVide = false;
