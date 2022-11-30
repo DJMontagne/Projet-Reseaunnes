@@ -1,3 +1,4 @@
+<<<<<<< HEAD:Projet/src/main/java/Outils/MAC.java
 package Outils;
 
 
@@ -11,10 +12,14 @@ import java.util.ArrayList;
 /**
  * @author bpotetma
  */
+=======
+package réseaunnés;
+>>>>>>> 888f124a7c17b51cbdb90b2f78801966cb06d8b0:Projet/src/MAC.java
 
 public class MAC {
 
     //Attributs
+<<<<<<< HEAD:Projet/src/main/java/Outils/MAC.java
     private String adresse;
     private static ArrayList<String> adresses = new ArrayList<String>();
 
@@ -35,14 +40,48 @@ public class MAC {
      */
     public void setAdresse(String mAdresse) {
         this.adresse = mAdresse;
+=======
+    private String MAC;
+
+    //Constructeurs
+    public MAC() {
+        String mac = genererMAC();
+        this.MAC = mac;
+    }
+    public MAC(String MAC) {
+        this.MAC = MAC;
+    }
+
+    //Geters
+    public String getMAC() {
+        return MAC;
+    }
+
+    //Setters
+    public void setMAC(String mAC) {
+        MAC = mAC;
+>>>>>>> 888f124a7c17b51cbdb90b2f78801966cb06d8b0:Projet/src/MAC.java
     }
 
     //Méthodes
 
+<<<<<<< HEAD:Projet/src/main/java/Outils/MAC.java
     /**
      * @return Une adresse MAC viable en String
      */
     public String genererAdresse() {
+=======
+    //toString
+    @Override
+    public String toString() {
+        return "Infos de l'adresse MAC" + "\n Adresse MAC : " + this.getMAC();
+    }
+    
+    /**
+     * @return Une adresse MAC viable en String
+     */
+    public String genererMAC() {
+>>>>>>> 888f124a7c17b51cbdb90b2f78801966cb06d8b0:Projet/src/MAC.java
         
         // Nombre de caractère dans une @MAC
         final int NB_CARACTERE_MAC = 12;
@@ -66,6 +105,7 @@ public class MAC {
         }
         return adresseMAC;
     }
+<<<<<<< HEAD:Projet/src/main/java/Outils/MAC.java
 
     /**
      * @param mac => adresse MAC à vérifier l'existence
@@ -112,3 +152,6 @@ public class MAC {
         return "Infos de l'adresse MAC" + "\n Adresse MAC : " + this.getAdresse();
     }
 }
+=======
+}
+>>>>>>> 888f124a7c17b51cbdb90b2f78801966cb06d8b0:Projet/src/MAC.java
