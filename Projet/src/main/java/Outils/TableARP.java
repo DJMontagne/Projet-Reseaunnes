@@ -24,10 +24,9 @@ public class TableARP {
     /**
     * @param machine
     */
-    public TableARP(Machine machine, String[] contenus) {
+    public TableARP(Machine machine) {
         
         this.tableARP = new HashMap<>();
-        this.tableARP.put(machine, contenus);
         initialisationTableARP(machine);
     }
 
