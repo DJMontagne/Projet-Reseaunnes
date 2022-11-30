@@ -76,31 +76,30 @@ public class Machine {
         
         ArrayList<String> interfaces = new ArrayList<String>();
         for (int i = 0; i < this.cartesR.size(); i++) {
-            interfaces.add(this.cartesR.get(i).getNomInterface());
+            interfaces.add(this.cartesR.get(i).getNominterface());
         }
-        if (!interfaces.contains(cr.getNomInterface()) && !this.cartesR.contains(cr)) {
+        if (!interfaces.contains(cr.getNominterface()) && !this.cartesR.contains(cr)) {
             this.cartesR.add(cr);
         }
     }
     
-    @Override
-    public String toString() {
-        String config = "";
-        for (int i = 0; i < this.cartesR.size(); i++) {
-            config += i + 1 + ": ";
-            if (i == this.cartesR.size() - 1) {
-                config += this.cartesR.get(i).toString();
-            }
-            else {
-                config += this.cartesR.get(i).toString() + "\n\n";
-            }
-        }
-        return config;
-    }
+    
 
     public void afficherConfig() {
 
         System.out.println(this.toString());
     }
-    
+     public String affichesCartesR() {
+        String toPrint = "";
+        for (CarteReseau carteR : this.cartesR) {
+            toPrint += carteR.toString();
+        }
+        return toPrint;
+    }
+
+    @Override
+    public String toString() {
+        return "\nCartes Réseaux : \n \t" + this.affichesCartesR();
+    }
+
 }
