@@ -1,5 +1,6 @@
 package General;
 import java.util.Scanner;
+import Outils.*;
 
 /**
  *
@@ -23,7 +24,7 @@ public class Terminal {
         return this.mach.getTableARP().toString();
     }
     
-    public void ping(){
+    public void ping(IPv4 adrr){
         // à faire
     }
     
@@ -39,10 +40,11 @@ public class Terminal {
         while(this.run){
             System.out.println("\nEntrez une commande : ");
             String input = sc.nextLine();
+            String utilisation[] = input.split(" ");
             System.out.println("");
-            switch (input) {
+            switch (utilisation[0]) {
                 case "arp" -> System.out.println(arp());
-                case "ping" -> ping();
+                case "ping" -> ping(new IPv4(utilisation[1]));
                 case "ifconfig" -> System.out.println(this.ifconfig());
                 default -> {
                         System.out.println("commande non reconnue");
