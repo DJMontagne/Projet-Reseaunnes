@@ -327,7 +327,7 @@ public class IPv4 {
 		return strAddrIP;
 	}
 
-	public String getAdresseIPBinaire() {
+	public String getStrAdresseIPBinaire() {
 		
 		String strAddrIPBinaire = "";
 		for (int i = 0; i < NBR_OCTET; i++) {
@@ -355,7 +355,7 @@ public class IPv4 {
 		return strMasque;
 	}
 
-	public String getMasqueBinaire() {
+	public String getStrMasqueBinaire() {
 		
 		String strMasqueBinaire = "";
 		for (int i = 0; i < NBR_OCTET; i++) {
@@ -383,7 +383,7 @@ public class IPv4 {
 		return strAddrReseau;
 	}
 
-	public String getReseauBinaire() {
+	public String getStrReseauBinaire() {
 		
 		String strAddrReseauBinaire = "";
 		for (int i = 0; i < NBR_OCTET; i++) {
@@ -411,7 +411,7 @@ public class IPv4 {
 		return strAddrBroadcast;
 	}
 
-	public String getBroadcastBinaire() {
+	public String getStrBroadcastBinaire() {
 		
 		String strAddrBroadcastBinaire = "";
 		for (int i = 0; i < NBR_OCTET; i++) {
@@ -439,7 +439,7 @@ public class IPv4 {
 		return strAdressePasserelle;
 	}
 
-	public String getPasserelleBinaire() {
+	public String getStrPasserelleBinaire() {
 		
 		String strAdressePasserelle = "";
 		for (int i = 0; i < NBR_OCTET; i++) {
