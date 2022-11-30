@@ -220,7 +220,7 @@ public class IPv4 {
 		}
 	}
 
-	static void setAdresse(Octet[] addr, String strNouvelleAddr) {
+	public static void setAdresse(Octet[] addr, String strNouvelleAddr) {
 
 		String[] sectionAddr = strNouvelleAddr.split("\\.");
 		Octet[] nouvelleAddr = initAdresseVide();
