@@ -19,9 +19,6 @@ public class app {
         CarteReseau carte1 = new CarteReseau();
         //carte1.setAdresseMAC(mac1);
 
-        Machine machine1 = new Machine();
-
-        System.out.println(machine1.affichesCartesR());
         //System.out.println(machine1.toString());
     }
 }

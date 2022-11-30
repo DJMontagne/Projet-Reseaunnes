@@ -1,4 +1,5 @@
 package General;
+import java.util.Scanner;
 
 /**
  *
@@ -14,19 +15,41 @@ public class Terminal {
     }
     public void fermerTerminal(){ //retire le terminal de la liste des terminaux de la machine, le rendant inutilisable
         this.mach.getTerminaux().remove(this);
+        this.run = false;
         this.mach = null;
     }
 
-    public void arp(){ //affichage de la table ARP de la machine
-        this.mach.getTableARP().affichage();
+    public String arp(){ //affichage de la table ARP de la machine
+        return this.mach.getTableARP().toString();
     }
     
     public void ping(){
         // à faire
     }
     
-    public void ifconfig(){ //affichage de la config de la machine
-        //this.mach.config();
+    public String ifconfig(){ //affichage de la config de la machine
+        return this.mach.toString();
+    }
+    
+    
+    // MAIN DU PROGRAMME DU TERMINAL
+    //Permet de lancer les méthodes correspondant à l'input de l'utilisateur
+    public void on(){
+        Scanner sc = new Scanner(System.in);
+        while(this.run){
+            System.out.println("\nEntrez une commande : ");
+            String input = sc.nextLine();
+            System.out.println("");
+            switch (input) {
+                case "arp" -> System.out.println(arp());
+                case "ping" -> ping();
+                case "ifconfig" -> System.out.println(this.ifconfig());
+                default -> {
+                        System.out.println("commande non reconnue");
+                        this.fermerTerminal(); // pour le test
+                }
+            }
+        }
     }
     
     //-----------Getters--------------

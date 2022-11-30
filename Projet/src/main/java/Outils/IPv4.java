@@ -81,7 +81,7 @@ public class IPv4 {
 		IPv4.setAdresse(this.adressePasserelle, mAdressePasserelle);
 	}
 
-	static Octet[] initAdresseVide() {
+	public static Octet[] initAdresseVide() {
 		
 		Octet[] adresseVide = {new Octet(), new Octet(), new Octet(), new Octet()};
 		return adresseVide;
@@ -211,7 +211,7 @@ public class IPv4 {
 	 * par exemple pour changer l'adresse IP la syntaxe sera this.ip.(this.ip.getAdresseIP(), foo) 
 	 * depuis l'objet ip de classe IPv4 et this.ip(this.ip.getPasserelle(), foo)
 	 */
-	static void setAdresse(Octet[] addr, Octet[] nouvelleAddr) {
+	public static void setAdresse(Octet[] addr, Octet[] nouvelleAddr) {
 		
 		if (adresseIPValide(nouvelleAddr)) {
 			for (int i = 0; i < NBR_OCTET; i++) {
