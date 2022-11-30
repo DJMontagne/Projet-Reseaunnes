@@ -37,13 +37,13 @@ public class CarteReseau {
 
     //Getters
     public MAC getAdresseMAC() {
-        return adresseMAC;
+        return this.adresseMAC;
     }
     public IPv4 getIp() {
-        return ip;
+        return this.ip;
     }
     public String getMasque() {
-        return masque;
+        return this.masque;
     }
     public String getNominterface() {
         return nominterface;
@@ -67,6 +67,17 @@ public class CarteReseau {
     }
     public void setPasserelle(String passerelle) {
         this.passerelle = passerelle;
+    }
+
+    //Affichage
+
+    @Override
+    public String toString() {
+        return " Nom de l'interface : " + this.getNominterface() +
+        "\n \t Addresse MAC : " + this.getAdresseMAC().getAdresse()  +
+        "\n \t Adresse IP : " + this.getIp().getStrAdresseIP() + 
+        "\n \t Masque : " + this.getIp().getStrMasque() + 
+        "\n \t Passerelle : " + this.getPasserelle();
     }
     
    

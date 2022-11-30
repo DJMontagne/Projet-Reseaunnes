@@ -11,7 +11,17 @@ import Outils.*;
  */
 public class app {
     public static void main(String[] args) {
-        Machine m = new Machine();
-        m.getTerminaux().get(0).arp();
+
+        IPv4 ip3 = new IPv4();
+
+        MAC mac1 = new MAC();
+
+        CarteReseau carte1 = new CarteReseau();
+        //carte1.setAdresseMAC(mac1);
+
+        Machine machine1 = new Machine();
+
+        System.out.println(machine1.affichesCartesR());
+        //System.out.println(machine1.toString());
     }
 }

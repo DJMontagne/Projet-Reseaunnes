@@ -106,9 +106,9 @@ public class MAC {
         return mac;
     } 
 
-    //Affichage pour une instance de MAC
+    //toString
     @Override
     public String toString() {
-        return "Adresse MAC : " + this.getAdresse();
+        return "Infos de l'adresse MAC" + "\n Adresse MAC : " + this.getAdresse();
     }
 }

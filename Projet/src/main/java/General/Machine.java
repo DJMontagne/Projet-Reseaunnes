@@ -62,6 +62,20 @@ public class Machine {
         return terminaux;
     }
     
-    
+    //Affichage
+
+    public String affichesCartesR() {
+        String toPrint = "";
+        for (CarteReseau carteR : this.cartesR) {
+            toPrint += carteR.toString();
+        }
+        return toPrint;
+    }
+
+    @Override
+    public String toString() {
+        return "Infos de la machine : " + 
+        "\n Ses cartes Réseaux : \n \t" + this.affichesCartesR();
+    }
     
 }
