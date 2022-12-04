@@ -289,7 +289,7 @@ public class IPv4 {
 	public static boolean adresseIPValide(Octet[] addrIP) {
 
 		boolean validite = true;
-		if (addrIP[0].getDecimal() == 0 || addrIP[0].getDecimal() == 127 || addrIP[0].getDecimal() == 255) {
+		if (addrIP[0].getDecimal() == 0 || addrIP[0].getDecimal() == 127 || addrIP[0].getDecimal() > 223) {
 			validite = false;
 		}
 		return validite;

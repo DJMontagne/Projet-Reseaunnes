@@ -1,6 +1,7 @@
 package General;
 import java.util.Scanner;
 import Outils.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -39,16 +40,31 @@ public class Terminal {
         Scanner sc = new Scanner(System.in);
         while(this.run){
             System.out.println("\nEntrez une commande : ");
-            String input = sc.nextLine();
-            String utilisation[] = input.split(" ");
-            System.out.println("");
-            switch (utilisation[0]) {
-                case "arp" -> System.out.println(arp());
-                case "ping" -> ping(new IPv4(utilisation[1]));
-                case "ifconfig" -> System.out.println(this.ifconfig());
+            String utilisation = sc.nextLine();
+            String input[] = utilisation.split(" ");
+            switch (input[0]) {
+                case "arp" -> {
+                    System.out.println(arp());
+                }
+                case "ping" -> {
+                    if(input.length == 2){
+                        if(IPValide(input[1])){
+                            ping(new IPv4(input[1]));
+                        }else{
+                            System.out.println("adresse ip non valide ...");
+                        }
+                    }else{
+                        System.out.println("Commande erronée ... (n'entrez qu'une adresse ip)");
+                    }
+                }
+                case "ifconfig" -> {
+                    System.out.println(this.ifconfig());
+                }
+                case "q"->{
+                    this.fermerTerminal();
+                }
                 default -> {
                         System.out.println("commande non reconnue");
-                        this.fermerTerminal(); // pour le test
                 }
             }
         }
@@ -58,5 +74,36 @@ public class Terminal {
     public boolean isRun() {
         return run;
     }
-    
+    //---------fonctions privées------
+    private boolean IPValide(String candidat){
+        boolean validite = true;
+        String util[] = candidat.split("\\.");
+        if(!(util.length == 4)){
+            validite = false;
+        }
+        if(validite){ // si les chaines de caractères sont pas des nombres
+            int i = 0;
+            while(validite && i < util.length){
+                validite = util[i].matches("[+-]?\\d*(\\.\\d+)?");
+                i++;
+            }
+        }
+        
+        if (validite){
+            int premier = Integer.parseInt(util[0]);
+            int deuxieme = Integer.parseInt(util[1]);
+            int troisieme = Integer.parseInt(util[2]);
+            int quatrieme = Integer.parseInt(util[3]);
+            
+            boolean boolpremier = ((premier > 0) && !(premier == 127) && (premier < 255));
+            boolean booldeuxieme = ((deuxieme >= 0) && (deuxieme <= 255));
+            boolean booltroisieme = ((troisieme >= 0) && (troisieme <= 255));
+            boolean boolquatrieme = ((quatrieme >= 0) && (quatrieme <= 255));
+            
+            if(!boolpremier || !booldeuxieme || !booltroisieme || !boolquatrieme){
+                validite = false;
+            }
+        }
+        return validite;
+    }
 }
