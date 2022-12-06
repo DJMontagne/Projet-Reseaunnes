@@ -1,5 +1,6 @@
 
 package Outils;
+
 import General.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,16 +19,15 @@ public class TableARP {
     private final int LONG_NOM_INTERFACE = 9; 
     private final int LONG_TOTALE = LONG_ADRESSE_MAC + LONG_MAX_ADRESSE_IP + LONG_NOM_INTERFACE;
     private HashMap<Machine, String[]> tableARP;
-    private String[] contenuEnTeteAffichage = {"Adresse IP", "Adresse MAC", "Interface"};
+    private final String[] AFFICHAGE_EN_TETE = {"Adresse IP", "Adresse MAC", "Interface"};
 
     // Constructeur 
     /**
     * @param machine
     */
-    public TableARP(Machine machine) {
+    public TableARP() {
         
         this.tableARP = new HashMap<>();
-        initialisationTableARP(machine);
     }
 
     // Getter
@@ -36,14 +36,14 @@ public class TableARP {
         return this.tableARP;
     }
 
-    /* 
-    Attendre d'avoir effectuer la classe Réseau car la table ARP d'une machine se remplie 
-    si cette dernière est connectée sur un réseau
-    */
-    public void initialisationTableARP(Machine machine) {
+    public void associerAdresses(Machine machine, String[] contenus) {
+
+        if (!this.tableARP.containsKey(machine)) {
+            this.tableARP.put(machine, contenus);
+        }
     }
 
-    public String affichageSeparateurTableARP() {
+    private String affichageSeparateurTableARP() {
         
         String separateurTableARP = "";
         for (int i = 0; i < LONG_TOTALE + 4; i++) {
@@ -60,7 +60,7 @@ public class TableARP {
     /**
     * @param contenus tableau de 3 données de type String que l'on veut afficher dans la table ARP 
     */
-    public String affichageContenuTableARP(String[] contenus) {
+    private String affichageContenuTableARP(String[] contenus) {
         
         String contenuTableARP = "";
         for (int i = 0; i < LONG_TOTALE + 4; i++) {
@@ -100,7 +100,7 @@ public class TableARP {
         String enTete = "";
         enTete += this.affichageSeparateurTableARP() + "\n";
         
-        enTete += this.affichageContenuTableARP(this.contenuEnTeteAffichage) + "\n";            
+        enTete += this.affichageContenuTableARP(AFFICHAGE_EN_TETE) + "\n";            
         enTete += this.affichageSeparateurTableARP() + "\n";
 
         String corps = "";

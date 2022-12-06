@@ -12,7 +12,7 @@ import Outils.*;
 public class app {
     public static void main(String[] args) {
 
-        Ordinateur pc1 = new Ordinateur(1,1);
+         Ordinateur pc1 = new Ordinateur(1,1);
         CarteReseau cr1 = new CarteReseau("eth0", "192.168.10.3", "255.255.255.0", "192.168.10.1");
         pc1.ajouterInterface(cr1);
         pc1.afficherConfig();   
@@ -44,6 +44,8 @@ public class app {
         CarteReseau cr8 = new CarteReseau("eno2", "172.32.50.8");
         route2.ajouterInterface(cr8);
         route2.afficherConfig();
+
+        System.out.println("\n");
         
         Liaison c1 = new Liaison("droit");
         c1.lier(pc1, switch1);
@@ -64,6 +66,19 @@ public class app {
         switch1.afficherPorts();
         pc1.afficherPorts();
 
-        System.out.println(Reseau.getReseaux());
+        System.out.println("\n");
+        
+        System.out.println("Réseaux : " + Reseau.getReseaux());
+        
+        System.out.println("\n");
+
+        System.out.print("Chemin : ");
+        ARP.requete(pc1, "192.168.10.4");
+
+        System.out.println("\n");
+
+        pc1.afficherTableARP();
+        System.out.println("\n");
+        pc2.afficherTableARP();
     }
 }

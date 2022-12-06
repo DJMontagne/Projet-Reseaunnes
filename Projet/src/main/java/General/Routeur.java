@@ -6,10 +6,14 @@ import java.util.ArrayList;
 public class Routeur extends Machine {
 
 	public static final int NBR_PORT_GIGA = 2;
+	private int id;
+    private static int nbrRouteur;
 
 	public Routeur(int x, int y) {
 
 		super(x, y);
+		nbrRouteur++;
+		this.id = nbrRouteur;
 	}
 
 	@Override
@@ -27,5 +31,11 @@ public class Routeur extends Machine {
         if (validiteCarteR && super.cartesR.size() < Routeur.NBR_PORT_GIGA) {
         	super.cartesR.add(cr);
         }
+    }
+
+    @Override
+    public String toString() {
+
+        return "Routeur n°" + this.id;
     }
 }
