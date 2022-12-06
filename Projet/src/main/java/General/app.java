@@ -12,7 +12,7 @@ import Outils.*;
 public class app {
     public static void main(String[] args) {
 
-        OOrdinateur pc1 = new Ordinateur(1,1);
+        Ordinateur pc1 = new Ordinateur(1,1);
         CarteReseau cr1 = new CarteReseau("eth0", "192.168.10.3", "255.255.255.0", "192.168.10.1");
         pc1.ajouterInterface(cr1);
         pc1.afficherConfig();   
