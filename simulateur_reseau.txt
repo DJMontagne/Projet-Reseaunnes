@@ -58,3 +58,13 @@ commutateur
 tables arp mac et routage
 graphique
 rajouter des trucs ensuite
+
+séance du 06/12/2022:
+A cet date voici ce que chacun a fait:
+
+on a tous travaillé un peu sur toutes les classes vu qu'il fallait adapter les autres classes a ce qu'on avait fait sur d'autres.
+
+ce que l'on doit finir:
+
+-finir l'affichage graphique.
+-Finalisation des autres fonctions java
