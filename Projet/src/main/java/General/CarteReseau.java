@@ -30,11 +30,10 @@ public class CarteReseau {
         this.nominterface = nominerface;
     }
 
-    public CarteReseau(String nominerface, String ip, String passerelle)  {
-        this.ip = new IPv4(ip);
+    public CarteReseau(String nominerface, String ip, String masque)  {
+        this.ip = new IPv4(ip, masque);
         this.mac = new MAC();
         this.nominterface = nominerface;
-        this.setPasserelle(passerelle);
     }
 
     public CarteReseau(String nominerface, String ip, String masque, String passerelle)  {

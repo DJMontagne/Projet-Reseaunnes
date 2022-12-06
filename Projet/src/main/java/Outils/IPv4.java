@@ -134,7 +134,7 @@ public class IPv4 {
 					masque[1].setOctet(255);
 					masque[2].setOctet(255);
 				}
-				else if (masque[i].getDecimal() != 255){
+				if (masque[i].getDecimal() != 255){
 					masque[i].setOctet(0);
 				}
 			}
