@@ -27,7 +27,7 @@ public abstract class Machine {
         cartesR = new ArrayList<CarteReseau>(); //création d'une liste vide de carteReseau
         terminaux = new ArrayList<Terminal>();  // création d'un liste vide de Terminal
         terminaux.add(new Terminal(this)); //ajout d'un terminal dans la liste
-        tableARP = new TableARP(this);         // création d'une tableARP vierge
+        tableARP = new TableARP();         // création d'une tableARP vierge
         tableRoutage = new TableRoutage(this); //création d'une tableRoutage vierge(à voir avec le constructeur pour le 0.0.0.0/0)
         this.ports = this.initPorts();
         this.x = mX;
@@ -208,5 +208,10 @@ public abstract class Machine {
             }
         }
         System.out.println(config);
+    }
+
+    public void afficherTableARP() {
+
+        System.out.println(this + "\n" + this.tableARP);
     }
 }
