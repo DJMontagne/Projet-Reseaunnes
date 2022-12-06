@@ -28,7 +28,7 @@ public abstract class Machine {
         terminaux = new ArrayList<Terminal>();  // création d'un liste vide de Terminal
         terminaux.add(new Terminal(this)); //ajout d'un terminal dans la liste
         tableARP = new TableARP(this);         // création d'une tableARP vierge
-        tableRoutage = new TableRoutage(); //création d'une tableRoutage vierge(à voir avec le constructeur pour le 0.0.0.0/0)
+        tableRoutage = new TableRoutage(this); //création d'une tableRoutage vierge(à voir avec le constructeur pour le 0.0.0.0/0)
         this.ports = this.initPorts();
         this.x = mX;
         this.y = mY;
