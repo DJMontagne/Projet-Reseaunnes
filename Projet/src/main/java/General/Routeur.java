@@ -1,4 +1,6 @@
+package General;
 
+import Outils.*;
 import java.util.ArrayList;
 
 public class Routeur extends Machine {

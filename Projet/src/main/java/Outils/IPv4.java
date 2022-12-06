@@ -308,164 +308,52 @@ public class IPv4 {
 		}
 		return validite;
 	}
+        
+        /**
+	 * Récupération d'une adresse sous la forme X.X.X.X, de type String X représentant un octet dont les valeurs sont
+	 * représentées soit en binaire, soti en décimal selon la méthode.  
+	 */
+	public static String getStrAdresse(Octet[] addr) {
+		
+		String strAddr = "";
+		for (int i = 0; i < IPv4.NBR_OCTET; i++) {
+			if (i != IPv4.NBR_OCTET - 1) {
+				strAddr += addr[i].getDecimal() + ".";
+			}
+			else {
+				strAddr+= addr[i].getDecimal();
+			}
+		}
+		return strAddr;
+	}
+        
+        public static String getStrAdresseBinaire(Octet[] addr) {
+		
+		String strAddrBinaire = "";
+		for (int i = 0; i < IPv4.NBR_OCTET; i++) {
+			if (i != IPv4.NBR_OCTET - 1) {
+				strAddrBinaire += addr[i].toString() + ".";
+			}
+			else {
+				strAddrBinaire += addr[i].toString();
+			}
+		}
+		return strAddrBinaire;
+	}
 	
-	// affichage d'une instance de cette classe
+		// affichage d'une instance de cette classe
 	@Override
 	public String toString() {
 
-		return "Adresse IP\n" + "    " + this.getStrAdresseIP() + "\n"
-			+ "Masque de sous-réseau\n" + "    " + this.getStrMasque() + "\n"
-			+ "Adresse Réseau\n" + "    " + this.getStrReseau() + "/" + this.getMasqueDecimal() + "\n"
-			+ "Adresse Broadcast\n" + "    " + this.getStrBroadcast() + "\n"
-			+ "Passerelle par défaut\n" + "    " + this.getStrPasserelle();
+		return "Adresse IP\n\t" + getStrAdresse(this.adresseIP) + "\n"
+			+ "Masque de sous-réseau\n\t" + getStrAdresse(this.masque) + "\n"
+			+ "Adresse Réseau\n\t" + getStrAdresse(this.adresseReseau) + "/" + this.getMasqueDecimal() + "\n"
+			+ "Adresse Broadcast\n\t" + getStrAdresse(this.adresseBroadcast) + "\n"
+			+ "Passerelle par défaut\n\t" + "    " + getStrAdresse(this.adressePasserelle);
 	}
 
 	public void afficher() {
 		
 		System.out.println(this.toString());
-	}
-
-	/**
-	 * Récupération d'une adresse sous la forme X.X.X.X, de type String X représentant un octet dont les valeurs sont
-	 * représentées soit en binaire, soti en décimal selon la méthode.  
-	 */
-	public String getStrAdresseIP() {
-		
-		String strAddrIP = "";
-		for (int i = 0; i < NBR_OCTET; i++) {
-			if (i != NBR_OCTET - 1) {
-				strAddrIP += this.adresseIP[i].getDecimal() + ".";
-			}
-			else {
-				strAddrIP += this.adresseIP[i].getDecimal();
-			}
-		}
-		return strAddrIP;
-	}
-
-	public String getStrAdresseIPBinaire() {
-		
-		String strAddrIPBinaire = "";
-		for (int i = 0; i < NBR_OCTET; i++) {
-			if (i != NBR_OCTET - 1) {
-				strAddrIPBinaire += this.adresseIP[i].toString() + ".";
-			}
-			else {
-				strAddrIPBinaire += this.adresseIP[i].toString();
-			}
-		}
-		return strAddrIPBinaire;
-	}
-
-	public String getStrMasque() {
-		
-		String strMasque = "";
-		for (int i = 0; i < NBR_OCTET; i++) {
-			if (i != NBR_OCTET - 1) {
-				strMasque += this.masque[i].getDecimal() + ".";
-			}
-			else {
-				strMasque += this.masque[i].getDecimal();
-			}
-		}
-		return strMasque;
-	}
-
-	public String getStrMasqueBinaire() {
-		
-		String strMasqueBinaire = "";
-		for (int i = 0; i < NBR_OCTET; i++) {
-			if (i != NBR_OCTET - 1) {
-				strMasqueBinaire += this.masque[i].toString() + ".";
-			}
-			else {
-				strMasqueBinaire += this.masque[i].toString();
-			}
-		}
-		return strMasqueBinaire;
-	}
-
-	public String getStrReseau() {
-		
-		String strAddrReseau = "";
-		for (int i = 0; i < NBR_OCTET; i++) {
-			if (i != NBR_OCTET - 1) {
-				strAddrReseau += this.adresseReseau[i].getDecimal() + ".";
-			}
-			else {
-				strAddrReseau += this.adresseReseau[i].getDecimal();
-			}
-		}
-		return strAddrReseau;
-	}
-
-	public String getStrReseauBinaire() {
-		
-		String strAddrReseauBinaire = "";
-		for (int i = 0; i < NBR_OCTET; i++) {
-			if (i != NBR_OCTET - 1) {
-				strAddrReseauBinaire += this.masque[i].toString() + ".";
-			}
-			else {
-				strAddrReseauBinaire += this.masque[i].toString();
-			}
-		}
-		return strAddrReseauBinaire;
-	}
-
-	public String getStrBroadcast() {
-		
-		String strAddrBroadcast = "";
-		for (int i = 0; i < NBR_OCTET; i++) {
-			if (i != NBR_OCTET - 1) {
-				strAddrBroadcast += this.adresseBroadcast[i].getDecimal() + ".";
-			}
-			else {
-				strAddrBroadcast += this.adresseBroadcast[i].getDecimal();
-			}
-		}
-		return strAddrBroadcast;
-	}
-
-	public String getStrBroadcastBinaire() {
-		
-		String strAddrBroadcastBinaire = "";
-		for (int i = 0; i < NBR_OCTET; i++) {
-			if (i != NBR_OCTET - 1) {
-				strAddrBroadcastBinaire += this.adresseBroadcast[i].toString() + ".";
-			}
-			else {
-				strAddrBroadcastBinaire += this.adresseBroadcast[i].toString();
-			}
-		}
-		return strAddrBroadcastBinaire;
-	}
-
-	public String getStrPasserelle() {
-		
-		String strAdressePasserelle = "";
-		for (int i = 0; i < NBR_OCTET; i++) {
-			if (i != NBR_OCTET - 1) {
-				strAdressePasserelle += this.adressePasserelle[i].getDecimal() + ".";
-			}
-			else {
-				strAdressePasserelle += this.adressePasserelle[i].getDecimal();
-			}
-		}
-		return strAdressePasserelle;
-	}
-
-	public String getStrPasserelleBinaire() {
-		
-		String strAdressePasserelle = "";
-		for (int i = 0; i < NBR_OCTET; i++) {
-			if (i != NBR_OCTET - 1) {
-				strAdressePasserelle += this.adressePasserelle[i].toString() + ".";
-			}
-			else {
-				strAdressePasserelle += this.adressePasserelle[i].toString();
-			}
-		}
-		return strAdressePasserelle;
 	}
 }

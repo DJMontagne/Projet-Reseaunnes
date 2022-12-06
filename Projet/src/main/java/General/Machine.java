@@ -1,4 +1,3 @@
-
 package General;
 
 import Outils.*;
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 public abstract class Machine {
     //-----attributs
     private int id;
-    private ArrayList<CarteReseau> cartesR; //Liste de cartes réseau
+    protected ArrayList<CarteReseau> cartesR; //Liste de cartes réseau
     private TableARP tableARP; //table ARP de la machine
     private TableRoutage tableRoutage; //table de routage de la machine
     private ArrayList<Terminal> terminaux; //liste des terminaux de la machine(pour les commandes)

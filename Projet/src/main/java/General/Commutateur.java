@@ -1,4 +1,7 @@
 
+package General;
+
+import Outils.*;
 /**
  * @author bpotetma
  */

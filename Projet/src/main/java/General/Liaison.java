@@ -1,4 +1,7 @@
 
+package General;
+
+import Outils.*;
 import java.util.HashMap;
 import java.util.Map;
 
