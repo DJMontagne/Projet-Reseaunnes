@@ -8,9 +8,6 @@ import java.util.Map;
  * @author bpotetma
  */
 
-import java.util.ArrayList;
-import java.util.Map;
-
 public class ARP {
 	
 
@@ -33,7 +30,8 @@ public class ARP {
 					ttl--;
 					if (machine.getKey().equals(cpMachineSrc)) {
 						System.out.print(cpMachineSrc + " ---> ");
-						if (IPv4.estEgale(machine.getValue().getInterfaceCompatible(cpMachineSrc).getIP().getAdresseIP(), addrIP)) {
+						CarteReseau crMachineDestCompatible = machine.getValue().getInterfaceCompatible(machineSrc);
+						if (crMachineDestCompatible != null && IPv4.estEgale(crMachineDestCompatible.getIP().getAdresseIP(), addrIP)) {
 							adresseMAC = machine.getValue().getInterfaceCompatible(cpMachineSrc).getMAC().getAdresse();
 							System.out.print(machine.getValue() + "\n");
 							// Remplissage de la table ARP de la machine destination
@@ -57,7 +55,8 @@ public class ARP {
 					}
 					else if (machine.getValue().equals(cpMachineSrc)) {
 						System.out.print(cpMachineSrc + " ---> ");
-						if (IPv4.estEgale(machine.getKey().getInterfaceCompatible(cpMachineSrc).getIP().getAdresseIP(), addrIP)) {
+						CarteReseau crMachineDestCompatible = machine.getKey().getInterfaceCompatible(machineSrc);
+						if (crMachineDestCompatible != null && IPv4.estEgale(crMachineDestCompatible.getIP().getAdresseIP(), addrIP)) {
 							adresseMAC = machine.getValue().getInterfaceCompatible(cpMachineSrc).getMAC().getAdresse();
 							System.out.print(machine.getKey() + "\n");
 							// Remplissage de la table ARP de la machine destination
