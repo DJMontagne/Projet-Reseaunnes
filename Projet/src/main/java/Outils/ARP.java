@@ -57,7 +57,7 @@ public class ARP {
 						System.out.print(cpMachineSrc + " ---> ");
 						CarteReseau crMachineDestCompatible = machine.getKey().getInterfaceCompatible(machineSrc);
 						if (crMachineDestCompatible != null && IPv4.estEgale(crMachineDestCompatible.getIP().getAdresseIP(), addrIP)) {
-							adresseMAC = machine.getValue().getInterfaceCompatible(cpMachineSrc).getMAC().getAdresse();
+							adresseMAC = machine.getKey().getInterfaceCompatible(cpMachineSrc).getMAC().getAdresse();
 							System.out.print(machine.getKey() + "\n");
 							// Remplissage de la table ARP de la machine destination
 							CarteReseau crCompatibleMachine = machineSrc.getInterfaceCompatible(machine.getKey());
@@ -66,7 +66,7 @@ public class ARP {
 														crCompatibleMachine.getNomInterface()};
 							machine.getKey().getTableARP().associerAdresses(machineSrc, infosMachineSrc);
 							// Remplissage de la table ARP de la machine source
-							crCompatibleMachine = machine.getValue().getInterfaceCompatible(machineSrc);
+							crCompatibleMachine = machine.getKey().getInterfaceCompatible(machineSrc);
 							String[] infosMachineDest = {IPv4.getStrAdresse(crCompatibleMachine.getIP().getAdresseIP()), 
 														crCompatibleMachine.getMAC().getAdresse(),
 														crCompatibleMachine.getNomInterface()};
