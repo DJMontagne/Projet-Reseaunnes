@@ -32,6 +32,10 @@ public class Routeur extends Machine {
         	super.cartesR.add(cr);
         }
     }
+	public void afficherTableRoutage() {
+
+        System.out.println(this + "\n" + this.getTableRoutage());
+    }
 
     @Override
     public String toString() {
