@@ -83,6 +83,7 @@ public class app {
         System.out.println("\n");
         pc2.afficherTableARP();
         switch1.afficherTableMAC();
+        route1.afficherTableRoutage();
 
         //System.out.println(Reseau.getReseauSelonMachine(pc1).getChemin(route2, pc2));
     }
