@@ -68,3 +68,6 @@ ce que l'on doit finir:
 
 -finir l'affichage graphique.
 -Finalisation des autres fonctions java
+
+séance du 14/12/2022:
+il ne reste qu'a finir l'affichage graphique et finir le ping et rajouter des commentaires dans le code
