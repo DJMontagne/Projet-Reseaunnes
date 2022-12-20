@@ -4,16 +4,22 @@
  */
 
 package General;
-
 import Outils.*;
+import Interface_Graphique.*;
+
 import java.util.ArrayList;
+import javax.swing.*;
+import java.awt.event.*; // Pour les évènements
+import java.awt.*;
+
+
 /**
  *
  * @author victo
  */
 public class app {
     public static void main(String[] args) {
-        
+
         Ordinateur pc1 = new Ordinateur(1,1);
         CarteReseau cr1 = new CarteReseau("eth0", "192.168.10.3", "255.255.255.0", "192.168.10.1");
         pc1.ajouterInterface(cr1);
@@ -74,6 +80,7 @@ public class app {
         
         System.out.println("\n");
         
+
         System.out.print("Chemin : ");
         ARP.requete(pc1, "192.168.10.4");
 
@@ -86,5 +93,11 @@ public class app {
         route1.afficherTableRoutage();
 
         //System.out.println(Reseau.getReseauSelonMachine(pc1).getChemin(route2, pc2));
+
+        // Tests Interface
+
+        Fenetre fenetre1 = new Fenetre();
+        fenetre1.setVisible(true);
+
     }
 }

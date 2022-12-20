@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import main.java.Interface_Graphique.ImagePanel;
+import Outils.*;
 
 public class Fenetre extends JFrame {
 
@@ -22,11 +22,11 @@ public class Fenetre extends JFrame {
 
   private String imgOrdinateurUrl = "";
 
-  public Fenetre() 
-  {
+  public Fenetre() {
     this.setTitle("test");
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.setSize(830,600);
+    this.setBounds(100, 150, 200, 300); // Position x,y Taille l,h
+    //this.setSize(830,600);
     this.setLocationRelativeTo(null);
 
     Container c = this.getContentPane();  // Conteneur à alimenter
@@ -36,31 +36,29 @@ public class Fenetre extends JFrame {
     BorderLayout gestionnaire = new BorderLayout();
     c.setLayout(gestionnaire);
 
-    //URL de l'image
-    /*ImageIcon icon = new ImageIcon("tatio.png");
+    //Affichage d'une image 
+    ImagePanel img = new ImagePanel(imgCommutateurUrl);
+    JLabel piclabel = new JLabel(new ImageIcon(img.getImage()));
+    c.add(piclabel);
 
-    JLabel jlabel = new JLabel(icon);
+    // Panneau de dessin avant l'écouteur.
+    PanneauDessin dessin = new PanneauDessin();
+    dessin.setBackground(Color.CYAN);
+    c.add(dessin);
 
-    //ajouter les deux JLabel a JFrame
-    c.add(jlabel);
-    c.validate();*/
-
-    
-
-   try {
-      System.out.println(imgCommutateurUrl == null);
-      BufferedImage myPicture = ImageIO.read(new File(imgCommutateurUrl));
-      JLabel picLabel = new JLabel(new ImageIcon(myPicture));
-      c.add(picLabel);
-   } catch (IOException ex) {
-      System.out.println(ex);
-   }
-   
-   
+    // Création de l'écouteur
+    EcouteurSouris ecouteur = new EcouteurSouris(dessin); 
+    // Attachement de l'écouteur au panneau.
+    dessin.addMouseListener(ecouteur);
 
     // Ajout d'un bouton
     JButton bouton = new JButton("OK");
+    // Ecouteur pour capter l'actionnement
+    EcouteurAction ecouteurBouton = new EcouteurAction();
+    // Attachement au bouton
+    bouton.addActionListener(ecouteurBouton);
     c.add(bouton, "South");
+
 
   }
   
