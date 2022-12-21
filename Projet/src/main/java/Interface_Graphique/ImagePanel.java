@@ -12,14 +12,18 @@ public class ImagePanel extends JPanel {
     private BufferedImage image;
 
     public ImagePanel(String url) {
-       try {                
+       try 
+       {                
           image = ImageIO.read(new File(url));
-       } catch (IOException ex) {
+       } 
+       catch (IOException ex) 
+       {
             System.out.println(ex);
        }
     }
 
-    public BufferedImage getImage() {
+    public BufferedImage getImage() 
+    {
         return this.image;
     }
 }

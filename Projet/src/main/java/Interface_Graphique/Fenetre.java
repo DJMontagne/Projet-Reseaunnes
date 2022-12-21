@@ -10,8 +10,8 @@ import javax.swing.JLabel;
 
 public class Fenetre extends JFrame {
 
-  private final String imgCommutateurUrl = "..\\..\\img\\commutateur_100_100.png";
-  private final String imgOrdinateurUrl = "img\\ordinateur100_100.png";
+  private final String imgCommutateurUrl = "src\\img\\commutateur_100_100.png";
+  private final String imgOrdinateurUrl = "src\\img\\ordinateur_100_100.png";
 
   public JButton boutonCommutateur;
   public JButton boutonOrdinateur;
@@ -35,14 +35,15 @@ public class Fenetre extends JFrame {
     BorderLayout gestionnaire = new BorderLayout();
     c.setLayout(gestionnaire);
 
-    //Affichage d'une image 
-    /*ImagePanel img = new ImagePanel(imgCommutateurUrl);
+    //Affichage d'une image
+
+    ImagePanel img = new ImagePanel(imgCommutateurUrl); 
     JLabel piclabel = new JLabel(new ImageIcon(img.getImage()));
     // Ecouteur pour capter le click sur l'image
    // EcouteurAction ecouteurClickImg = new EcouteurAction();
     // Attachement a l'image
    // piclabel.addActionListener(ecouteurClickImg);
-    c.add(piclabel);*/
+    c.add(piclabel);
 
     /* 
     // Panneau de dessin avant l'écouteur.
