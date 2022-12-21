@@ -7,11 +7,6 @@ package General;
 import Outils.*;
 import Interface_Graphique.*;
 
-import java.util.ArrayList;
-import javax.swing.*;
-import java.awt.event.*; // Pour les évènements
-import java.awt.*;
-
 
 /**
  *
@@ -95,6 +90,7 @@ public class app {
         //System.out.println(Reseau.getReseauSelonMachine(pc1).getChemin(route2, pc2));
 
         // Tests Interface
+        System.out.println("Début tests Interface \n ");
 
         Fenetre fenetre1 = new Fenetre();
         fenetre1.setVisible(true);

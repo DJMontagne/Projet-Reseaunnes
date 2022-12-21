@@ -1,4 +1,4 @@
-package main.java.Interface_Graphique;
+package Interface_Graphique;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

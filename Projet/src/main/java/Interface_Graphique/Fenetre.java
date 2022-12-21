@@ -1,32 +1,31 @@
 package Interface_Graphique;
 
-import javax.swing.*;
-import java.awt.event.*; // Pour les évènements
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
 
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import javax.swing.JPanel;
-
-import Outils.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 public class Fenetre extends JFrame {
 
-  private String imgCommutateurUrl = "img\\commutateur_100_100.png";
-  private String imgCommutateurUrl2 = "commutateur_100_100.png";
+  private final String imgCommutateurUrl = "..\\..\\img\\commutateur_100_100.png";
+  private final String imgOrdinateurUrl = "img\\ordinateur100_100.png";
 
-  private String imgOrdinateurUrl = "";
+  public JButton boutonCommutateur;
+  public JButton boutonOrdinateur;
+  public JButton boutonRouteur;
+
+  private EcouteurAction ecouteurBoutonCommutateur;
+  private EcouteurAction ecouteurBoutonOrdinateur;
+  private EcouteurAction ecouteurBoutonRouteur;
 
   public Fenetre() {
     this.setTitle("test");
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.setBounds(100, 150, 200, 300); // Position x,y Taille l,h
-    //this.setSize(830,600);
+    //this.setBounds(100, 150, 200, 300); // Position x,y Taille l,h
+    this.setSize(830,600);
     this.setLocationRelativeTo(null);
 
     Container c = this.getContentPane();  // Conteneur à alimenter
@@ -37,28 +36,48 @@ public class Fenetre extends JFrame {
     c.setLayout(gestionnaire);
 
     //Affichage d'une image 
-    ImagePanel img = new ImagePanel(imgCommutateurUrl);
+    /*ImagePanel img = new ImagePanel(imgCommutateurUrl);
     JLabel piclabel = new JLabel(new ImageIcon(img.getImage()));
-    c.add(piclabel);
+    // Ecouteur pour capter le click sur l'image
+   // EcouteurAction ecouteurClickImg = new EcouteurAction();
+    // Attachement a l'image
+   // piclabel.addActionListener(ecouteurClickImg);
+    c.add(piclabel);*/
 
+    /* 
     // Panneau de dessin avant l'écouteur.
     PanneauDessin dessin = new PanneauDessin();
-    dessin.setBackground(Color.CYAN);
     c.add(dessin);
 
     // Création de l'écouteur
     EcouteurSouris ecouteur = new EcouteurSouris(dessin); 
     // Attachement de l'écouteur au panneau.
     dessin.addMouseListener(ecouteur);
+    */
 
-    // Ajout d'un bouton
-    JButton bouton = new JButton("OK");
-    // Ecouteur pour capter l'actionnement
-    EcouteurAction ecouteurBouton = new EcouteurAction();
-    // Attachement au bouton
-    bouton.addActionListener(ecouteurBouton);
-    c.add(bouton, "South");
+    // Ajout du bouton d'ajout de commutateur
+    boutonCommutateur = new JButton("Ajouter un commutateur");
+    // Ecouteur pour capter l'actionnement du bouton commutateur
+    ecouteurBoutonCommutateur = new EcouteurAction();
+    // Attachement au bouton commutateur
+    boutonCommutateur.addActionListener(ecouteurBoutonCommutateur);
+    c.add(boutonCommutateur, "East");
 
+    // Ajout du bouton d'ajout d'ordinateur
+    boutonOrdinateur = new JButton("Ajouter un ordinateur");
+    // Ecouteur pour capter l'actionnement du bouton commutateur
+    ecouteurBoutonOrdinateur = new EcouteurAction();
+    // Attachement au bouton commutateur
+    boutonOrdinateur.addActionListener(ecouteurBoutonOrdinateur);
+    c.add(boutonOrdinateur, "West");
+
+    // Ajout du bouton d'ajout d'ordinateur
+    boutonRouteur = new JButton("Ajouter un routeur");
+    // Ecouteur pour capter l'actionnement du bouton commutateur
+    ecouteurBoutonRouteur = new EcouteurAction();
+    // Attachement au bouton commutateur
+    boutonRouteur.addActionListener(ecouteurBoutonRouteur);
+    c.add(boutonRouteur, "South");
 
   }
   
