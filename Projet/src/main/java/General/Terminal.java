@@ -8,15 +8,15 @@ import java.util.ArrayList;
  * @author victo
  */
 public class Terminal {
-    private boolean run; //Pour le While, pour savoir si le terminal doit être ouvert ou se fermer
+    private boolean on; //Pour le While, pour savoir si le terminal doit être ouvert ou se fermer
     private Machine mach; //Machine sur laquelle le terminal va "s'afficher"
     
     public Terminal(Machine mach){
-        this.run = true;
+        this.on = true;
         this.mach = mach;
     }
     public void fermerTerminal(){ //arrête le terminal
-        this.run = false;
+        this.on = false;
     }
 
     public String arp(){ //affichage de la table ARP de la machine
@@ -34,9 +34,9 @@ public class Terminal {
     
     // MAIN DU PROGRAMME DU TERMINAL
     //Permet de lancer les méthodes correspondant à l'input de l'utilisateur
-    public void on(){
+    public void run(){
         Scanner sc = new Scanner(System.in);
-        while(this.run){
+        while(this.on){
             System.out.println("\nEntrez une commande : ");
             String utilisation = sc.nextLine();
             utilisation = utilisation.toLowerCase();
@@ -70,8 +70,8 @@ public class Terminal {
     }
     
     //-----------Getters--------------
-    public boolean isRun() {
-        return run;
+    public boolean isOn() {
+        return on;
     }
     //---------fonctions privées------
     private boolean IPValide(String candidat){
