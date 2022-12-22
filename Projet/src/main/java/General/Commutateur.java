@@ -1,9 +1,9 @@
-
 package General;
 
 import Outils.*;
-
 import java.util.HashMap;
+import java.util.ArrayList;
+
 /**
  * @author bpotetma
  */
@@ -14,6 +14,7 @@ public class Commutateur extends Machine {
     private int id;
     private static int nbrCommutateur;
     private TableMAC tableMAC;
+    private static ArrayList<Commutateur> allCommutateurs = new ArrayList<Commutateur>(); // ArrayList regroupant tous les commutateurs
     //private TableMAC tableMac;
 
     public Commutateur(int x, int y) {
@@ -22,6 +23,7 @@ public class Commutateur extends Machine {
         nbrCommutateur++;
         this.id = nbrCommutateur;
         this.tableMAC = new TableMAC();
+        allCommutateurs.add(this);
     }
 
     public TableMAC getTableMAC() {
@@ -37,6 +39,14 @@ public class Commutateur extends Machine {
             super.cartesR.add(cr);
         }
     }
+
+    public static ArrayList<Commutateur> getAllCommutateurs() {
+		return allCommutateurs;
+	}
+
+	public static Commutateur getUnCommutateur(int a) {
+		return allCommutateurs.get(a);
+	}
 
     @Override
     public String toString() {

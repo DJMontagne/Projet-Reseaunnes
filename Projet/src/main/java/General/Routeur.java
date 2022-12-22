@@ -8,12 +8,14 @@ public class Routeur extends Machine {
 	public static final int NBR_PORT_GIGA = 2;
 	private int id;
     private static int nbrRouteur;
+    private static ArrayList<Routeur> allRouteurs = new ArrayList<Routeur>(); // ArrayList regroupant tous les routeurs
 
 	public Routeur(int x, int y) {
 
 		super(x, y);
 		nbrRouteur++;
 		this.id = nbrRouteur;
+		allRouteurs.add(this);
 	}
 
 	@Override
@@ -36,6 +38,14 @@ public class Routeur extends Machine {
 
         System.out.println(this + "\n" + this.getTableRoutage());
     }
+
+	public static ArrayList<Routeur> getAllRouteurs() {
+		return allRouteurs;
+	}
+
+	public static Routeur getUnRouteur(int a) {
+		return allRouteurs.get(a);
+	}
 
     @Override
     public String toString() {

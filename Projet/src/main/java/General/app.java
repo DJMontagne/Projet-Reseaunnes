@@ -4,8 +4,10 @@
  */
 
 package General;
-import Outils.*;
+import java.io.IOException;
+
 import Interface_Graphique.*;
+import Outils.*;
 
 
 /**
@@ -13,7 +15,7 @@ import Interface_Graphique.*;
  * @author victo
  */
 public class app {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         Ordinateur pc1 = new Ordinateur(1,1);
         CarteReseau cr1 = new CarteReseau("eth0", "192.168.10.3", "255.255.255.0", "192.168.10.1");
@@ -94,6 +96,5 @@ public class app {
 
         Fenetre fenetre1 = new Fenetre();
         fenetre1.setVisible(true);
-
     }
 }

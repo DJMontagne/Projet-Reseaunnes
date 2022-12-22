@@ -6,7 +6,6 @@ import java.awt.*;
 
 import General.*;
 import Outils.*;
-import Interface_Graphique.*;
 
 
 /**
@@ -29,6 +28,7 @@ public class EcouteurAction extends JFrame implements ActionListener {
       CarteReseau crTest = new CarteReseau();
       pcTest.ajouterInterface(crTest);
       System.out.println("Ordinateur ajouté, voici sa config : \n");
+      System.out.println(Ordinateur.getAllOrdinateurss());
       pcTest.afficherConfig();
 
     }
@@ -39,19 +39,31 @@ public class EcouteurAction extends JFrame implements ActionListener {
       CarteReseau crTest = new CarteReseau();
       switch1.ajouterInterface(crTest);
       System.out.println("Commutateur ajouté, voici sa config :\n");
+      System.out.println(Commutateur.getAllCommutateurs());
       switch1.afficherConfig();
 
     }
     else if (this.bouton.getText() == "Ajouter un routeur")
     {
-      //Création d'un nouveau routeur
+      //Création d'un nouveau routeur et affichage de sa config
       Routeur routeurTest = new Routeur(16, 7);
-      CarteReseau crTest = new CarteReseau("eno1", "192.168.10.1");
+      CarteReseau crTest = new CarteReseau("eno1");
       routeurTest.ajouterInterface(crTest);
       System.out.println("Routeur ajouté, voici sa config : \n");
+      System.out.println(Routeur.getAllRouteurs());
       routeurTest.afficherConfig();
+
+      // Affichage d'une image de routeur
+      
+      //Fenetre.getFenetre().setVisible(false);
+      ImagePanel img = new ImagePanel(Fenetre.getUrlImgRouteur());
+      JLabel piclabel = new JLabel(new ImageIcon(img.getImage()));
+      Fenetre.getContainerC().add(piclabel);
+      Fenetre.getFenetre().setVisible(true);
 
     }
     System.out.println("\n");
     }
+
+
 }
