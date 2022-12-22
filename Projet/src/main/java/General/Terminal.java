@@ -15,10 +15,8 @@ public class Terminal {
         this.run = true;
         this.mach = mach;
     }
-    public void fermerTerminal(){ //retire le terminal de la liste des terminaux de la machine, le rendant inutilisable
-        this.mach.getTerminaux().remove(this);
+    public void fermerTerminal(){ //arrête le terminal
         this.run = false;
-        this.mach = null;
     }
 
     public String arp(){ //affichage de la table ARP de la machine
@@ -41,6 +39,7 @@ public class Terminal {
         while(this.run){
             System.out.println("\nEntrez une commande : ");
             String utilisation = sc.nextLine();
+            utilisation = utilisation.toLowerCase();
             String input[] = utilisation.split(" ");
             switch (input[0]) {
                 case "arp" -> {
