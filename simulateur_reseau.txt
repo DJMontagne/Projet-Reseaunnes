@@ -17,7 +17,7 @@ regarder packet tracer pour s'inspirer d
 
 
 mettre des contraintes pour les attributs (adresse ip, mac etc..)
-
+gr
 2ème séance
 ETQ utilisateur, je veux pouvoir ajouter un ordinateur
 ETQ utilisateur, je veux pouvoir ajouter un commutateur
