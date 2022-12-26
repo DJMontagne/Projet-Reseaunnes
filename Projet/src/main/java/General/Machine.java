@@ -15,7 +15,7 @@ public abstract class Machine {
     protected ArrayList<CarteReseau> cartesR; //Liste de cartes réseau
     private TableARP tableARP; //table ARP de la machine
     private TableRoutage tableRoutage; //table de routage de la machine
-    private ArrayList<Terminal> terminaux; //liste des terminaux de la machine(pour les commandes)
+    private Terminal terminal; //terminal de la machine
     private int x;
     private int y;
     private static ArrayList<Machine> machines = new ArrayList<>();
@@ -28,8 +28,7 @@ public abstract class Machine {
         Machine.nbrMachine++;
         this.id = nbrMachine;
         cartesR = new ArrayList<CarteReseau>(); //création d'une liste vide de carteReseau
-        terminaux = new ArrayList<Terminal>();  // création d'un liste vide de Terminal
-        terminaux.add(new Terminal(this)); //ajout d'un terminal dans la liste
+        terminal = new Terminal(this);  //ajout d'un terminal
         tableARP = new TableARP();         // création d'une tableARP vierge
         this.ports = new HashMap<>();
         this.x = mX;
@@ -37,12 +36,8 @@ public abstract class Machine {
         machines.add(this);
     }
     
-    
-    public void addTerminal(Terminal term){ //ajout d'un terminal dans la liste de terminaux
-        terminaux.add(term);
-    }
     public void fermerTerminal(int index){ //retire le terminal de la liste des terminaux de la machine, le rendant inutilisable
-        this.terminaux.get(index).fermerTerminal();
+        this.terminal.fermerTerminal();
     }
     
     //----LISTE DE GETTERS ET SETTERS (peut-être à renommer pour facilité)-----
@@ -56,6 +51,11 @@ public abstract class Machine {
     public int getY() {
 
         return this.y;
+    }
+
+    public Terminal getTerminal() {
+
+        return this.terminal;
     }
     
     public ArrayList<CarteReseau> getCartesR() {
@@ -117,10 +117,6 @@ public abstract class Machine {
 
     protected void setTableARP(TableARP tableARP) {
         this.tableARP = tableARP;
-    }
-
-    public ArrayList<Terminal> getTerminaux() {
-        return terminaux;
     }
     
     public HashMap<CarteReseau, ArrayList<CarteReseau>> getPorts() {

@@ -114,8 +114,8 @@ public class app {
         ARP.requete(route1, "192.168.10.4");
         ARP.requete(route1, "172.32.50.1");
 
-        route1.getTerminaux().get(0).ipRouteAdd("10.0.0.0", 8, "172.32.50.1");
-        route2.getTerminaux().get(0).ipRouteAdd("192.168.10.0", 24, "172.32.50.7");
+        route1.getTerminal().ipRouteAdd("10.0.0.0", 8, "172.32.50.1");
+        route2.getTerminal().ipRouteAdd("192.168.10.0", 24, "172.32.50.7");
 
         System.out.println("\n");
 
@@ -137,9 +137,9 @@ public class app {
         System.out.println("\n");
         switch2.afficherTableMAC();
 
-        pc2.getTerminaux().get(0).ping("172.32.50.1", false);
+        pc2.getTerminal().ping("172.32.50.1", false);
         System.out.println();
-        pc2.getTerminaux().get(0).traceroute("192.168.10.1");
+        pc2.getTerminal().traceroute("192.168.10.1");
 
         //System.out.println(Reseau.getReseauSelonMachine(pc1).getChemin(route2, pc2));
 
