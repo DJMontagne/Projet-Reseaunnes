@@ -10,12 +10,13 @@ import java.util.Map;
 
 public class Table {
 
-	protected int longMaxChampGauche;
+    protected int longMaxChampGauche;
     protected int longMaxChampMilieu;
     protected int longMaxChampDroite; 
     protected int longTotale;
-    protected HashMap<Machine, String[]> table;
+    protected HashMap<Integer, String[]> table;
     protected String[] affichageEnTete;
+    protected int indice;
 
     // Constructeur 
     /**
@@ -26,15 +27,23 @@ public class Table {
     }
 
     // Getter
-    public HashMap<Machine, String[]> getTable() {
+    public Map<Integer, String[]> getTable() {
         
         return this.table;
     }
 
-    public void remplir(Machine machine, String[] contenus) {
+    public void remplir(String[] contenus) {
 
-        if (!this.table.containsKey(machine)) {
-            this.table.put(machine, contenus);
+        boolean existence = false;
+        for (Map.Entry<Integer, String[]> entree : this.table.entrySet()) {
+            if (contenus[0].equals(entree.getValue()[0])) {
+                existence = true;
+                this.table.put(entree.getKey(), contenus);
+            }
+        }
+        if (!existence) {
+            this.indice++;
+            this.table.put(this.indice, contenus);
         }
     }
 
@@ -100,7 +109,7 @@ public class Table {
 
         String corps = "";
         int cpt = 0;
-        for (Map.Entry<Machine, String[]> entree : this.table.entrySet()) {
+        for (Map.Entry<Integer, String[]> entree : this.table.entrySet()) {
                 
             String[] contenusCorps = {entree.getValue()[0], entree.getValue()[1], entree.getValue()[2]};
             corps += this.affichageContenuTable(contenusCorps) + "\n";

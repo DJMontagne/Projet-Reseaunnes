@@ -142,6 +142,33 @@ public class IPv4 {
 		return masque;
 	}
 
+	public static Octet[] genererMasque(String strAddrIP) {
+
+		Octet[] addrIP = initAdresseVide();
+		IPv4.setAdresse(addrIP, strAddrIP); 
+		Octet[] masque = initAdresseVide();
+		if (adresseIPValide(addrIP)) {
+			for (int i = 0; i < NBR_OCTET; i++) {
+				if (addrIP[0].getDecimal() > 0 && addrIP[0].getDecimal() < 127) {
+					masque[0].setOctet(255);
+				}
+				else if (addrIP[0].getDecimal() > 127 && addrIP[0].getDecimal() < 192) {
+					masque[0].setOctet(255);
+					masque[1].setOctet(255);
+				}
+				else if (addrIP[0].getDecimal() >= 192) {
+					masque[0].setOctet(255);
+					masque[1].setOctet(255);
+					masque[2].setOctet(255);
+				}
+				if (masque[i].getDecimal() != 255){
+					masque[i].setOctet(0);
+				}
+			}
+		}
+		return masque;
+	}
+
 	// génère une adresse réseau en fonction de l'adresse IP et du masque donnés en argument de cette méthode
 	public Octet[] genererAdresseReseau(Octet[] addrIP, Octet[] masque) {
 		
@@ -151,6 +178,21 @@ public class IPv4 {
 				if (masque[i].getOctet()[j] == 1) {
 					addrReseau[i].getOctet()[j] = addrIP[i].getOctet()[j];					
 					this.masqueDecimal++;
+				}
+			}
+		}
+		return addrReseau;
+	}
+
+	public static Octet[] genererAdresseReseau(String strAddrIP, Octet[] masque) {
+		
+		Octet[] addrIP = initAdresseVide();
+		IPv4.setAdresse(addrIP, strAddrIP);
+		Octet[] addrReseau = initAdresseVide();
+		for (int i = 0; i < NBR_OCTET; i++) {
+			for (int j = 0; j < Octet.NBR_BIT; j++) {
+				if (masque[i].getOctet()[j] == 1) {
+					addrReseau[i].getOctet()[j] = addrIP[i].getOctet()[j];					
 				}
 			}
 		}
@@ -182,6 +224,19 @@ public class IPv4 {
 	public int getMasqueDecimal() {
 
 		return this.masqueDecimal;
+	}
+
+	public static int getMasqueDecimal(Octet[] masque) {
+
+		int masqueDecimal = 0;
+		for (int i = 0; i < NBR_OCTET; i++) {
+			for (int j = 0; j < Octet.NBR_BIT; j++) {
+				if (masque[i].getOctet()[j] == 1) {
+					masqueDecimal++;
+				}
+			}
+		}
+		return masqueDecimal;
 	}
 
 	public Octet[] getMasque() {
@@ -309,9 +364,9 @@ public class IPv4 {
 		return validite;
 	}
         
-        /**
+     /**
 	 * Récupération d'une adresse sous la forme X.X.X.X, de type String X représentant un octet dont les valeurs sont
-	 * représentées soit en binaire, soti en décimal selon la méthode.  
+	 * représentées soit en binaire, soit en décimal selon la méthode.  
 	 */
 	public static String getStrAdresse(Octet[] addr) {
 		

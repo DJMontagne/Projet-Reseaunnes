@@ -24,6 +24,7 @@ public class Ordinateur extends Machine {
         
         if (super.cartesR.size() == 0) {
             super.cartesR.add(cr);
+            cr.setMachine(this);
         }
     }
 

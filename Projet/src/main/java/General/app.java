@@ -26,8 +26,9 @@ public class app {
 
         System.out.println("\n");
 
-        Ordinateur pc2 = new Ordinateur(15,15);
+        Ordinateur pc2 = new Ordinateur(134, 78);
         CarteReseau cr2 = new CarteReseau("eth1", "192.168.10.4");
+        cr2.setPasserelle("192.168.10.1");
         pc2.ajouterInterface(cr2);
         pc2.afficherConfig();
 
@@ -42,14 +43,33 @@ public class app {
 
         System.out.println("\n");
 
-        Commutateur switch1 = new Commutateur(17, 3);
+        Commutateur switch1 = new Commutateur(5000000, 0);
         CarteReseau cr7 = new CarteReseau("eno1", "192.168.10.130");
         switch1.ajouterInterface(cr7);
         switch1.afficherConfig();
 
-        Routeur route2 = new Routeur(5, 50);
-        CarteReseau cr8 = new CarteReseau("eno2", "172.32.50.8");
-        route2.ajouterInterface(cr8);
+        System.out.println("\n");
+
+        Commutateur switch2 = new Commutateur(23, 4);
+        CarteReseau cr11 = new CarteReseau("enp2f1", "192.168.10.100");
+        switch2.ajouterInterface(cr11);
+        switch2.afficherConfig();
+
+        System.out.println("\n");
+
+        Ordinateur pc3 = new Ordinateur(5, 50);
+        CarteReseau cr8 = new CarteReseau("eno2", "10.32.1.7");
+        cr8.setPasserelle("10.32.1.1");
+        pc3.ajouterInterface(cr8);
+        pc3.afficherConfig();
+
+        System.out.println("\n");
+
+        Routeur route2 = new Routeur(164, 23);
+        CarteReseau cr9 = new CarteReseau("eno3", "172.32.50.1");
+        CarteReseau cr10 = new CarteReseau("enp2s1", "10.32.1.1");
+        route2.ajouterInterface(cr9);
+        route2.ajouterInterface(cr10);
         route2.afficherConfig();
 
         System.out.println("\n");
@@ -60,36 +80,66 @@ public class app {
         Liaison c4 = new Liaison("droit");
         c4.lier(route1, switch1);
 
+        Liaison c6 = new Liaison("croisé");
+        c6.lier(switch2, switch1);
+
         Liaison c5 = new Liaison("droit");
-        c5.lier(switch1, pc2);
+        c5.lier(switch2, pc2);
+
+        Liaison c2 = new Liaison("croisé");
+        c2.lier(route2, route1);
 
         Liaison c3 = new Liaison("croisé");
-        c3.lier(route1, route2);
+        c3.lier(route2, pc3);
+
 
         System.out.println("\n");
 
+        System.out.println("Réseaux : " + Reseau.getReseaux());
+
+        System.out.println("\n");
+        
         route1.afficherPorts();
-        route2.afficherPorts();
+        pc3.afficherPorts();
         switch1.afficherPorts();
         pc1.afficherPorts();
-
-        System.out.println("\n");
-        
-        System.out.println("Réseaux : " + Reseau.getReseaux());
+        switch2.afficherPorts();
         
         System.out.println("\n");
         
-
         System.out.print("Chemin : ");
-        ARP.requete(pc1, "192.168.10.4");
+        
+        String macAddrPC2 = ARP.requete(pc1, "192.168.10.4");
+        ARP.requete(route2, "10.32.1.7");
+        ARP.requete(route1, "192.168.10.4");
+        ARP.requete(route1, "172.32.50.1");
+
+        route1.getTerminaux().get(0).ipRouteAdd("10.0.0.0", 8, "172.32.50.1");
+        route2.getTerminaux().get(0).ipRouteAdd("192.168.10.0", 24, "172.32.50.7");
 
         System.out.println("\n");
 
         pc1.afficherTableARP();
         System.out.println("\n");
         pc2.afficherTableARP();
+        System.out.println("\n");
         switch1.afficherTableMAC();
+        System.out.println("\n");
+        route1.afficherTableARP();
+        System.out.println("\n");
         route1.afficherTableRoutage();
+        System.out.println("\n");
+        pc3.afficherTableARP();
+        System.out.println("\n");
+        route2.afficherTableRoutage();
+        System.out.println("\n");
+        route2.afficherTableARP();
+        System.out.println("\n");
+        switch2.afficherTableMAC();
+
+        pc2.getTerminaux().get(0).ping("172.32.50.1", false);
+        System.out.println();
+        pc2.getTerminaux().get(0).traceroute("192.168.10.1");
 
         //System.out.println(Reseau.getReseauSelonMachine(pc1).getChemin(route2, pc2));
 

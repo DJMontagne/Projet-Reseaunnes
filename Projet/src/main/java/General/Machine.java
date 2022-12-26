@@ -2,6 +2,8 @@ package General;
 
 import Outils.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -13,35 +15,49 @@ public abstract class Machine {
     protected ArrayList<CarteReseau> cartesR; //Liste de cartes réseau
     private TableARP tableARP; //table ARP de la machine
     private TableRoutage tableRoutage; //table de routage de la machine
-    private Terminal terminal; //terminal de la machine
+    private ArrayList<Terminal> terminaux; //liste des terminaux de la machine(pour les commandes)
     private int x;
     private int y;
+    private static ArrayList<Machine> machines = new ArrayList<>();
     private static int nbrMachine;
-    public static final Object PORT_DOWN = null;
-    private CarteReseau[] ports;
+    private static int NBR_PORT;
+    private HashMap<CarteReseau, ArrayList<CarteReseau>> ports;
     
     public Machine(int mX, int mY){
         
         Machine.nbrMachine++;
         this.id = nbrMachine;
         cartesR = new ArrayList<CarteReseau>(); //création d'une liste vide de carteReseau
-        terminal = new Terminal(this);  //ajout d'un terminal
+        terminaux = new ArrayList<Terminal>();  // création d'un liste vide de Terminal
+        terminaux.add(new Terminal(this)); //ajout d'un terminal dans la liste
         tableARP = new TableARP();         // création d'une tableARP vierge
-        tableRoutage = new TableRoutage(); //création d'une tableRoutage vierge(à voir avec le constructeur pour le 0.0.0.0/0)
-        this.ports = this.initPorts();
+        this.ports = new HashMap<>();
         this.x = mX;
         this.y = mY;
+        machines.add(this);
     }
     
     
-    
-    public void fermerTerminal(){ //retire le terminal de la liste des terminaux de la machine, le rendant inutilisable
-        this.terminal.fermerTerminal();
+    public void addTerminal(Terminal term){ //ajout d'un terminal dans la liste de terminaux
+        terminaux.add(term);
+    }
+    public void fermerTerminal(int index){ //retire le terminal de la liste des terminaux de la machine, le rendant inutilisable
+        this.terminaux.get(index).fermerTerminal();
     }
     
     //----LISTE DE GETTERS ET SETTERS (peut-être à renommer pour facilité)-----
-     protected abstract void ajouterInterface(CarteReseau cr);
+    protected abstract void ajouterInterface(CarteReseau cr);
 
+    public int getX() {
+
+        return this.x;
+    }
+
+    public int getY() {
+
+        return this.y;
+    }
+    
     public ArrayList<CarteReseau> getCartesR() {
         return cartesR;
     }
@@ -69,7 +85,31 @@ public abstract class Machine {
             }
         }
         return carteReseau;
-    } 
+    }
+
+    public CarteReseau getInterfaceParDefaut(Machine machine) {
+
+        CarteReseau carteReseau = this.getInterfaceCompatible(machine);
+        // Si il n'existe pas de carteReseau compatible, une carte réseau non utilisée est récupérée
+        for (int i = 0; i < this.cartesR.size(); i++) {
+            if (carteReseau == null) {
+                if (!this.ports.containsKey(this.cartesR.get(i))) {
+                    carteReseau = this.cartesR.get(i);
+                }
+                else {
+                    for (int j = 0; j < machine.cartesR.size(); j++) {
+                        for (Map.Entry<CarteReseau, ArrayList<CarteReseau>> port : this.ports.entrySet()) {
+                            if (port.getValue().contains(machine.cartesR.get(j))) {
+                                carteReseau = port.getKey();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return carteReseau;
+
+    }
 
     public TableARP getTableARP() {
         return tableARP;
@@ -79,90 +119,52 @@ public abstract class Machine {
         this.tableARP = tableARP;
     }
 
-    public TableRoutage getTableRoutage() {
-        return tableRoutage;
-    }
-
-    protected void setTableRoutage(TableRoutage tableRoutage) {
-        this.tableRoutage = tableRoutage;
-    }
-
-    public Terminal getTerminal() {
-        return terminal;
+    public ArrayList<Terminal> getTerminaux() {
+        return terminaux;
     }
     
-    public CarteReseau[] getPorts() {
+    public HashMap<CarteReseau, ArrayList<CarteReseau>> getPorts() {
 
         return this.ports;
     }
 
-    public boolean carteRAttribue(CarteReseau cr) {
-        
-        boolean estAttribue = false;
-        for (int i = 0; i < this.ports.length; i++) {
-            if (this.ports[i] != PORT_DOWN && this.ports[i].equals(cr)) {
-                estAttribue = true;
+    public int taillePorts() {
+
+        int taillePort = 0;
+        for (Map.Entry<CarteReseau, ArrayList<CarteReseau>> port : this.ports.entrySet()) {
+            for (int i = 0; i < port.getValue().size(); i++) {
+                taillePort++;
             }
         }
-        return estAttribue;
+        return taillePort;
     }
 
-    private CarteReseau[] initPorts() {
-        
-        CarteReseau[] initPorts = null;
-        if (this instanceof Ordinateur) {
-            initPorts = new CarteReseau[Ordinateur.NBR_PORT_FAST];
-        }
-        else if (this instanceof Routeur) {
-            initPorts = new CarteReseau[Routeur.NBR_PORT_GIGA];
-        }
-        else if (this instanceof Commutateur) {
-            initPorts = new CarteReseau[Commutateur.NBR_PORT_FAST];
-        }
-
-        return initPorts;
-    }
-
-    public boolean attribuerPort(Machine machine) {
+    public boolean attribuerPort(Machine machineDest) {
 
         boolean portLibre = false;
         if (this.cartesR.size() != 0) {
+            // Récupération de la carte réseau de "this" ayant la même adresse Réseau et le même masque que la celle du paramètre "machineDest"
+            CarteReseau carteRSrc = this.getInterfaceParDefaut(machineDest);
+            CarteReseau carteRDest = machineDest.getInterfaceParDefaut(this);
             if (this instanceof Ordinateur) {
-                for (int i = 0; i < this.ports.length; i++) {
-                    if (this.ports[i] == PORT_DOWN) {
-                        this.ports[i] = this.cartesR.get(0);
-                        portLibre = true;
-                        i = Ordinateur.NBR_PORT_FAST;
-                    }
-                }
+                Machine.NBR_PORT = Ordinateur.NBR_PORT_FAST;
             }
             else if (this instanceof Routeur) {
-                // Récupération d'une carte réseau ayant la même adresse Réseau et le même masque que la celle du paramètre "machine"
-                CarteReseau carteR = this.getInterfaceCompatible(machine);
-                if (carteR == null) {
-                    for (int i = 0; i < this.cartesR.size(); i++) {
-                        if (!this.carteRAttribue(this.cartesR.get(i))) {
-                            carteR = this.cartesR.get(i);
-                        }
-                    }
-                }
-                for (int i = 0; i < this.ports.length; i++) {
-                    if (this.ports[i] == PORT_DOWN) {
-                        this.ports[i] = carteR;
-                        portLibre = true;
-                        i = Routeur.NBR_PORT_GIGA;
-                    }
-                }
+                Machine.NBR_PORT = Routeur.NBR_PORT_GIGA;
             }
             else if (this instanceof Commutateur) {
-                for (int i = 0; i < this.ports.length; i++) {
-                    if (this.ports[i] == PORT_DOWN) {
-                        this.ports[i] = this.cartesR.get(0);
-                        portLibre = true;
-                        i = Commutateur.NBR_PORT_FAST;
-                    }
-                }
+                Machine.NBR_PORT = Commutateur.NBR_PORT_FAST;
             }
+            if (this.ports.containsKey(carteRSrc) && this.taillePorts() < Machine.NBR_PORT) {
+                this.ports.get(carteRSrc).add(carteRDest);
+                portLibre = true;
+            }
+            else if (this.taillePorts() < Machine.NBR_PORT) {
+                ArrayList<CarteReseau> cartesRDest = new ArrayList<>();
+                cartesRDest.add(carteRDest);
+                this.ports.put(carteRSrc, cartesRDest);
+                portLibre = true;
+            }    
         }
         return portLibre;
     }
@@ -170,17 +172,33 @@ public abstract class Machine {
     public void afficherPorts() {
 
         String ports = "[";
-        for (int i = 0; i < this.ports.length; i++) {
-            ports += (i + 1) + " => ";
-            if (this.ports[i] != PORT_DOWN) {
-                ports += IPv4.getStrAdresse(this.ports[i].getIP().getAdresseIP());
+        if (this instanceof Ordinateur) {
+            Machine.NBR_PORT = Ordinateur.NBR_PORT_FAST;
+        }
+        else if (this instanceof Routeur) {
+            Machine.NBR_PORT = Routeur.NBR_PORT_GIGA;
+        }
+        else if (this instanceof Commutateur) {
+            Machine.NBR_PORT = Commutateur.NBR_PORT_FAST;
+        }
+        int nbrPort = 0;
+        int i = 0;
+        for (Map.Entry<CarteReseau, ArrayList<CarteReseau>> cr : this.ports.entrySet()) {
+            for (int j = 0; j < cr.getValue().size(); j++) {
+                ports += cr.getKey().getNomInterface() + " => ";
+                ports += IPv4.getStrAdresse(cr.getValue().get(j).getIP().getAdresseIP());
+                if (j != (cr.getValue().size() - 1)) {
+                    ports += "    ";
+                }
+                nbrPort++;
             }
-            else {
-                ports += "DOWN";
+            if (i != this.taillePorts() - 1) {
+                ports += "    ";
             }
-            if (i != (this.ports.length - 1)) {
-                ports += "\t";
-            }
+            i++;
+        }
+        for (int k = nbrPort; k < Machine.NBR_PORT; k++) {
+            ports += "    " + (k + 1) + " => DOWN";
         }
         ports += "]";
         System.out.println(ports);

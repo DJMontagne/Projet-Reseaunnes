@@ -83,6 +83,33 @@ public class Reseau {
         return reseauMachineExistante;
     }
 
+    public static Reseau getReseauSelonMachines(Machine machine1, Machine machine2) {
+
+        Reseau reseauMachineExistante = null;
+        if (!Reseau.reseaux.isEmpty()) {
+            for (int i = 0; i < Reseau.reseaux.size(); i++) {
+                if (Reseau.reseaux.get(i).existenceMachine(machine1) 
+                && Reseau.reseaux.get(i).existenceMachine(machine2)) {
+                    reseauMachineExistante = Reseau.reseaux.get(i);
+                }
+            }
+        }
+        return reseauMachineExistante;
+    }
+
+    public static Reseau getReseauSelonLiaison(Liaison liaison) {
+
+        Reseau reseau = null;
+        for (int i = 0; i < Reseau.reseaux.size(); i++) {
+            for (int j = 0; j < Reseau.reseaux.get(i).getLiaisons().size(); j++) {
+                if (Reseau.reseaux.get(i).getLiaisons().get(j).equals(liaison)) {
+                    reseau = Reseau.reseaux.get(i);
+                }
+            }
+        }
+        return reseau;
+    }
+
     public ArrayList<Liaison> getLiaisonSelonMachine(Machine mMachine) {
 
         ArrayList<Liaison> liaisonsMachine = new ArrayList<>();
@@ -100,7 +127,8 @@ public class Reseau {
         
         Reseau reseau = null;
         for (Map.Entry<Machine, Machine> machine : liaison.getLiaison().entrySet()) {
-            if (machine.getKey() instanceof Routeur && machine.getValue() instanceof Routeur) {
+            if ((machine.getKey() instanceof Routeur && getReseauSelonMachine(machine.getKey()) != null)
+            || (machine.getValue() instanceof Routeur && getReseauSelonMachine(machine.getValue()) != null)) {
                 reseau = new Reseau();
                 reseau.ajouterLiaison(liaison);
             }
@@ -121,41 +149,6 @@ public class Reseau {
                 }
             }
         }
-    }
-
-    public String getChemin(Machine machineSrc, Machine machineDest) {
-
-        String chemin = "";
-        boolean machineAtteinte = false;
-        while (!machineAtteinte) {
-            for (int i = 0; i < this.liaisons.size(); i++) {
-                for (Map.Entry<Machine, Machine> machine : this.liaisons.get(i).getLiaison().entrySet()) {
-                    if (machine.getKey().equals(machineSrc)) {
-                        chemin += machine.getKey().toString() + " ---> ";
-                        if (machine.getValue() != machineDest) {
-                            machineSrc = machine.getValue();
-                        }
-                        else {
-                            chemin += machine.getValue().toString();
-                            machineAtteinte = true;
-                            i = this.liaisons.size() - 1;
-                        }
-                    }
-                    else if (machine.getValue().equals(machineSrc)) {
-                        chemin += machine.getValue().toString() + " ---> ";                        
-                        if (machine.getKey() != machineDest) {
-                            machineSrc = machine.getKey();
-                        }
-                        else {
-                            chemin += machine.getKey().toString();
-                            machineAtteinte = true;
-                            i = this.liaisons.size() - 1;
-                        }
-                    }
-                }
-            }
-        }
-        return chemin;
     }
 
     public String toString() {

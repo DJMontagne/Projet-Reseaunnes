@@ -10,6 +10,7 @@ public class CarteReseau {
     private IPv4 ip;
     private MAC mac;
     private String nominterface;
+    private Machine machine;
 
     //Constructeurs
     public CarteReseau() {
@@ -64,6 +65,11 @@ public class CarteReseau {
 
         return this.nominterface;
     }
+
+    public Machine getMachine() {
+
+        return this.machine;
+    }
     
     //Setters
     public void setAdresseMAC(String adresseMAC) {
@@ -81,6 +87,11 @@ public class CarteReseau {
     public void setAdresseIP(String addrIP) {
 
         IPv4.setAdresse(this.ip.getAdresseIP(), addrIP);
+    }
+
+    public void setMachine(Machine machine) {
+
+        this.machine = machine;
     }
     
     /**

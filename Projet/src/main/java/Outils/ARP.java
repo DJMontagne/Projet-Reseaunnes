@@ -3,6 +3,7 @@ package Outils;
 import General.*;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -11,75 +12,89 @@ import java.util.Map;
 
 public class ARP {
 	
-	private static int nbrEnvoieRequete = 0;
+        private static int nbrEnvoieRequete = 0;
 
 	public static String requete(Machine machineSrc, String strAddrIP) {
 
-		Machine cpMachineSrc = machineSrc;
+		ICMP.verbose = true;
+
+		if (nbrEnvoieRequete == 0) {
+			System.out.print(ICMP.verbose ? "\nEnvoie d'une requête ARP...\n\n" : "");
+		}
+		else if (nbrEnvoieRequete == 1) {
+			System.out.print(ICMP.verbose ? "\nRéponse de la requête ARP...\n\n" : "");
+		}
+
+		CarteReseau crSrc = null;
+		if (machineSrc instanceof Routeur) {
+			Routeur routeur = (Routeur) machineSrc;
+			crSrc = routeur.getCarteRSelonRoute(strAddrIP);
+		}
+		else {
+			crSrc = machineSrc.getCartesR().get(0);
+		}
+
+		CarteReseau crCourante = crSrc;
+		Machine machineCourante = machineSrc;
 		Octet[] addrIP = IPv4.initAdresseVide();
 		IPv4.setAdresse(addrIP, strAddrIP);
-		Reseau reseau = Reseau.getReseauSelonMachine(machineSrc);
 		String adresseMAC = null;
-		int ttl = 600;
+		ArrayList<Commutateur> fileCommutateur = new ArrayList<>();
+		Machine commutateurAtteint = null;
 
-		while (adresseMAC == null && ttl > 0) {
-			for (int i = 0; i < reseau.getLiaisons().size(); i++) {	
-				for (Map.Entry<Machine, Machine> machine : reseau.getLiaisons().get(i).getLiaison().entrySet()) {
-					ttl--;
-					if (machine.getKey().equals(cpMachineSrc)) {
-						System.out.print(cpMachineSrc + " ---> ");
-						CarteReseau crMachineDestCompatible = machine.getValue().getInterfaceCompatible(machineSrc);
-						if (crMachineDestCompatible != null && IPv4.estEgale(crMachineDestCompatible.getIP().getAdresseIP(), addrIP)) {
-							adresseMAC = machine.getValue().getInterfaceCompatible(cpMachineSrc).getMAC().getAdresse();
-							System.out.print(machine.getValue() + "\n");
+		Iterator<Map.Entry<CarteReseau, ArrayList<CarteReseau>>> iterateur = machineCourante.getPorts().entrySet().iterator();
+		while (iterateur.hasNext()) {
+			Map.Entry<CarteReseau, ArrayList<CarteReseau>> cr = iterateur.next();	
+			if (crCourante.equals(cr.getKey())) {
+				for (int i = 0; i < cr.getValue().size(); i++) {
+					CarteReseau crDest = cr.getValue().get(i);
+					Machine machineDest = crDest.getMachine();
+					if (!machineDest.equals(commutateurAtteint) && !machineDest.equals(machineSrc)) {
+						System.out.print(ICMP.verbose ? machineCourante + " ---> " : "");
+						if (IPv4.estEgale(crDest.getIP().getAdresseIP(), addrIP)) {
+							adresseMAC = crDest.getMAC().getAdresse();
+							System.out.print(ICMP.verbose ? machineDest + "\n" : "");
 							// Appel méthode de préparation et d'ajout de contenus pour la table ARP
-							ARP.remplissageTableARP(machineSrc, machine.getValue());
+							ARP.remplissageTableARP(machineSrc, machineDest);
 							// Reponse de la requete
 							nbrEnvoieRequete++;
 							if (nbrEnvoieRequete == 1) {
-								String iPMachineSrc = IPv4.getStrAdresse(machineSrc.getInterfaceCompatible(machine.getValue()).getIP().getAdresseIP());
-								ARP.requete(machine.getValue(), iPMachineSrc);
+								String iPMachineSrc = IPv4.getStrAdresse(machineSrc.getInterfaceCompatible(machineDest).getIP().getAdresseIP());
+								ARP.requete(machineDest, iPMachineSrc);
 							}
 							ARP.nbrEnvoieRequete = 0; 
 							// On sort de la boucle itérant les liaisons du réseau
-							i = reseau.getLiaisons().size();
+							i = cr.getValue().size();
 						}
 						else {
-							if (machine.getValue() instanceof Commutateur) {
-								Commutateur commutateur = (Commutateur) machine.getValue();
-								ARP.remplissageTableMAC(machineSrc, commutateur);
+							System.out.print(ICMP.verbose ? machineDest + "   " : "");
+							if (machineDest instanceof Commutateur) {
+								Commutateur commutateur = (Commutateur) machineDest;
+								ARP.remplissageTableMAC(crSrc.getMAC().getAdresse(), machineCourante, commutateur);
+								fileCommutateur.add(commutateur);
+								if (machineCourante instanceof Commutateur) {
+									commutateurAtteint = machineCourante;
+								}	
 							}
-							cpMachineSrc = machine.getValue();
+							if (i == cr.getValue().size() - 1 && !fileCommutateur.isEmpty()) {
+								machineCourante = fileCommutateur.get(0);
+								iterateur = machineCourante.getPorts().entrySet().iterator();
+								fileCommutateur.remove(0);
+								crCourante = machineCourante.getCartesR().get(0);
+							}
 						}
 					}
-					else if (machine.getValue().equals(cpMachineSrc)) {
-						System.out.print(cpMachineSrc + " ---> ");
-						CarteReseau crMachineDestCompatible = machine.getKey().getInterfaceCompatible(machineSrc);
-						if (crMachineDestCompatible != null && IPv4.estEgale(crMachineDestCompatible.getIP().getAdresseIP(), addrIP)) {
-							adresseMAC = machine.getKey().getInterfaceCompatible(cpMachineSrc).getMAC().getAdresse();
-							System.out.print(machine.getKey() + "\n");
-							// Appel méthode de préparation et d'ajout de contenus pour la table ARP
-							ARP.remplissageTableARP(machineSrc, machine.getKey());
-							// Reponse de la requete
-							nbrEnvoieRequete++;
-							if (nbrEnvoieRequete == 1) {
-								String iPMachineSrc = IPv4.getStrAdresse(machineSrc.getInterfaceCompatible(machine.getKey()).getIP().getAdresseIP());
-								ARP.requete(machine.getKey(), iPMachineSrc);
-							}
-							ARP.nbrEnvoieRequete = 0; 
-							// On sort de la boucle itérant les liaisons du réseaux
-							i = reseau.getLiaisons().size();
-						}
-						else {
-							if (machine.getKey() instanceof Commutateur) {
-								Commutateur commutateur = (Commutateur) machine.getKey();
-								ARP.remplissageTableMAC(machineSrc, commutateur);
-							}
-							cpMachineSrc = machine.getKey();
-						}
+					else if (i == cr.getValue().size() - 1 && !fileCommutateur.isEmpty()) {
+						machineCourante = fileCommutateur.get(0);
+						iterateur = machineCourante.getPorts().entrySet().iterator();
+						fileCommutateur.remove(0);
+						crCourante = machineCourante.getCartesR().get(0);
 					}
 				}
 			}
+		}
+		if (adresseMAC == null) {
+				System.out.print(ICMP.verbose ? "\n\nL'hôte de destination n'a pas été trouvé, le paquet ARP se détruit...\n" : "");
 		}
 		return adresseMAC;
 	}
@@ -87,38 +102,41 @@ public class ARP {
 	private static void remplissageTableARP(Machine machineSrc, Machine machineDest) {
 
 		// Remplissage de la table ARP de la machine destination
-		CarteReseau crCompatibleMachine = machineSrc.getInterfaceCompatible(machineDest);
-		String[] infosMachineSrc = {IPv4.getStrAdresse(crCompatibleMachine.getIP().getAdresseIP()), 
-									crCompatibleMachine.getMAC().getAdresse(),
-									crCompatibleMachine.getNomInterface()};
-		machineDest.getTableARP().remplir(machineSrc, infosMachineSrc);
-		// Remplissage de la table ARP de la machine source
-		crCompatibleMachine = machineDest.getInterfaceCompatible(machineSrc);
-		String[] infosMachineDest = {IPv4.getStrAdresse(crCompatibleMachine.getIP().getAdresseIP()), 
-									crCompatibleMachine.getMAC().getAdresse(),
-									crCompatibleMachine.getNomInterface()};
-		machineSrc.getTableARP().remplir(machineDest, infosMachineDest);
+		CarteReseau crCompatibleMachineSrc = machineSrc.getInterfaceCompatible(machineDest);
+		CarteReseau crCompatibleMachineDest = machineDest.getInterfaceCompatible(machineSrc);
+		
+		if (crCompatibleMachineSrc != null && crCompatibleMachineDest != null) {
+			String[] infosMachineSrc = {IPv4.getStrAdresse(crCompatibleMachineSrc.getIP().getAdresseIP()), 
+									crCompatibleMachineSrc.getMAC().getAdresse(),
+									crCompatibleMachineDest.getNomInterface()};
+			machineDest.getTableARP().remplir(infosMachineSrc);
+			// Remplissage de la table ARP de la machine source
+			String[] infosMachineDest = {IPv4.getStrAdresse(crCompatibleMachineDest.getIP().getAdresseIP()), 
+										crCompatibleMachineDest.getMAC().getAdresse(),
+										crCompatibleMachineSrc.getNomInterface()};
+			machineSrc.getTableARP().remplir(infosMachineDest);
+		}
 	}
 
-	private static void remplissageTableMAC(Machine machineSrc, Commutateur commutateur) {
+	private static void remplissageTableMAC(String addrMacSrc, Machine machineCourante, Commutateur commutateur) {
+
 
 		// Attribution d'un numéro de port pour la machine enregistrée dans la table MAC
-		ArrayList<Integer> numsPortUtilise = new ArrayList<>();
-		for (Map.Entry<Machine, String[]> entree : commutateur.getTableMAC().getTable().entrySet()) {
-			int num = Integer.parseInt(entree.getValue()[2].split("/")[1]);
-			numsPortUtilise.add(num);
-		}
 		int numPort = 0;
-		for (int i = 0; i < commutateur.getPorts().length; i++) {
-			if (commutateur.getPorts()[i] != Machine.PORT_DOWN && !numsPortUtilise.contains(i)) {
-				numPort = i;
+		int i = 0;
+		for (Map.Entry<CarteReseau, ArrayList<CarteReseau>> cr : commutateur.getPorts().entrySet()) {
+			for (int j = 0; j < cr.getValue().size(); j++) {
+				if (cr.getValue().get(j).getMachine().equals(machineCourante)) {
+					numPort = i + 1;
+				}
+				i++;
 			}
 		}
-		// Remplissage de la table MAC de la machine destination
-		CarteReseau crCompatibleMachine = machineSrc.getInterfaceCompatible(commutateur);
-		String[] infosMachineSrc = {crCompatibleMachine.getMAC().getAdresse(), 
+		String[] infosMachineSrc = {addrMacSrc, 
 									"DYNAMIC",
 									"Fa0/" + numPort};
-		commutateur.getTableMAC().remplir(machineSrc, infosMachineSrc);
+		if (numPort != 0) {	
+			commutateur.getTableMAC().remplir(infosMachineSrc);
+		}
 	}
 }

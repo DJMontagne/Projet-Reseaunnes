@@ -37,6 +37,7 @@ public class Commutateur extends Machine {
         
         if (super.cartesR.size() == 0) {
             super.cartesR.add(cr);
+            cr.setMachine(this);
         }
     }
 
@@ -56,6 +57,6 @@ public class Commutateur extends Machine {
 
     public void afficherTableMAC() {
 
-        System.out.println(this.tableMAC);
+        System.out.println(this + "\n" + this.tableMAC);
     }
 }

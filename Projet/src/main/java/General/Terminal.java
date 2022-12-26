@@ -2,6 +2,8 @@ package General;
 import java.util.Scanner;
 import Outils.*;
 import java.util.ArrayList;
+import java.util.Map;
+
 
 /**
  *
@@ -23,8 +25,95 @@ public class Terminal {
         return this.mach.getTableARP().toString();
     }
     
-    public void ping(IPv4 adrr){
-        // à faire
+    public void ipRouteAdd(String strAddrReseau, int masqueDecimal, String passerelle) {
+
+        if (this.mach instanceof Routeur) {
+            
+            Routeur routeur = (Routeur) this.mach;
+            Octet[] masque = IPv4.genererMasque(passerelle);
+            Octet[] addrReseau = IPv4.genererAdresseReseau(passerelle, masque);
+            
+            String nomInterface = null;
+            TableRoutage tableRoutage = routeur.getTableRoutage();
+            
+            for (Map.Entry<Integer, String[]> table : tableRoutage.getTable().entrySet()) {
+                if (table.getValue()[0].split("/")[0].equals(IPv4.getStrAdresse(addrReseau))) {
+                    nomInterface = table.getValue()[2];
+                }
+            }
+
+            String[] infosTableRoutage = {strAddrReseau + "/" + Integer.toString(masqueDecimal),
+                passerelle,
+                nomInterface};
+            if (nomInterface != null) {
+                tableRoutage.remplir(infosTableRoutage);
+            }    
+        }
+    }
+    
+    public void ping(String addrIPDest, boolean verbose){
+
+        final int NBR_PING = 4;
+        boolean status;
+        String addrIPSrc = null;
+        // Empêche l'affichage de la commande "traceroute"
+        ICMP.commande = "ping";
+
+        if (mach instanceof Routeur) {
+            Routeur routeur = (Routeur) mach;
+            addrIPSrc = IPv4.getStrAdresse(routeur.getCarteRSelonRoute(addrIPDest).getIP().getAdresseIP());
+        }
+        else {
+            addrIPSrc = IPv4.getStrAdresse(mach.getCartesR().get(0).getIP().getAdresseIP());
+        }
+        // Affichage
+        System.out.println("\nPING " + addrIPDest + "\n");
+        for (int i = 0; i < NBR_PING; i++) {
+            // Requete ICMP
+            String output = "";
+            if (verbose) {
+                output += "\n";
+            }
+            status = ICMP.executerRequete(mach, addrIPSrc, addrIPDest, verbose);
+            if (status && ICMP.codeStatus == ICMP.FINISH) {
+                output += "Reply from " + addrIPDest + ": icmp_seq=" + (i + 1)
+                    + " ttl=" + ICMP.ttl + " time";
+                if (ICMP.tempsTotal < 1) {
+                    output += "<1 ms";
+                }
+                else {
+                    double temps = (double) Math.round(ICMP.tempsTotal * 100) / 100;
+                    output += "=" + temps + " ms";
+                }
+            }
+            else if (status && ICMP.codeStatus == ICMP.HOST_UNREACHABLE) {
+            output += "Reply from " + addrIPDest + ": Destination host unreachable";
+            }
+            else {
+                output += "Request timed out";
+            }
+            if (verbose && i != NBR_PING - 1) {
+                output += "\n\n\n";
+            } 
+            System.out.println(output);
+        }
+    }
+
+    public void traceroute(String addrIPDest) {
+
+        boolean status;
+        String addrIPSrc = null;
+        ICMP.commande = "traceroute";
+
+        if (mach instanceof Routeur) {
+            Routeur routeur = (Routeur) mach;
+            addrIPSrc = IPv4.getStrAdresse(routeur.getCarteRSelonRoute(addrIPDest).getIP().getAdresseIP());
+        }
+        else {
+            addrIPSrc = IPv4.getStrAdresse(mach.getCartesR().get(0).getIP().getAdresseIP());
+        }
+
+        status = ICMP.executerRequete(mach, addrIPSrc, addrIPDest, false);
     }
     
     public String ifconfig(){ //affichage de la config de la machine
@@ -48,7 +137,7 @@ public class Terminal {
                 case "ping" -> {
                     if(input.length == 2){
                         if(IPValide(input[1])){
-                            ping(new IPv4(input[1]));
+                            //ping(input[1]);
                         }else{
                             System.out.println("adresse ip non valide ...");
                         }

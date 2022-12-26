@@ -25,7 +25,8 @@ public class TableMAC extends Table {
         super.longMaxChampMilieu = this.LONG_MAX_TYPE;
         super.longMaxChampDroite = this.LONG_MAX_NOM_PORT;
         super.affichageEnTete = this.AFFICHAGE_EN_TETE;
-        super.table = new HashMap<Machine, String[]>();
+        super.table = new HashMap<Integer, String[]>();
         super.longTotale = this.LONG_ADRESSE_MAC + this.LONG_MAX_TYPE + this.LONG_MAX_NOM_PORT;
+        super.indice = 0;
     }
 }
