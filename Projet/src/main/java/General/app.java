@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-    
+  
 
     
 package General;
@@ -17,7 +17,7 @@ import Outils.*;
  * @author victo
  */
 public class app {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
         Ordinateur pc1 = new Ordinateur(1,1);
         CarteReseau cr1 = new CarteReseau("eth0", "192.168.10.3", "255.255.255.0", "192.168.10.1");
@@ -137,9 +137,9 @@ public class app {
         System.out.println("\n");
         switch2.afficherTableMAC();
 
-        pc2.getTerminal().ping("172.32.50.1", false);
+        //pc2.getTerminal().ping("172.32.50.1", false);
         System.out.println();
-        pc2.getTerminal().traceroute("192.168.10.1");
+        //pc2.getTerminal().traceroute("192.168.10.1");
 
         //System.out.println(Reseau.getReseauSelonMachine(pc1).getChemin(route2, pc2));
 

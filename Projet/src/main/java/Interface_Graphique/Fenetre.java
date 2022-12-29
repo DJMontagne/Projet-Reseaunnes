@@ -16,9 +16,9 @@ public class Fenetre extends JFrame {
   private static final int tailleFenetreY = 750; 
 
   // Relatifs aux images
-  private static final String imgCommutateurUrl = "src\\img\\commutateur_100_100.png";
-  private static final String imgOrdinateurUrl = "src\\img\\ordinateur_100_100.png";
-  private static final String imgRouteurUrl = "src\\img\\routeur_100_100.png"; 
+  private static final String imgCommutateurUrl = "src\\img\\commutateur.png";
+  private static final String imgOrdinateurUrl = "src\\img\\ordinateur.png";
+  private static final String imgRouteurUrl = "src\\img\\routeur.png"; 
   public JPanel jPanelImages;
   private String ajoutImage;
   private final static int tailleImageX = 100;
