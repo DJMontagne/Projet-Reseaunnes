@@ -1,12 +1,17 @@
 package Interface_Graphique;
 
-import javax.swing.*; // API pour les interfaces graphiques
-import java.awt.event.*; // Pour les évènements
-import java.io.IOException;
-import java.awt.*;
+// Pour les évènements
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import General.*;
-import Outils.*;
+// API pour les interfaces graphiques
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+import General.CarteReseau;
+import General.Commutateur;
+import General.Ordinateur;
+import General.Routeur;
 
 
 /**
@@ -18,79 +23,71 @@ public class EcouteurAction extends JFrame implements ActionListener {
 
   private JButton bouton;
 
-  private JPanel jPanelSouris;
-  private EcouteurSouris ecouteurSouris;
-
   public void actionPerformed(ActionEvent e) {
     
     this.bouton = (JButton) e.getSource();
 
-    // Pour capter le clic de souris
-    Fenetre.getjPanelSouris().addMouseListener(Fenetre.getEcouteurSouris());
+    //Fenetre.getFenetre().getjPanelImages().updateUI(); // ABSOLUMENT NECESAIRE
+
+
+    // Pour capter le clic de souris sur la fenetre lorsqu'un bouton est cliqué
     Fenetre.getFenetre().add(Fenetre.getjPanelSouris());
     Fenetre.getFenetre().setVisible(true);
 
-    try 
+    CarteReseau nvlCR;
+
+    switch(this.bouton.getText())
     {
-      if (this.bouton.getText() == "Ajouter un ordinateur") 
-      {
+      case "Ajouter un ordinateur" :
         // Création d'un nouveau ordinateur et affichage de sa config
 
         Ordinateur pcTest = new Ordinateur(1, 1);
-        CarteReseau crTest = new CarteReseau();
-        pcTest.ajouterInterface(crTest);
+        nvlCR = new CarteReseau();
+        pcTest.ajouterInterface(nvlCR);
         System.out.println("Ordinateur ajouté, voici sa config : \n");
-        System.out.println(Ordinateur.getAllOrdinateurss());
+        //System.out.println(Ordinateur.getAllOrdinateurss());
         pcTest.afficherConfig();
 
         // Affichage d'une image de ordinateur
         
-        PannelImage panelimg = new PannelImage(Fenetre.getUrlImgOrdinateur());
-        Fenetre.getFenetre().add(panelimg);
-        Fenetre.getFenetre().setVisible(true);
+        Fenetre.getFenetre().setAjoutImage("Ordinateur");
 
-      }
-      else if (this.bouton.getText() == "Ajouter un commutateur") 
-      {
+        break;
+      case "Ajouter un commutateur" :
         // Création d'un nouveau commutateur et affichage de sa config
 
         Commutateur switch1 = new Commutateur(17, 3);
-        CarteReseau crTest = new CarteReseau();
-        switch1.ajouterInterface(crTest);
+        nvlCR = new CarteReseau();
+        switch1.ajouterInterface(nvlCR);
         System.out.println("Commutateur ajouté, voici sa config :\n");
-        System.out.println(Commutateur.getAllCommutateurs());
+        //System.out.println(Commutateur.getAllCommutateurs());
         switch1.afficherConfig();
 
         // Affichage d'une image de commutateur 
         
-        PannelImage panelimg = new PannelImage(Fenetre.getUrlImgCommutateur());
-        Fenetre.getFenetre().add(panelimg);
-        Fenetre.getFenetre().setVisible(true);
-
-      }
-      else if (this.bouton.getText() == "Ajouter un routeur")
-      {
+        Fenetre.getFenetre().setAjoutImage("Commutateur");
+        break;
+      case "Ajouter un routeur" :
         //Création d'un nouveau routeur et affichage de sa config
 
         Routeur routeurTest = new Routeur(16, 7);
-        CarteReseau crTest = new CarteReseau("eno1");
-        routeurTest.ajouterInterface(crTest);
+        nvlCR = new CarteReseau("eno1");
+        routeurTest.ajouterInterface(nvlCR);
         System.out.println("Routeur ajouté, voici sa config : \n");
-        System.out.println(Routeur.getAllRouteurs());
+        //System.out.println(Routeur.getAllRouteurs());
         routeurTest.afficherConfig();
 
         // Affichage d'une image de routeur
 
         Fenetre.getFenetre().setAjoutImage("Routeur");
-        //Fenetre.getFenetre().ajouterImageRouteur(routeurTest);
-
-      }
-      System.out.println("\n");
-      }
-    catch (IOException ex) 
-    {
-      System.out.println(ex);
+        break;
     }
+
+    System.out.println("\n");
+
+    //Afin de toujorus update la fenetre
+    Fenetre.getFenetre().setVisible(true);
+
   }
   
 

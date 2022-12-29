@@ -1,25 +1,28 @@
 package Interface_Graphique;
 
-import java.awt.*;
-import java.awt.image.*;
-import java.io.File;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
-import org.w3c.dom.events.MouseEvent;
-
-import General.*;
-
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class Fenetre extends JFrame {
 
-  // Les liens des images
+  //La fenetre SEULE ET UNIQUE
+  private static Fenetre fenetre;
+  private static final int tailleFenetreX = 900;
+  private static final int tailleFenetreY = 750; 
+
+  // Relatifs aux images
   private static final String imgCommutateurUrl = "src\\img\\commutateur_100_100.png";
   private static final String imgOrdinateurUrl = "src\\img\\ordinateur_100_100.png";
   private static final String imgRouteurUrl = "src\\img\\routeur_100_100.png"; 
+  public JPanel jPanelImages;
+  private String ajoutImage;
+  private final static int tailleImageX = 100;
+  private final static int tailleImageY = 100;
 
   // Relatif aux boutons
   private JButton boutonCommutateur;
@@ -31,53 +34,47 @@ public class Fenetre extends JFrame {
   // Relatif à la souris
   private static JPanel jPanelSouris = new JPanel();
   private static EcouteurSouris ecouteurSouris = new EcouteurSouris();
-  private static int xSouris;
-  private static int ySouris;
-
-  private String ajoutImage;
-
-  // Les trucs inutiles ????
-  private static Container c;
-  private static BorderLayout gestionnaire;
-  private JPanel contentPannel;
   
-  //La fenetre SEULE ET UNIQUE
-  private static Fenetre fenetre;
 
-  public Fenetre() throws IOException, InterruptedException {
+  public Fenetre() throws IOException {
     fenetre = this;
+    this.setLayout(new BorderLayout());
     this.setTitle("Simulateur Réseau");
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.setSize(900,750);
+    this.setSize(tailleFenetreX, tailleFenetreY);
+    this.setLocationRelativeTo(null);
 
-    /*c = this.getContentPane();  // Conteneur à alimenter
-
-    // Gestionnaire de mise en forme
-    // Inutile, c'est le gestionnaire par défaut
-    gestionnaire = new BorderLayout();
-    c.setLayout(gestionnaire);*/
-
-    contentPannel = new JPanel();
-    //this.setContentPane(contentPannel);
-    //contentPannel.setBorder(new EmptyBorder(5, 5, 5, 5));
-    contentPannel.setLayout(new FlowLayout());
-
-    ImageIcon icone = new ImageIcon(imgCommutateurUrl);
-    ImageIcon icone2 = new ImageIcon(imgRouteurUrl);
-
-    JLabel image = new JLabel(icone);
-    contentPannel.add(image);
-    image.setBounds(0, 0, 65, 65);
-    fenetre.add(image);
-    JLabel image2 = new JLabel(icone2);
-    image2.setBounds(0, 76, 65, 65);
-    fenetre.add(image2);
-
-
-    jPanelBoutons = new JPanel();
-    jPanelBoutons.setLayout(new FlowLayout());
     ajouterBoutons();
 
+    // Création et ajout du Jpanel images a la fenetre
+    jPanelImages = new JPanel();
+    jPanelImages.setLayout(null);
+    fenetre.add(jPanelImages);
+
+    // Pour capter le clic de souris sur la fenetre
+    jPanelSouris.addMouseListener(ecouteurSouris);
+
+    /*ImageComponent image = new ImageComponent(imgCommutateurUrl);
+    image.setLocation(0, 0);
+    this.jPanelImages.add(image);
+
+    ImageComponent image2 = new ImageComponent(imgRouteurUrl);
+    image2.setLocation(0, 100);
+    jPanelImages.add(image2);
+
+    ImageComponent image3 = new ImageComponent(imgOrdinateurUrl);
+    image3.setLocation(0, 200);
+    jPanelImages.add(image3);
+    //fenetre.add(image3);
+
+    ImageComponent image5 = new ImageComponent(imgCommutateurUrl);
+    image5.setLocation(100,100);
+    jPanelImages.add(image5);
+
+    //ImageComponent img4 = image2;
+    //img4.setLocation(0,400);
+    //jPanelImages.add(img4);*/
+  
     
     System.out.println("end");
 
@@ -88,10 +85,12 @@ public class Fenetre extends JFrame {
   // Méthodes d'ajout des boutons
   private void ajouterBoutons() 
   {
+    jPanelBoutons = new JPanel();
+    jPanelBoutons.setLayout(new FlowLayout());
     ajouterBoutonRouteur();
     ajouterBoutonCommutateur();
     ajouterBoutonOrdinateur();
-    fenetre.add(jPanelBoutons,BorderLayout.SOUTH);
+    this.add(jPanelBoutons,BorderLayout.SOUTH);
   }
 
   private void ajouterBoutonRouteur()
@@ -117,83 +116,47 @@ public class Fenetre extends JFrame {
     boutonOrdinateur = new JButton("Ajouter un ordinateur");
     // Attachement au bouton commutateur
     boutonOrdinateur.addActionListener(ecouteurBoutons);
-    
     jPanelBoutons.add(boutonOrdinateur);
-  }
-
-  //Méthodes d'ajout d'images au clic sur la fenetre
-  public void ajouterImageRouteur() throws IOException 
-  {
-    
-
-    if (ajoutImage == "Routeur" & ecouteurSouris.getClickAgain() == true) {
-      System.out.println("Choisis où placer ton routeur");
-      PannelImage panelimg = new PannelImage(imgRouteurUrl);
-      panelimg.setX(xSouris); panelimg.setY(ySouris);
-      fenetre.add(panelimg);
-      fenetre.setVisible(true);
-    }
-
-    /*while (ecouteurSouris.getClickAgain() != true) 
-    {
-      //Thread.sleep(2000);
-      //System.out.println("Choisis ou placer ton routeur");
-      //System.out.println(ecouteurSouris.getClickAgain());
-      if (ecouteurSouris.getClickAgain() == true) {
-        System.out.println("test");
-      }
-      //ecouteurSouris.setClickAgain(true);
-    } */
-    //Thread.sleep(3000);
-   
-    
   }
 
   //Getters 
   public EcouteurAction getEcouteurBoutons() 
   {
-      return ecouteurBoutons;
+      return this.ecouteurBoutons;
   }
 
-  public String getAjoutImage() {
+  public String getAjoutImage() 
+  {
       return this.ajoutImage;
+  }
+
+  public JPanel getjPanelImages() 
+  {
+    return this.jPanelImages;
   }
 
 
   //Setters
-  public static void setxSouris(int xSouris) {
-      Fenetre.xSouris = xSouris;
-  }
-
-  public static void setySouris(int ySouris) {
-      Fenetre.ySouris = ySouris;
-  }
-
-  public void setAjoutImage(String ajoutImage) {
+  public void setAjoutImage(String ajoutImage) 
+  {
       this.ajoutImage = ajoutImage;
   }
   
 
   //Getters static
-  public static String getUrlImgRouteur() {
+  public static String getUrlImgRouteur() 
+  {
     return imgRouteurUrl;
   }
 
-  public static String getUrlImgCommutateur() {
+  public static String getUrlImgCommutateur() 
+  {
       return imgCommutateurUrl;
   }
 
-  public static String getUrlImgOrdinateur() {
-      return imgOrdinateurUrl;
-  }
-
-  public static BorderLayout getGestionnaire() {
-      return gestionnaire;
-  }
-  
-  public static Container getContainerC() 
+  public static String getUrlImgOrdinateur() 
   {
-    return c;
+      return imgOrdinateurUrl;
   }
 
   public static Fenetre getFenetre()
@@ -205,22 +168,31 @@ public class Fenetre extends JFrame {
   {
       return jPanelSouris;
   }
-  
+
   public static EcouteurSouris getEcouteurSouris() 
   {
       return ecouteurSouris;
   }
 
-  public static int getxSouris() 
+  public static int getTaillefenetrex() 
   {
-      return xSouris;
+      return tailleFenetreX;
   }
 
-  public static int getySouris() 
+  public static int getTaillefenetrey() 
   {
-    return ySouris;
+      return tailleFenetreY;
   }
 
-  
+  public static int getTailleimagex() 
+  {
+      return tailleImageX;
+  }
+
+  public static int getTailleimagey() 
+  {
+      return tailleImageY;
+  }
+
   
 }
