@@ -2,28 +2,25 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-  
 
-    
 package General;
-import java.io.IOException;
 
-import Interface_Graphique.*;
 import Outils.*;
-
+import GUI.*;
+import java.util.ArrayList;
 
 /**
  *
  * @author victo
  */
 public class app {
-    public static void main(String[] args) throws IOException, InterruptedException {
-
+    public static void main(String[] args) {
+        
         Ordinateur pc1 = new Ordinateur(1,1);
         CarteReseau cr1 = new CarteReseau("eth0", "192.168.10.3", "255.255.255.0", "192.168.10.1");
         pc1.ajouterInterface(cr1);
         pc1.afficherConfig();   
-
+        
         System.out.println("\n");
 
         Ordinateur pc2 = new Ordinateur(134, 78);
@@ -74,24 +71,30 @@ public class app {
 
         System.out.println("\n");
         
-        Liaison c1 = new Liaison("droit");
+        Liaison c1 = new Liaison();
         c1.lier(pc1, switch1);
 
-        Liaison c4 = new Liaison("droit");
+        Liaison c4 = new Liaison();
         c4.lier(route1, switch1);
 
-        Liaison c6 = new Liaison("croisé");
+        Liaison c6 = new Liaison();
         c6.lier(switch2, switch1);
 
-        Liaison c5 = new Liaison("droit");
+        Liaison c5 = new Liaison();
         c5.lier(switch2, pc2);
 
-        Liaison c2 = new Liaison("croisé");
+        Liaison c2 = new Liaison();
         c2.lier(route2, route1);
 
-        Liaison c3 = new Liaison("croisé");
+        Liaison c3 = new Liaison();
         c3.lier(route2, pc3);
 
+
+        route1.afficherPorts();
+        pc3.afficherPorts();
+        switch1.afficherPorts();
+        pc1.afficherPorts();
+        switch2.afficherPorts();
 
         System.out.println("\n");
 
@@ -114,8 +117,8 @@ public class app {
         ARP.requete(route1, "192.168.10.4");
         ARP.requete(route1, "172.32.50.1");
 
-        route1.getTerminal().ipRouteAdd("10.0.0.0", 8, "172.32.50.1");
-        route2.getTerminal().ipRouteAdd("192.168.10.0", 24, "172.32.50.7");
+        route1.getTerminaux().get(0).ipRouteAdd("10.0.0.0", 8, "172.32.50.1");
+        route2.getTerminaux().get(0).ipRouteAdd("192.168.10.0", 24, "172.32.50.7");
 
         System.out.println("\n");
 
@@ -137,16 +140,13 @@ public class app {
         System.out.println("\n");
         switch2.afficherTableMAC();
 
-        //pc2.getTerminal().ping("172.32.50.1", false);
+        /*
+        pc2.getTerminaux().get(0).ping("172.32.50.1", false);
         System.out.println();
-        //pc2.getTerminal().traceroute("192.168.10.1");
+        pc2.getTerminaux().get(0).traceroute("192.168.10.1");
+        */
 
-        //System.out.println(Reseau.getReseauSelonMachine(pc1).getChemin(route2, pc2));
-
-        // Tests Interface
-        System.out.println("Début tests Interface \n ");
-
-        Fenetre fenetre1 = new Fenetre();
-        fenetre1.setVisible(true);
+        Accueil accueil = new Accueil();
+        accueil.getFenetre().setVisible(true);
     }
 }

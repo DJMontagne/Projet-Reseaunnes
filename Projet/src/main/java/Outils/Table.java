@@ -1,5 +1,6 @@
 package Outils;
 
+import General.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +10,7 @@ import java.util.Map;
 
 public class Table {
 
-    protected int longMaxChampGauche;
+	protected int longMaxChampGauche;
     protected int longMaxChampMilieu;
     protected int longMaxChampDroite; 
     protected int longTotale;

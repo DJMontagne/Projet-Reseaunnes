@@ -117,7 +117,7 @@ public class IPv4 {
 	}
 
 	// génère un masque par défaut en fonction l'adresse IP donné en argument de cette méthode
-	public Octet[] genererMasque(Octet[] addrIP) {
+	public static Octet[] genererMasque(Octet[] addrIP) {
 
 		Octet[] masque = initAdresseVide();
 		if (adresseIPValide(addrIP)) {
@@ -278,11 +278,17 @@ public class IPv4 {
 	public static void setAdresse(Octet[] addr, String strNouvelleAddr) {
 
 		String[] sectionAddr = strNouvelleAddr.split("\\.");
+		int longueur = sectionAddr.length; 
 		Octet[] nouvelleAddr = initAdresseVide();
 		for (int i = 0; i < NBR_OCTET; i++) {
-			nouvelleAddr[i].setOctet(Integer.parseInt(sectionAddr[i]));
+
+			try {
+				nouvelleAddr[i].setOctet(Integer.parseInt(sectionAddr[i]));
+			}
+			catch (Exception e){
+			}
 		}
-		if (adresseIPValide(nouvelleAddr)) {
+		if (adresseIPValide(nouvelleAddr) && longueur == NBR_OCTET) {
 			for (int i = 0; i < NBR_OCTET; i++) {
 				addr[i].setOctet(nouvelleAddr[i].getDecimal());
 			}
@@ -308,6 +314,25 @@ public class IPv4 {
 		if (masqueValide(masque)) {
 			for (int i = 0; i < NBR_OCTET; i++) {
 				this.masque[i].setOctet(masque[i].getDecimal());
+			}
+		}
+	}
+
+	public static void setMasque(Octet[] masque, String strMasque) {
+
+		String[] sectionMasque = strMasque.split("\\.");
+		int longueur = sectionMasque.length;
+		Octet[] nouveauMasque = initAdresseVide();
+		for (int i = 0; i < NBR_OCTET; i++) {
+			try {
+				nouveauMasque[i].setOctet(Integer.parseInt(sectionMasque[i]));
+			}
+			catch (Exception e) {
+			}
+		}
+		if (masqueValide(masque) && longueur == IPv4.NBR_OCTET) {
+			for (int i = 0; i < NBR_OCTET; i++) {
+				masque[i].setOctet(nouveauMasque[i].getDecimal());
 			}
 		}
 	}
@@ -344,14 +369,15 @@ public class IPv4 {
 	public static boolean adresseIPValide(Octet[] addrIP) {
 
 		boolean validite = true;
-		if (addrIP[0].getDecimal() == 0 || addrIP[0].getDecimal() == 127 || addrIP[0].getDecimal() > 223) {
+		if (addrIP[0].getDecimal() == 0 || addrIP[0].getDecimal() == 127 || addrIP[0].getDecimal() > 223 
+		|| addrIP[3].getDecimal() == 0 || addrIP[3].getDecimal() == 255) {
 			validite = false;
 		}
 		return validite;
 	}
 
 	// retourne VRAI si le masque donné en argument est valide
-	public boolean masqueValide(Octet[] masque) {
+	public static boolean masqueValide(Octet[] masque) {
 
 		boolean validite = true;
 		for (int i = 0; i < NBR_OCTET; i++) {

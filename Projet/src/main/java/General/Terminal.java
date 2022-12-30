@@ -1,33 +1,33 @@
 package General;
-import java.util.Map;
 import java.util.Scanner;
+import Outils.*;
 
-import Outils.ICMP;
-import Outils.IPv4;
-import Outils.Octet;
-import Outils.TableRoutage;
-
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  *
  * @author victo
  */
 public class Terminal {
-    private boolean on; //Pour le While, pour savoir si le terminal doit être ouvert ou se fermer
+    private boolean run; //Pour le While, pour savoir si le terminal doit être ouvert ou se fermer
     private Machine mach; //Machine sur laquelle le terminal va "s'afficher"
     
     public Terminal(Machine mach){
-        this.on = true;
+        this.run = true;
         this.mach = mach;
     }
-    public void fermerTerminal(){ //arrête le terminal
-        this.on = false;
+
+    public void fermerTerminal(){ //retire le terminal de la liste des terminaux de la machine, le rendant inutilisable
+        this.mach.getTerminaux().remove(this);
+        this.run = false;
+        this.mach = null;
     }
 
     public String arp(){ //affichage de la table ARP de la machine
         return this.mach.getTableARP().toString();
     }
-    
+
     public void ipRouteAdd(String strAddrReseau, int masqueDecimal, String passerelle) {
 
         if (this.mach instanceof Routeur) {
@@ -117,6 +117,12 @@ public class Terminal {
         }
 
         status = ICMP.executerRequete(mach, addrIPSrc, addrIPDest, false);
+
+        /*
+        if (status && (ICMP.codeStatus == ICMP.FINISH || ICMP.codeStatus == ICMP.HOST_UNREACHABLE)) {
+            System.out.println("\n" + ICMP.outputTraceroute);
+        }*/
+
     }
     
     public String ifconfig(){ //affichage de la config de la machine
@@ -126,12 +132,11 @@ public class Terminal {
     
     // MAIN DU PROGRAMME DU TERMINAL
     //Permet de lancer les méthodes correspondant à l'input de l'utilisateur
-    public void run(){
+    public void on(){
         Scanner sc = new Scanner(System.in);
-        while(this.on){
+        while(this.run){
             System.out.println("\nEntrez une commande : ");
             String utilisation = sc.nextLine();
-            utilisation = utilisation.toLowerCase();
             String input[] = utilisation.split(" ");
             switch (input[0]) {
                 case "arp" -> {
@@ -140,7 +145,7 @@ public class Terminal {
                 case "ping" -> {
                     if(input.length == 2){
                         if(IPValide(input[1])){
-                            //ping(input[1]);
+                            //ping(input[1], input[2]);
                         }else{
                             System.out.println("adresse ip non valide ...");
                         }
@@ -162,8 +167,8 @@ public class Terminal {
     }
     
     //-----------Getters--------------
-    public boolean isOn() {
-        return on;
+    public boolean isRun() {
+        return run;
     }
     //---------fonctions privées------
     private boolean IPValide(String candidat){

@@ -15,12 +15,12 @@ public abstract class Machine {
     protected ArrayList<CarteReseau> cartesR; //Liste de cartes réseau
     private TableARP tableARP; //table ARP de la machine
     private TableRoutage tableRoutage; //table de routage de la machine
-    private Terminal terminal; //terminal de la machine
+    private ArrayList<Terminal> terminaux; //liste des terminaux de la machine(pour les commandes)
     private int x;
     private int y;
     private static ArrayList<Machine> machines = new ArrayList<>();
     private static int nbrMachine;
-    private static int NBR_PORT;
+    protected int nbrPortMax;
     private HashMap<CarteReseau, ArrayList<CarteReseau>> ports;
     
     public Machine(int mX, int mY){
@@ -28,7 +28,8 @@ public abstract class Machine {
         Machine.nbrMachine++;
         this.id = nbrMachine;
         cartesR = new ArrayList<CarteReseau>(); //création d'une liste vide de carteReseau
-        terminal = new Terminal(this);  //ajout d'un terminal
+        terminaux = new ArrayList<Terminal>();  // création d'un liste vide de Terminal
+        terminaux.add(new Terminal(this)); //ajout d'un terminal dans la liste
         tableARP = new TableARP();         // création d'une tableARP vierge
         this.ports = new HashMap<>();
         this.x = mX;
@@ -36,8 +37,12 @@ public abstract class Machine {
         machines.add(this);
     }
     
+    
+    public void addTerminal(Terminal term){ //ajout d'un terminal dans la liste de terminaux
+        terminaux.add(term);
+    }
     public void fermerTerminal(int index){ //retire le terminal de la liste des terminaux de la machine, le rendant inutilisable
-        this.terminal.fermerTerminal();
+        this.terminaux.get(index).fermerTerminal();
     }
     
     //----LISTE DE GETTERS ET SETTERS (peut-être à renommer pour facilité)-----
@@ -51,11 +56,6 @@ public abstract class Machine {
     public int getY() {
 
         return this.y;
-    }
-
-    public Terminal getTerminal() {
-
-        return this.terminal;
     }
     
     public ArrayList<CarteReseau> getCartesR() {
@@ -71,6 +71,22 @@ public abstract class Machine {
             }
         }
         return crCherche;
+    }
+
+    public int getNbrCarteR() {
+
+        return this.cartesR.size();
+    }
+
+    public boolean nomCarteRUtilise(String nomInterface) {
+
+        boolean utilise = false;
+        for (int i = 0; i < this.cartesR.size(); i++) {
+            if (this.cartesR.get(i).getNomInterface().equals(nomInterface)) {
+                utilise = true;
+            }
+        }
+        return utilise;
     }
 
     public CarteReseau getInterfaceCompatible(Machine machine) {
@@ -118,10 +134,41 @@ public abstract class Machine {
     protected void setTableARP(TableARP tableARP) {
         this.tableARP = tableARP;
     }
+
+    public ArrayList<Terminal> getTerminaux() {
+        return terminaux;
+    }
+    
+    public Liaison getLiaison(CarteReseau cr) {
+
+        ArrayList<Liaison> liaisons = new ArrayList<>();
+        ArrayList<CarteReseau> cartesR = new ArrayList<>();
+        if (this.ports.containsKey(cr)) {
+            cartesR = this.ports.get(cr);
+        }
+        for (int i = 0; i < Reseau.getReseaux().size(); i++) {
+            for (int j = 0; j < Reseau.getReseaux().get(i).getLiaisons().size(); j++) {
+                for (int k = 0; k < cartesR.size(); k++) {
+                    System.out.println(Reseau.getReseaux().get(i).getLiaisons().get(j));
+                    /*if (Reseau.getReseaux().get(i).getLiaisons().get(j)) {
+                        if (Reseau.getReseaux().get(i).getLiaisons().get(j).get(cartesR.get(k))) {
+
+                        }
+                    }*/
+                }
+            } 
+        }
+        return null;
+    }
     
     public HashMap<CarteReseau, ArrayList<CarteReseau>> getPorts() {
 
         return this.ports;
+    }
+
+    public int getNbrPortMax() {
+
+        return this.nbrPortMax;
     }
 
     public int taillePorts() {
@@ -142,20 +189,11 @@ public abstract class Machine {
             // Récupération de la carte réseau de "this" ayant la même adresse Réseau et le même masque que la celle du paramètre "machineDest"
             CarteReseau carteRSrc = this.getInterfaceParDefaut(machineDest);
             CarteReseau carteRDest = machineDest.getInterfaceParDefaut(this);
-            if (this instanceof Ordinateur) {
-                Machine.NBR_PORT = Ordinateur.NBR_PORT_FAST;
-            }
-            else if (this instanceof Routeur) {
-                Machine.NBR_PORT = Routeur.NBR_PORT_GIGA;
-            }
-            else if (this instanceof Commutateur) {
-                Machine.NBR_PORT = Commutateur.NBR_PORT_FAST;
-            }
-            if (this.ports.containsKey(carteRSrc) && this.taillePorts() < Machine.NBR_PORT) {
+            if (this.ports.containsKey(carteRSrc) && this.taillePorts() < this.nbrPortMax) {
                 this.ports.get(carteRSrc).add(carteRDest);
                 portLibre = true;
             }
-            else if (this.taillePorts() < Machine.NBR_PORT) {
+            else if (this.taillePorts() < this.nbrPortMax) {
                 ArrayList<CarteReseau> cartesRDest = new ArrayList<>();
                 cartesRDest.add(carteRDest);
                 this.ports.put(carteRSrc, cartesRDest);
@@ -168,15 +206,6 @@ public abstract class Machine {
     public void afficherPorts() {
 
         String ports = "[";
-        if (this instanceof Ordinateur) {
-            Machine.NBR_PORT = Ordinateur.NBR_PORT_FAST;
-        }
-        else if (this instanceof Routeur) {
-            Machine.NBR_PORT = Routeur.NBR_PORT_GIGA;
-        }
-        else if (this instanceof Commutateur) {
-            Machine.NBR_PORT = Commutateur.NBR_PORT_FAST;
-        }
         int nbrPort = 0;
         int i = 0;
         for (Map.Entry<CarteReseau, ArrayList<CarteReseau>> cr : this.ports.entrySet()) {
@@ -193,11 +222,25 @@ public abstract class Machine {
             }
             i++;
         }
-        for (int k = nbrPort; k < Machine.NBR_PORT; k++) {
+        for (int k = nbrPort; k < this.nbrPortMax; k++) {
             ports += "    " + (k + 1) + " => DOWN";
         }
         ports += "]";
         System.out.println(ports);
+    }
+
+    public void supprimerCarteR(CarteReseau cr) {
+
+        CarteReseau crSuppr = null;
+        for (int i = 0; i < this.cartesR.size(); i++) {
+            if (this.cartesR.get(i).equals(cr)) {
+                crSuppr = this.cartesR.get(i);
+            }
+        }
+        if (crSuppr != null) {
+            this.cartesR.remove(crSuppr);
+            crSuppr = null;
+        }
     }
     
     @Override

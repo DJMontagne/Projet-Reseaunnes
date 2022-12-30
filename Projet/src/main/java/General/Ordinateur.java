@@ -1,20 +1,23 @@
 package General;
 
+import Outils.*;
+import GUI.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Ordinateur extends Machine {
 
 	public static final int NBR_PORT_FAST = 1;
+	public static final int NBR_CR = 1;
 	private int id;
 	private static int nbrOrdinateur;
-	private static ArrayList<Ordinateur> allOrdinateurs = new ArrayList<Ordinateur>(); // ArrayList regroupant tous les ordinateurs
 
 	public Ordinateur(int x, int y) {
 		
 		super(x, y);
 		nbrOrdinateur++;
 		this.id = nbrOrdinateur;
-		allOrdinateurs.add(this);
+		this.nbrPortMax = NBR_PORT_FAST;
 	}
 
 	@Override
@@ -26,14 +29,6 @@ public class Ordinateur extends Machine {
             cr.setMachine(this);
         }
     }
-
-	public static ArrayList<Ordinateur> getAllOrdinateurss() {
-		return allOrdinateurs;
-	}
-
-	public static Ordinateur getUnOrdinateur(int a) {
-		return allOrdinateurs.get(a);
-	}
 
     @Override
     public String toString() {

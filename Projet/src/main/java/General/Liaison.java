@@ -12,20 +12,16 @@ import java.util.Map;
 public class Liaison {
 
 	private HashMap<Machine, Machine> liaison;
-	private String typeCable;
+	private boolean validite;
 
-	// Constructeurs
 	public Liaison() {
-
-	}
-	/**
-	 * @param typeCable => 2 valeurs possibles de type String cable "droit" ou cable "croisé"
-	 */
-	public Liaison(String mTypeCable) {
-		if (mTypeCable.equals("droit") || mTypeCable.equals("croisé")) {
-			this.typeCable = mTypeCable;
-		}
+		
 		this.liaison = new HashMap<>();
+	}
+
+	public boolean getValidite() {
+
+		return this.validite;
 	}
 
 	public HashMap<Machine, Machine> getLiaison() {
@@ -66,25 +62,17 @@ public class Liaison {
 	 */
 	public void lier(Machine machine1, Machine machine2) {
 
-		boolean liaisonValide = false;	
 		if (this.liaison.isEmpty()) {
-
-			if (this.typeCable.equals("droit") && ((!(machine1 instanceof Commutateur) && (machine2 instanceof Commutateur))
-			|| (!(machine2 instanceof Commutateur) && (machine1 instanceof Commutateur)))) {
-				if (machine2.attribuerPort(machine1) && machine1.attribuerPort(machine2)) {
-					this.liaison.put(machine1, machine2);
-					liaisonValide = true;
-				}
+			if (machine2.attribuerPort(machine1) && machine1.attribuerPort(machine2)) {
+				this.liaison.put(machine1, machine2);
+				this.validite = true;
 			}
-			else if (this.typeCable.equals("croisé") && ((!(machine1 instanceof Commutateur)  && !(machine2 instanceof Commutateur))
-			|| ((machine1 instanceof Commutateur) && (machine2 instanceof Commutateur)))) {
-				if (machine2.attribuerPort(machine1) && machine1.attribuerPort(machine2)) {
-					this.liaison.put(machine1, machine2);
-					liaisonValide = true;
-				}
+			else if (machine2.attribuerPort(machine1) && machine1.attribuerPort(machine2)) {
+				this.liaison.put(machine1, machine2);
+				this.validite = true;
 			}
 		}
-		if (liaisonValide) {
+		if (this.validite) {
 			Reseau.ajouterAuReseau(this);
 		}	
 	}

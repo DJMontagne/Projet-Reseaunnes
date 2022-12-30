@@ -7,10 +7,10 @@ import java.util.Map;
 public class Routeur extends Machine {
 
 	public static final int NBR_PORT_GIGA = 2;
+    public static final int NBR_CR = 2;
 	private int id;
     private static int nbrRouteur;
     private TableRoutage tableRoutage;
-    private static ArrayList<Routeur> allRouteurs = new ArrayList<Routeur>(); // ArrayList regroupant tous les routeurs
 
 	public Routeur(int x, int y) {
 
@@ -18,9 +18,9 @@ public class Routeur extends Machine {
 		nbrRouteur++;
 		this.id = nbrRouteur;
 		this.tableRoutage = new TableRoutage();
-		allRouteurs.add(this);
+        this.nbrPortMax = NBR_PORT_GIGA;
 	}
-
+	
 	public TableRoutage getTableRoutage() {
         
         return tableRoutage;
@@ -80,18 +80,10 @@ public class Routeur extends Machine {
         return carteR;
     }
 
-	public void afficherTableRoutage() {
+    public void afficherTableRoutage() {
 
-        System.out.println(this + "\n" + this.getTableRoutage());
+        System.out.println(this + "\n" + this.tableRoutage);
     }
-
-	public static ArrayList<Routeur> getAllRouteurs() {
-		return allRouteurs;
-	}
-
-	public static Routeur getUnRouteur(int a) {
-		return allRouteurs.get(a);
-	}
 
     @Override
     public String toString() {

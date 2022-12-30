@@ -1,7 +1,9 @@
 package General;
 
-import Outils.IPv4;
-import Outils.MAC;
+import Outils.*;
+import java.io.ObjectInputStream.GetField;
+import java.util.ArrayList;
+import java.util.Set;
 
 public class CarteReseau {
     //Atributs
@@ -84,7 +86,7 @@ public class CarteReseau {
 
     public void setAdresseIP(String addrIP) {
 
-        IPv4.setAdresse(this.ip.getAdresseIP(), addrIP);
+        this.ip = new IPv4(addrIP, IPv4.getStrAdresse(this.ip.getMasque()));
     }
 
     public void setMachine(Machine machine) {
