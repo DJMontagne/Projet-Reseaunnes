@@ -286,15 +286,15 @@ public class Accueil implements ActionListener, MouseListener {
 				}
 			}
 		}
-		else if (btnClique.equals(btnOrdinateur)) {
+		else if (btnClique != null && btnClique.equals(btnOrdinateur)) {
 			creerOrdinateur(x, y);
 			btnClique = null;
 		}
-		else if (btnClique.equals(btnCommutateur)) {
+		else if (btnClique != null && btnClique.equals(btnCommutateur)) {
 			creerCommutateur(x, y);
 			btnClique = null;
 		}
-		else if (btnClique.equals(btnRouteur)) {
+		else if (btnClique != null && btnClique.equals(btnRouteur)) {
 			creerRouteur(x, y);
 			btnClique = null;
 		}
