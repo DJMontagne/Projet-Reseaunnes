@@ -28,9 +28,7 @@ public class Repere extends JPanel {
 		this.labelB = mLabelB;
 	}
 
-	@Override
-	public void paintComponent(Graphics g) {
-		
+	private void dessinGrille(Graphics g) {
 		g.setColor(new Color(220, 220, 220));
 		int largeur = getWidth();
 	    int hauteur = getHeight();
@@ -42,9 +40,16 @@ public class Repere extends JPanel {
 		for (int y = 0; y < hauteur; y += 20) {
 			g.drawLine(0, y, largeur, y);
 		}
+	}
+
+	@Override
+	public void paintComponent(Graphics g) {
+
+		super.paintComponent(g);
+
+		dessinGrille(g);
 
 		if (labelA != null && labelB != null) {
-			super.paintComponent(g);
 
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setStroke(new BasicStroke(3));
