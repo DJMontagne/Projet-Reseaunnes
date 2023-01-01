@@ -7,7 +7,6 @@ package General;
 
 import Outils.*;
 import GUI.*;
-import java.util.ArrayList;
 
 /**
  *
