@@ -29,7 +29,7 @@ Exemple :
 
 **Note**: Un ordinateur et un commutateur ne peuvent avoir qu'une carte réseau et le routeur peut en avoir 2, qui ne doivent pas correspondre au même réseau. 
 
-- Après avoir donné une carte réseau à 2 ordinateurs, vous pouvez les lier en cliquant sur "ajouter une liaison" puis sur les deux ordinateurs que vous voulez lier.
+- Après avoir donné une carte réseau à 2 ordinateurs, vous pouvez les lier en cliquant sur "ajouter une liaison" puis sur les deux ordinateurs que vous voulez lier. Si vous voulez supprimer une liaison, supprimez simplement une carte réseau liée.
 
 - Allez sur le terminal d'un des deux ordinateurs, puis lancez la requête ping *adresse IP de l'autre ordinateur* pour voir le ping, confirmant ou non la liaison des deux ordinateurs.
 
