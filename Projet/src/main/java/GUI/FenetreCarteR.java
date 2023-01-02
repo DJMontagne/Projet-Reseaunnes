@@ -110,7 +110,6 @@ public class FenetreCarteR implements KeyListener {
 		imgAjout.setIcon(icon);
 		this.contenantAjoutSuppr.add(imgAjout);
 		this.cartesR.revalidate();
-		this.cartesR.repaint();
 		
 		imgAjout.addMouseListener(new MouseAdapter() {
 			
@@ -187,7 +186,6 @@ public class FenetreCarteR implements KeyListener {
 		imgSuppr.setIcon(icon);
 		this.contenantAjoutSuppr.add(imgSuppr);
 		this.cartesR.revalidate();
-		this.cartesR.repaint();
 
 		imgSuppr.addMouseListener(new MouseAdapter() {
 			
@@ -259,7 +257,7 @@ public class FenetreCarteR implements KeyListener {
 				JOptionPane.showMessageDialog(new JFrame(), 
 					IPv4.getStrAdresse(carteR.getIP().getReseau()) + " " 
 					+ IPv4.getStrAdresse(carteR.getIP().getMasque()) + " est déjà utilisée"
-					, "Adresse réseau existante", JOptionPane.WARNING_MESSAGE);
+					, "Adresse réseau existant", JOptionPane.WARNING_MESSAGE);
 			}
 			carteR = null;
 		}
@@ -288,7 +286,6 @@ public class FenetreCarteR implements KeyListener {
 		imgCarteR.add(texte, BorderLayout.SOUTH);
 		this.imgCartesR.add(imgCarteR, BorderLayout.WEST);
 		this.cartesR.revalidate();
-		this.cartesR.repaint();
 		this.labelCr.put(imgCarteR, carteR);
 		champBlanc();
 	}

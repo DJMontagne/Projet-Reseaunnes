@@ -4,6 +4,8 @@ import General.*;
 import Outils.*;
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -107,7 +109,6 @@ public class Accueil implements ActionListener, MouseListener {
 		JLabel texte = new JLabel(ordinateur.toString());
 		imgOrdinateur.add(texte, BorderLayout.SOUTH);
 		imgOrdinateur.setBounds(x - largeur/2, y - hauteur, largeur*2, hauteur*2);
-		imgOrdinateur.repaint();
 		this.machines.put(ordinateur, imgOrdinateur);
 		this.repere.add(imgOrdinateur);
 		this.repere.revalidate();
@@ -129,7 +130,6 @@ public class Accueil implements ActionListener, MouseListener {
 		JLabel texte = new JLabel(commutateur.toString());
 		imgCommutateur.add(texte, BorderLayout.SOUTH);
 		imgCommutateur.setBounds(x - largeur/2, y - hauteur/2, largeur + 50, hauteur);
-		imgCommutateur.repaint();
 		this.machines.put(commutateur, imgCommutateur);
 		this.repere.add(imgCommutateur);
 		this.repere.revalidate();
@@ -151,7 +151,6 @@ public class Accueil implements ActionListener, MouseListener {
 		JLabel texte = new JLabel(routeur.toString());
 		imgRouteur.add(texte, BorderLayout.SOUTH);
 		imgRouteur.setBounds(x - largeur/2, y - hauteur/2, largeur, hauteur);
-		imgRouteur.repaint();
 		this.machines.put(routeur, imgRouteur);
 		this.repere.add(imgRouteur);
 		this.repere.revalidate();
@@ -203,6 +202,7 @@ public class Accueil implements ActionListener, MouseListener {
     		if (this.menus.containsKey(machineCherche)) {
     			Menu menu = this.menus.get(machineCherche);
     			menu.getFenetre().setContentPane(menu.getContenuPane());
+    			menu.getFenetre().revalidate();
     			menu.getFenetre().setVisible(true);
     		}
     		else {

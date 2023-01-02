@@ -22,13 +22,11 @@ public class FenetreTerminal {
 	public FenetreTerminal(Machine mMachine, Fenetre fenetreMenu) {
 		
 		this.machine = mMachine;
-
-		this.fenetre = new Fenetre(this.machine.toString(), 900, 500);
-		this.fenetre.setResizable(false);
+		this.fenetre = fenetreMenu;
 
 		this.contenuPane = (JPanel) this.fenetre.getContentPane();
 
-		this.contenuTerminalPane = new JPanel(new FlowLayout(FlowLayout.CENTER));
+		this.contenuTerminalPane = new JPanel();
 		this.contenuPane.add(contenuTerminalPane);
 
 		creerTerminal();

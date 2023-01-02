@@ -29,15 +29,13 @@ public class Menu {
 		this.repere = mRepere;
 
 		this.fenetre = new Fenetre(this.machine.toString(), 900, 500);
-		this.fenetre.setResizable(false);
-		
+
 		this.contenuPane = (JPanel) this.fenetre.getContentPane();
 		
 		this.contenuMenuPane = new JPanel(new GridLayout(1, 2));
 		this.contenuPane.add(contenuMenuPane);
 
-		this.panelConfig = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		this.panelConfig.setBorder(new EmptyBorder(0, 0, 50, 0));
+		this.panelConfig = new JPanel();
 		this.panelTerminal = new JPanel();
 
 		this.contenuMenuPane.add(panelConfig);
@@ -58,6 +56,7 @@ public class Menu {
 	}
 
 	public void creerMenuConfig() {
+		
 		JPanel contenant = new JPanel(new BorderLayout());
 		contenant.setBorder(new EmptyBorder(60, 0, 0, 0));
 		Image image = new ImageIcon("./img/config.png").getImage();
@@ -67,7 +66,7 @@ public class Menu {
 		Icon icon = new ImageIcon(imageReduite);
 		JButton btnConfig = new JButton();
 		btnConfig.setIcon(icon);
-		btnConfig.setFocusPainted (false);
+		btnConfig.setFocusPainted(false);
 		btnConfig.setBackground(new Color(210, 210, 210));  
 		btnConfig.setBorder(new RoundBorder(30, new Color(200, 200, 200)));
 		btnConfig.setPreferredSize(new Dimension(300, 300));
@@ -103,10 +102,12 @@ public class Menu {
     	
 		if (this.carteRConfig != null) {
 			this.carteRConfig.getFenetre().setContentPane(this.carteRConfig.getContenuPane());
+			this.carteRConfig.getFenetre().revalidate();
 		}
 		else {
 			this.carteRConfig = new FenetreCarteR(this.machine, this.repere, this.fenetre);
 			this.carteRConfig.getFenetre().setContentPane(this.carteRConfig.getContenuPane());
+			this.carteRConfig.getFenetre().revalidate();
 		}
     }
 
@@ -121,7 +122,7 @@ public class Menu {
 		Icon icon = new ImageIcon(imageReduite);
 		JButton btnTerminal = new JButton();
 		btnTerminal.setIcon(icon);
-		btnTerminal.setFocusPainted (false);
+		btnTerminal.setFocusPainted(false);
 		btnTerminal.setBackground(new Color(210, 210, 210));  
 		btnTerminal.setBorder(new RoundBorder(30, new Color(200, 200, 200)));
 		btnTerminal.setPreferredSize(new Dimension(300, 300));
@@ -158,13 +159,12 @@ public class Menu {
 
 		if (this.terminal != null) {
 			this.terminal.getFenetre().setContentPane(this.terminal.getContenuPane());
-			this.terminal.getFenetre().setVisible(true);
+			this.terminal.getFenetre().revalidate();
 		}
 		else {
 			this.terminal = new FenetreTerminal(this.machine, this.fenetre);
-			//System.out.println(this.terminal.getContenuPane());
-			this.terminal.getFenetre().setVisible(true);
 			this.terminal.getFenetre().setContentPane(this.terminal.getContenuPane());
+			this.terminal.getFenetre().revalidate();
 		}	           
 	}
 }
