@@ -102,13 +102,13 @@ public class ICMP {
 	private static boolean requete() {
 
 		if (nbrEnvoieRequete == 0 && codeStatus == PROCESSING) {
-			pingVerboseOutput += verbose ? "Envoie d'un message ICMP Echo Request...\n" : "";
+			pingVerboseOutput += verbose ? "Envoi d'un message ICMP Echo Request...\n" : "";
 		}
 		else if (nbrEnvoieRequete == 0 && codeStatus == HOST_UNREACHABLE) {
-			pingVerboseOutput += verbose ? "\nEnvoie d'un message ICMP Host Unreachable...\n\n" : "";
+			pingVerboseOutput += verbose ? "\nEnvoi d'un message ICMP Host Unreachable...\n\n" : "";
 		}
 		else if (nbrEnvoieRequete == 1 && codeStatus == PROCESSING) {
-			pingVerboseOutput += verbose ? "\nEnvoie d'un message ICMP Echo Reply...\n" : "";
+			pingVerboseOutput += verbose ? "\nEnvoi d'un message ICMP Echo Reply...\n" : "";
 		}
 
 		boolean destinationAtteinte = false;
@@ -234,7 +234,7 @@ public class ICMP {
 			}
 		}
 		else if (tableARP.existence(addrIPDest)) {
-			pingVerboseOutput += verbose ? "L'adresse IP de destination " + addrIPDest + " est renseigné dans la table ARP\n" : "";
+			pingVerboseOutput += verbose ? "L'adresse IP de destination " + addrIPDest + " est renseignée dans la table ARP\n" : "";
 			interfaceRedirection = tableARP.getInterface(addrIPDest);
 			addrMacDest = tableARP.getMAC(addrIPDest);
 		}
@@ -250,19 +250,19 @@ public class ICMP {
 					crMachineLiee = port.getValue().get(0);
 					Machine machineLiee = crMachineLiee.getMachine();
 					pingVerboseOutput += verbose ? "\n\nL'adresse IP de destination  " + addrIPDest 
-						+ " n'est pas renseigné dans la table ARP\n" + routeur + " détruit le paquet ICMP...\n" : "";
+						+ " n'est pas renseignée dans la table ARP\n" + routeur + " détruit le paquet ICMP...\n" : "";
 					ARP.requete(routeur, addrIPDest);
 					pingVerboseOutput += verbose ? "" : "";
 				}
 			}
 			else {
 				if (!machineSrc.equals(routeur) && !tableRoutage.existenceReseau(IPv4.getStrAdresse(addrReseauDest))) {
-					pingVerboseOutput += verbose ? "\n\nL'adresse réseau de destination n'est pas renseigné dans la table de routage\n" 
+					pingVerboseOutput += verbose ? "\n\nL'adresse réseau de destination n'est pas renseignée dans la table de routage\n" 
 						+ routeur + " détruit le paquet ICMP...\n" : "";
 					codeStatus = HOST_UNREACHABLE;
 				}
 				else if (!tableRoutage.existenceReseau(IPv4.getStrAdresse(addrReseauDest))) {
-					pingVerboseOutput += verbose ? "\n\nL'adresse réseau de destination n'est pas renseigné dans la table de routage\n" 
+					pingVerboseOutput += verbose ? "\n\nL'adresse réseau de destination n'est pas renseignée dans la table de routage\n" 
 						+ routeur + " détruit le paquet ICMP...\n" : "";
 					codeStatus = REQUEST_TIMED_OUT;
 				}
@@ -297,23 +297,23 @@ public class ICMP {
 			&& IPv4.estEgale(addrReseauDest, crMachineSrc.getIP().getReseau())) {
 				memeSousReseau = true;
 				if (tableARP.existence(addrIPDest)) {
-					pingVerboseOutput += verbose ? "L'adresse IP de destination " + addrIPDest + " est renseigné dans la table ARP\n" : "";
+					pingVerboseOutput += verbose ? "L'adresse IP de destination " + addrIPDest + " est renseignée dans la table ARP\n" : "";
 					addrMacDest = tableARP.getMAC(addrIPDest);				}
 				else {
-					pingVerboseOutput += verbose ? "L'adresse IP de destination " + addrIPDest + " n'est pas renseigné dans la table ARP\n" : "";
+					pingVerboseOutput += verbose ? "L'adresse IP de destination " + addrIPDest + " n'est pas renseignée dans la table ARP\n" : "";
 					addrMacDest = ARP.requete(machineSrc, addrIPDest);
 					pingVerboseOutput += verbose ? "" : "";
 				}
 			}
 			else if (tableARP.existence(IPv4.getStrAdresse(crMachineSrc.getIP().getPasserelle()))) {
 				pingVerboseOutput += verbose ? "L'adresse IP de destination " + addrIPDest + " n'est pas dans le même sous-réseau\n"
-					+ "La passerelle est renseigné dans la table ARP\n\n" : "";
+					+ "La passerelle est renseignée dans la table ARP\n\n" : "";
 				addrMacDest = tableARP.getMAC(IPv4.getStrAdresse(crMachineSrc.getIP().getPasserelle()));
 			}
 			if (addrMacDest == null && !memeSousReseau) {
 				pingVerboseOutput += verbose ? "L'adresse IP de destination " + addrIPDest + " n'est pas dans le même sous-réseau\n" : "";
 				if (!IPv4.adresseVide(crMachineSrc.getIP().getPasserelle())) {
-					pingVerboseOutput += verbose ? "La passerelle n'est pas renseigné dans la table ARP\n" : "";
+					pingVerboseOutput += verbose ? "La passerelle n'est pas renseignée dans la table ARP\n" : "";
 					addrMacDest = ARP.requete(machineSrc, IPv4.getStrAdresse(crMachineSrc.getIP().getPasserelle()));
 					pingVerboseOutput += verbose ? "\n" : "";
 				}

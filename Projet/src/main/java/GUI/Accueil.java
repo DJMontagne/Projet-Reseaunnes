@@ -4,8 +4,6 @@ import General.*;
 import Outils.*;
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -97,7 +95,7 @@ public class Accueil implements ActionListener, MouseListener {
     private void creerOrdinateur(int x, int y) {
 
     	Ordinateur ordinateur = new Ordinateur(x, y);
-		Image image = new ImageIcon("img\\ordinateur.png").getImage();
+		Image image = new ImageIcon("./img/ordinateur.png").getImage();
 		int largeur = 50;
 		int hauteur = 50;
 		Image imageReduite = image.getScaledInstance(largeur, hauteur, Image.SCALE_SMOOTH);
@@ -119,7 +117,7 @@ public class Accueil implements ActionListener, MouseListener {
     private void creerCommutateur(int x, int y) {
 
     	Commutateur commutateur = new Commutateur(x, y);
-		Image image = new ImageIcon("img\\commutateur.png").getImage();
+		Image image = new ImageIcon("./img/commutateur.png").getImage();
 		int largeur = 75;
 		int hauteur = 75;
 		Image imageReduite = image.getScaledInstance(largeur, hauteur, Image.SCALE_SMOOTH);
@@ -141,7 +139,7 @@ public class Accueil implements ActionListener, MouseListener {
     private void creerRouteur(int x, int y) {
 
     	Routeur routeur = new Routeur(x, y);
-		Image image = new ImageIcon("img\\routeur.png").getImage();
+		Image image = new ImageIcon("./img/routeur.png").getImage();
 		int largeur = 100;
 		int hauteur = 100;
 		Image imageReduite = image.getScaledInstance(largeur, hauteur, Image.SCALE_SMOOTH);

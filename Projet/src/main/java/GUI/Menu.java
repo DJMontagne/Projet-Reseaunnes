@@ -60,7 +60,7 @@ public class Menu {
 	public void creerMenuConfig() {
 		JPanel contenant = new JPanel(new BorderLayout());
 		contenant.setBorder(new EmptyBorder(60, 0, 0, 0));
-		Image image = new ImageIcon("img\\config.png").getImage();
+		Image image = new ImageIcon("src\\main\\java\\img\\config.png").getImage();
 		int largeur = 200;
 		int hauteur = 200;
 		Image imageReduite = image.getScaledInstance(largeur, hauteur, Image.SCALE_SMOOTH);
@@ -114,7 +114,7 @@ public class Menu {
 
 		JPanel contenant = new JPanel(new BorderLayout());
 		contenant.setBorder(new EmptyBorder(60, 0, 0, 0));
-		Image image = new ImageIcon("img\\terminal.png").getImage();
+		Image image = new ImageIcon("src\\main\\java\\img\\terminal.png").getImage();
 		int largeur = 200;
 		int hauteur = 200;
 		Image imageReduite = image.getScaledInstance(largeur, hauteur, Image.SCALE_SMOOTH);
