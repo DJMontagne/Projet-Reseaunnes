@@ -11,7 +11,7 @@ Cette application permet de simuler un réseau local avec des ordinateurs, des c
 
 Pour installer ce projet il vous suffit de télécharger le fichier Réseaunnés.exe qui se trouve dans le dossier exe, ainsi que le dossier img.
 
-L'application utilise des fichiers du dossier img, alors il faut IMPÉRATIVEMENT que le dossier img et le fichier Réseaunnés.exe soit à la même place d'une arborescence. 
+L'application utilise des fichiers du dossier img, alors il faut IMPÉRATIVEMENT que le dossier img et le fichier Réseaunnés.exe soient au même niveau d'une arborescence. 
 
 Exemple : 
 - |Documents
@@ -19,17 +19,15 @@ Exemple :
 - ---|img
 - |Téléchargements
 
-## Add your files
+## Mode d'emploi
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+- Pour commencer, vous pouvez placer deux ordinateurs sur le plan en cliquant sur le bouton "Ajouter un ordinateur". 
+- Pour configurer une carte réseau sur un ordinateur, cliquez dessus et sur configuration. Une fenêtre s'ouvre où vous pouvez renseigner le nom que vous voulez donner à votre interface, son adresse IP, son masque et sa passerelle. Seule la passerelle n'est pas obligatoire et est initalisée à 0.0.0.0 de base.
+- Cliquez ensuite sur le bouton + et fermez la fenêtre. 
+Note : Un ordinateur et un commutateur ne peuvent avoir qu'une carte réseau et le routeur peut en avoir 2, qui ne doivent pas correspondre au même réseau.
 
-```
-cd existing_repo
-git remote add origin https://gitlab.univ-lr.fr/les-reseaunnes/les-reseaunnes.git
-git branch -M main
-git push -uf origin main
-```
+
+
 
 ## Integrate with your tools
 
