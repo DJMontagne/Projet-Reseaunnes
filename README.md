@@ -14,10 +14,10 @@ Pour installer ce projet il vous suffit de télécharger le fichier Réseaunnés
 L'application utilise des fichiers du dossier img, alors il faut IMPÉRATIVEMENT que le dossier img et le fichier Réseaunnés.exe soit à la même place d'une arborescence. 
 
 Exemple : 
--|Documents
----|Réseaunnés.exe
----|img
--|Téléchargements
+- |Documents
+- ---|Réseaunnés.exe
+- ---|img
+- |Téléchargements
 
 ## Add your files
 
