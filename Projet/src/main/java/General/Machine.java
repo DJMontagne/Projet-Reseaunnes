@@ -15,7 +15,7 @@ public abstract class Machine {
     protected ArrayList<CarteReseau> cartesR; //Liste de cartes réseau
     private TableARP tableARP; //table ARP de la machine
     private TableRoutage tableRoutage; //table de routage de la machine
-    private ArrayList<Terminal> terminaux; //liste des terminaux de la machine(pour les commandes)
+    private Terminal terminal; //terminal de la machine(pour les commandes)
     private int x;
     private int y;
     private static ArrayList<Machine> machines = new ArrayList<>();
@@ -28,25 +28,21 @@ public abstract class Machine {
         Machine.nbrMachine++;
         this.id = nbrMachine;
         cartesR = new ArrayList<CarteReseau>(); //création d'une liste vide de carteReseau
-        terminaux = new ArrayList<Terminal>();  // création d'un liste vide de Terminal
-        terminaux.add(new Terminal(this)); //ajout d'un terminal dans la liste
+        this.terminal = new Terminal(this);  // création d'un liste vide de Terminal
         tableARP = new TableARP();         // création d'une tableARP vierge
         this.ports = new HashMap<>();
         this.x = mX;
         this.y = mY;
         machines.add(this);
+        this.envoyerRequetesARP();
     }
-    
-    
-    public void addTerminal(Terminal term){ //ajout d'un terminal dans la liste de terminaux
-        terminaux.add(term);
-    }
+
     public void fermerTerminal(int index){ //retire le terminal de la liste des terminaux de la machine, le rendant inutilisable
-        this.terminaux.get(index).fermerTerminal();
+        this.terminal.fermerTerminal();
     }
     
     //----LISTE DE GETTERS ET SETTERS (peut-être à renommer pour facilité)-----
-    protected abstract void ajouterInterface(CarteReseau cr);
+    protected abstract boolean ajouterInterface(CarteReseau cr);
 
     public int getX() {
 
@@ -124,7 +120,6 @@ public abstract class Machine {
             }
         }
         return carteReseau;
-
     }
 
     public TableARP getTableARP() {
@@ -135,30 +130,43 @@ public abstract class Machine {
         this.tableARP = tableARP;
     }
 
-    public ArrayList<Terminal> getTerminaux() {
-        return terminaux;
+    public Terminal getTerminal() {
+        return terminal;
     }
     
-    public Liaison getLiaison(CarteReseau cr) {
+    public ArrayList<Liaison> getLiaisons(CarteReseau cr) {
 
         ArrayList<Liaison> liaisons = new ArrayList<>();
         ArrayList<CarteReseau> cartesR = new ArrayList<>();
+        ArrayList<Machine> machines = new ArrayList<>();
+        
         if (this.ports.containsKey(cr)) {
             cartesR = this.ports.get(cr);
         }
+        for (int i = 0; i < cartesR.size(); i++) {
+            machines.add(cartesR.get(i).getMachine());
+        }
         for (int i = 0; i < Reseau.getReseaux().size(); i++) {
             for (int j = 0; j < Reseau.getReseaux().get(i).getLiaisons().size(); j++) {
-                for (int k = 0; k < cartesR.size(); k++) {
-                    System.out.println(Reseau.getReseaux().get(i).getLiaisons().get(j));
-                    /*if (Reseau.getReseaux().get(i).getLiaisons().get(j)) {
-                        if (Reseau.getReseaux().get(i).getLiaisons().get(j).get(cartesR.get(k))) {
-
+                Liaison liaison = Reseau.getReseaux().get(i).getLiaisons().get(j);
+                HashMap<Machine, Machine> cable = liaison.getLiaison();
+                for (Map.Entry<Machine, Machine> machine : cable.entrySet()) {            
+                    for (int k = 0; k < machines.size(); k++) {
+                        if (machine.getKey().equals(this)) {
+                            if (machine.getValue().equals(machines.get(k))) {
+                                liaisons.add(liaison);
+                            }
                         }
-                    }*/
+                        else if (machine.getValue().equals(this)) {
+                            if (machine.getKey().equals(machines.get(k))) {
+                                liaisons.add(liaison);
+                            }
+                        }
+                    }
                 }
             } 
         }
-        return null;
+        return liaisons;
     }
     
     public HashMap<CarteReseau, ArrayList<CarteReseau>> getPorts() {
@@ -203,6 +211,27 @@ public abstract class Machine {
         return portLibre;
     }
 
+    public void desattribuerPort(CarteReseau cr) {
+
+        if (this.ports.containsKey(cr)) {
+            this.ports.remove(cr);
+        }
+    }
+
+    public void desattribuerPortMachinesDest(CarteReseau cr) {
+
+        ArrayList<CarteReseau> crDest = null;
+        if (this.ports.containsKey(cr)) {
+            crDest = this.ports.get(cr);
+        }
+        if (crDest != null) {
+            for (int i = 0; i < crDest.size(); i++) {
+                Machine machineDest = crDest.get(i).getMachine();
+                machineDest.desattribuerPort(crDest.get(i));
+            }
+        }
+    }
+
     public void afficherPorts() {
 
         String ports = "[";
@@ -238,9 +267,29 @@ public abstract class Machine {
             }
         }
         if (crSuppr != null) {
+            this.desattribuerPortMachinesDest(crSuppr);
+            this.desattribuerPort(crSuppr);
             this.cartesR.remove(crSuppr);
             crSuppr = null;
         }
+    }
+
+    public void envoyerRequetesARP() {
+
+        for (int i = 0; i < this.cartesR.size(); i++) {
+            ARP.requete(this, IPv4.getStrAdresse(this.cartesR.get(i).getIP().getAdresseIP()));
+        }
+    }
+
+    public boolean ipExistant(String addrIP) {
+
+        boolean existence = false;
+        for (int i = 0; i < this.cartesR.size(); i++) {
+            if (IPv4.getStrAdresse(cartesR.get(i).getIP().getAdresseIP()).equals(addrIP)) {
+                existence = true;
+            }
+        }
+        return existence;
     }
     
     @Override
@@ -249,9 +298,12 @@ public abstract class Machine {
         return "Machine n°" + this.id;
     }
 
-    public void afficherConfig() {
+    public String config() {
 
-        String config = this.toString() + "\n";
+        String config = "";
+        if (this.cartesR.size() == 0) {
+            config += "Aucune carte réseau existante";
+        }
         for (int i = 0; i < this.cartesR.size(); i++) {
             config += i + 1 + ": ";
             if (i == this.cartesR.size() - 1) {
@@ -261,7 +313,17 @@ public abstract class Machine {
                 config += this.cartesR.get(i).toString() + "\n\n";
             }
         }
-        System.out.println(config);
+        return config;
+    }
+
+    public void afficherConfig() {
+
+        System.out.println(this.config());
+    }
+
+    public String tableARP() {
+
+        return this.tableARP.toString();
     }
 
     public void afficherTableARP() {

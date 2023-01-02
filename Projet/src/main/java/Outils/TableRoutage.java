@@ -43,6 +43,17 @@ public class TableRoutage extends Table {
         return existence;
     }
 
+    public Integer getIndiceReseauMasque(String addrReseauMasque) {
+
+        Integer indice = null;
+        for (Map.Entry<Integer, String[]> tableRoutage : this.getTable().entrySet()) {
+            if ((tableRoutage.getValue()[0]).equals(addrReseauMasque)) {
+                indice = tableRoutage.getKey();
+            }
+        }
+        return indice;
+    }
+
     public boolean existencePasserelle(String addrReseau) {
 
         boolean existence = false;

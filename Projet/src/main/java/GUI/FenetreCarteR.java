@@ -17,26 +17,34 @@ import javax.swing.event.MouseInputListener;
 public class FenetreCarteR implements KeyListener {
 
 	private Fenetre fenetre;
+	private Repere repere;
 	private Machine machine;
 
 	private JPanel contenuPane;
+    private JPanel contenuConfigPane;
 	private JPanel config;
 	private JPanel cartesR;
 	private JPanel imgCartesR;
 	private JPanel contenantAjoutSuppr;
 	
-	private String[] nomChamps = {"Nom interface", "Adresse IP", "Masque", "Passerelle"};
+	private String[] nomChamps = {"Interface", "Adresse IP", "Masque", "Passerelle"};
 	private ArrayList<JTextField> champsTexte;
 	private HashMap<JLabel, CarteReseau> labelCr;
 	private CarteReseau crModifier;
 	private ArrayList<JLabel> textes;
 
-	public FenetreCarteR(Machine mMachine) {
+	public FenetreCarteR(Machine mMachine, Repere mRepere, Fenetre fenetreMenu) {
+		
+		this.machine = mMachine;
 
-		this.fenetre = new Fenetre(mMachine.toString(), 900, 500);
-		this.fenetre.setResizable(false);
+		this.repere = mRepere;
+		this.fenetre = fenetreMenu;
+		
 		this.contenuPane = (JPanel) this.fenetre.getContentPane();
-		this.contenuPane.setLayout(new BoxLayout(this.contenuPane, BoxLayout.Y_AXIS));
+		
+		this.contenuConfigPane = new JPanel();
+		this.contenuConfigPane.setLayout(new BoxLayout(this.contenuConfigPane, BoxLayout.Y_AXIS));
+		this.contenuPane.add(contenuConfigPane);
 
 		this.config = new JPanel(new GridLayout(4, 1));
 		
@@ -49,18 +57,18 @@ public class FenetreCarteR implements KeyListener {
 		this.cartesR.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(210, 210, 210)));
 		this.cartesR.add(imgCartesR);
 		this.cartesR.add(contenantAjoutSuppr);
-		this.contenuPane.add(config);
-		this.contenuPane.add(cartesR);
 		
-		this.machine = mMachine;
-		this.champsTexte = new ArrayList<>();
+		this.contenuConfigPane.add(config);
+		this.contenuConfigPane.add(cartesR);
+		
 		this.labelCr = new HashMap<>();
 		this.textes = new ArrayList<>();
+		this.champsTexte = new ArrayList<>();
 
 		ajouterIconeAjout();
 		ajouterIconeSuppr();
 
-		for (String nomChamp : nomChamps) {
+		for (String nomChamp : this.nomChamps) {
 			creerChampTexte(nomChamp);
 		}
 	}
@@ -68,6 +76,11 @@ public class FenetreCarteR implements KeyListener {
 	public Fenetre getFenetre() {
 
 		return this.fenetre;
+	}
+
+	public JPanel getContenuPane() {
+
+		return this.contenuConfigPane;
 	}
 
 	private void creerChampTexte(String nom) {
@@ -151,6 +164,10 @@ public class FenetreCarteR implements KeyListener {
 					JOptionPane.showMessageDialog(new JFrame(), 
 						"L'adresse IP de la passerelle est invalide", "Passerelle invalide", JOptionPane.WARNING_MESSAGE);
 				}
+				else if (machine.ipExistant(strAddrIP)) {
+					JOptionPane.showMessageDialog(new JFrame(), 
+						"L'adresse IP est déjà utilisée", "Addresse IP invalide", JOptionPane.WARNING_MESSAGE);
+				}
 				else if (machine.nomCarteRUtilise(champsTexte.get(0).getText())) {
 					JOptionPane.showMessageDialog(new JFrame(), 
 						"Le nom de la carte réseau est déjà utilisé", "Nom utilisé", JOptionPane.WARNING_MESSAGE);
@@ -195,9 +212,16 @@ public class FenetreCarteR implements KeyListener {
 								labelSuppr = label;
 							}
 							imgCartesR.remove(labelSuppr);
-							imgCartesR.invalidate();							
+							imgCartesR.invalidate();			
 							imgCartesR.repaint();
 							CarteReseau crSuppr = labelCr.get(labelSuppr);
+							ArrayList<Liaison> liaisonsSuppr = machine.getLiaisons(crSuppr);
+							for (int i = 0; i < liaisonsSuppr.size(); i++) {
+								Liaison liaison = liaisonsSuppr.get(i);
+								liaison.delier();
+							}
+							repere.invalidate();
+							repere.repaint();
 							machine.supprimerCarteR(crSuppr);
 							imgCartesR.removeMouseListener(this);
 						}
@@ -214,19 +238,31 @@ public class FenetreCarteR implements KeyListener {
 		String masque = champsTexte.get(2).getText();
 		String passerelle = champsTexte.get(3).getText();
 		CarteReseau carteR = new CarteReseau(nomInterface, adresseIP, masque, passerelle);
+		boolean validiteCarteR = false;
 		if (this.machine instanceof Ordinateur) {
 			Ordinateur ordinateur = (Ordinateur) this.machine;
-			ordinateur.ajouterInterface(carteR);
+			validiteCarteR = ordinateur.ajouterInterface(carteR);
 		}
 		else if (this.machine instanceof Commutateur) {
 			Commutateur commutateur = (Commutateur) this.machine;
-			commutateur.ajouterInterface(carteR);
+			validiteCarteR = commutateur.ajouterInterface(carteR);
 		}
 		else if (this.machine instanceof Routeur) {
 			Routeur routeur = (Routeur) this.machine;
-			routeur.ajouterInterface(carteR);
+			validiteCarteR = routeur.ajouterInterface(carteR);
 		}
-		afficherCarteReseau(carteR);
+		if (validiteCarteR) {
+			afficherCarteReseau(carteR);
+		}
+		else {
+			if (this.machine instanceof Routeur) {
+				JOptionPane.showMessageDialog(new JFrame(), 
+					IPv4.getStrAdresse(carteR.getIP().getReseau()) + " " 
+					+ IPv4.getStrAdresse(carteR.getIP().getMasque()) + " est déjà utilisée"
+					, "Adresse réseau existant", JOptionPane.WARNING_MESSAGE);
+			}
+			carteR = null;
+		}
 
 		if (this.machine.getNbrCarteR() == 1) {
 			ecouterCartesR();
@@ -311,9 +347,44 @@ public class FenetreCarteR implements KeyListener {
 		}
 	}
 
+	private void modificationTablesRouteur() {
+
+		if (this.machine instanceof Routeur) {
+			Routeur routeur  = (Routeur) this.machine;
+
+			Integer indice = null;
+			for (Map.Entry<Integer, String[]> entree : routeur.getTableARP().getTable().entrySet()) {
+				if (entree.getValue()[1].equals(this.crModifier.getMAC().getAdresse())) {
+					indice = entree.getKey();
+				}
+			}
+			if(indice != null) {
+				String[] infosARP = {IPv4.getStrAdresse(this.crModifier.getIP().getAdresseIP()), 
+					this.crModifier.getMAC().getAdresse(), 
+					this.crModifier.getNomInterface()};
+				routeur.getTableARP().getTable().put(indice, infosARP);
+			}
+			else {
+				String[] infosARP = {IPv4.getStrAdresse(this.crModifier.getIP().getAdresseIP()), 
+					this.crModifier.getMAC().getAdresse(), 
+					this.crModifier.getNomInterface()};
+				routeur.getTableARP().remplir(infosARP);
+			}
+			String[] infosRoutage = {IPv4.getStrAdresse(this.crModifier.getIP().getReseau()) + "/" 
+				+ IPv4.getMasqueDecimal(this.crModifier.getIP().getMasque()), 
+				"*", 
+				this.crModifier.getNomInterface()};
+			routeur.getTableRoutage().remplir(infosRoutage);
+		}
+	}
+
 	public void keyPressed(KeyEvent e) {
 		
 		Octet[] adresse = IPv4.initAdresseVide();
+		boolean nomInterfaceValide = false;
+		boolean ipValide = false;
+		boolean masqueValide = false;
+		boolean passerelleValide = false;
 		if (e.getSource().equals(this.champsTexte.get(0))) {
 			if ((e.getKeyCode() == KeyEvent.VK_ENTER)) {
 				if (machine.nomCarteRUtilise(this.champsTexte.get(0).getText())) {
@@ -323,6 +394,7 @@ public class FenetreCarteR implements KeyListener {
 				else if (this.crModifier != null) {
 					modifierNomInterface(this.champsTexte.get(0).getText());
 					this.crModifier.setNominterface(this.champsTexte.get(0).getText());
+					modificationTablesRouteur();
 				}
 			}
 		}
@@ -334,8 +406,13 @@ public class FenetreCarteR implements KeyListener {
 					JOptionPane.showMessageDialog(new JFrame(), 
 						"L'adresse IP est invalide", "Adresse IP invalide", JOptionPane.WARNING_MESSAGE);
 				}
+				else if (machine.ipExistant(IPv4.getStrAdresse(adresse))) {
+					JOptionPane.showMessageDialog(new JFrame(), 
+						"L'adresse IP est déjà utilisée", "Addresse IP invalide", JOptionPane.WARNING_MESSAGE);
+				}
 				else if (this.crModifier != null) {
 					this.crModifier.setAdresseIP(this.champsTexte.get(1).getText());
+					modificationTablesRouteur();
 				}
 				if (IPv4.adresseIPValide(adresse) && !IPv4.adresseVide(adresse) 
 				&& this.champsTexte.get(2).getText().equals("")) {
@@ -353,6 +430,7 @@ public class FenetreCarteR implements KeyListener {
 				}
 				else if (this.crModifier != null) {
 					this.crModifier.setMasque(this.champsTexte.get(2).getText());
+					modificationTablesRouteur();
 				}
 			}
 		}

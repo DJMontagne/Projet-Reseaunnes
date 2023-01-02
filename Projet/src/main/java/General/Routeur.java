@@ -33,7 +33,7 @@ public class Routeur extends Machine {
 
 	@Override
 	// Permet d'ajouter une carte réseau à une machine
-    public void ajouterInterface(CarteReseau cr) {
+    public boolean ajouterInterface(CarteReseau cr) {
         
     	boolean validiteCarteR = true;
 	    for (int i = 0; i < super.cartesR.size(); i++) {
@@ -56,6 +56,7 @@ public class Routeur extends Machine {
         		cr.getNomInterface()};
         	this.getTableARP().remplir(infosTableARP);
         }
+        return validiteCarteR;
     }
 
     public CarteReseau getCarteRSelonRoute(String addrIPDest) {
@@ -64,7 +65,6 @@ public class Routeur extends Machine {
 
     	Octet[] masqueDest = IPv4.genererMasque(addrIPDest);
         Octet[] addrReseauDest = IPv4.genererAdresseReseau(addrIPDest, masqueDest);
-
     	for (Map.Entry<Integer, String[]> tableRoutage : this.getTableRoutage().getTable().entrySet()) {
             if (IPv4.getStrAdresse(addrReseauDest).equals(tableRoutage.getValue()[0].split("/")[0])) {
                 for (Map.Entry<CarteReseau, ArrayList<CarteReseau>> port : this.getPorts().entrySet()) {
@@ -73,11 +73,16 @@ public class Routeur extends Machine {
                     }
                 }
             }
-            else {
-                carteR = this.getCartesR().get(0);
-            }
+        }
+        if (carteR == null) {
+            carteR = this.getCartesR().get(0);
         }
         return carteR;
+    }
+
+    public String tableRoutage() {
+
+        return this.tableRoutage.toString();
     }
 
     public void afficherTableRoutage() {

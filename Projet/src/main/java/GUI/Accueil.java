@@ -4,7 +4,8 @@ import General.*;
 import Outils.*;
 import java.awt.*;
 import javax.swing.*;
-
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ public class Accueil implements ActionListener, MouseListener {
 	
 	private Repere repere;
 	private HashMap<Machine, JLabel> machines;
-	private HashMap<Machine, FenetreCarteR> fenetresCarteR;
+	private HashMap<Machine, Menu> menus;
 	private	ArrayList<JLabel> labelsMachine;			
 
 
@@ -37,23 +38,25 @@ public class Accueil implements ActionListener, MouseListener {
 		
 		this.contenuPane = (JPanel) this.fenetre.getContentPane();
 	   	this.menuAjouter = new JPanel();
-	   	this.menuAjouter.setBackground(new Color(160, 160, 160));
+	   	this.menuAjouter.setBackground(new Color(220, 220, 220));
 	   	this.menuAjouter.setLayout(new FlowLayout(FlowLayout.CENTER, 50, 20));
-	   	this.menuAjouter.setBorder(BorderFactory.createLineBorder(Color.RED));
+	   	this.menuAjouter.setBorder(BorderFactory.createLineBorder(Color.BLACK, 10));
 
 	   	this.repere = new Repere();
-	   	this.repere.addMouseListener(this);
+	   	JScrollPane scrollPane = new JScrollPane(this.repere);
+		this.repere.addMouseListener(this);
 	
 	    this.btnOrdinateur = this.ajouterBouton("Ajouter un ordinateur");
 	    this.btnCommutateur = this.ajouterBouton("Ajouter un commutateur");	   
 	    this.btnRouteur = this.ajouterBouton("Ajouter un routeur");
 	    this.btnLiaison = this.ajouterBouton("Ajouter une liaison");
 
+	    this.repere.setPreferredSize(new Dimension(25000, 25000));
 	   	this.contenuPane.add(this.menuAjouter, BorderLayout.SOUTH);
-	   	this.contenuPane.add(this.repere, BorderLayout.CENTER);
+	   	this.contenuPane.add(scrollPane, BorderLayout.CENTER);
 
 	   	this.machines = new HashMap<>();
-	   	this.fenetresCarteR = new HashMap<>();
+	   	this.menus = new HashMap<>(); 
 	   	this.labelsMachine = new ArrayList<>();
 	}
 
@@ -65,6 +68,9 @@ public class Accueil implements ActionListener, MouseListener {
 	public JButton ajouterBouton(String texte) {
 	
 		JButton bouton = new JButton(texte);
+		bouton.setFont(new Font("Arial", Font.BOLD, 14));
+		bouton.setBackground(new Color(180, 180, 180));
+		bouton.setBorder(new RoundBorder(15, new Color(180, 180, 180)));
 		bouton.addActionListener(this);
 		this.menuAjouter.add(bouton);
 
@@ -98,11 +104,9 @@ public class Accueil implements ActionListener, MouseListener {
 		Icon icon = new ImageIcon(imageReduite);
 		JLabel imgOrdinateur = new JLabel();
 		imgOrdinateur.setName(ordinateur.toString());
-		imgOrdinateur.setBorder(BorderFactory.createLineBorder(Color.RED));
 		imgOrdinateur.setLayout(new BorderLayout());
 		imgOrdinateur.setIcon(icon);
 		JLabel texte = new JLabel(ordinateur.toString());
-		texte.setBorder(BorderFactory.createLineBorder(Color.RED));
 		imgOrdinateur.add(texte, BorderLayout.SOUTH);
 		imgOrdinateur.setBounds(x - largeur/2, y - hauteur, largeur*2, hauteur*2);
 		imgOrdinateur.repaint();
@@ -122,11 +126,9 @@ public class Accueil implements ActionListener, MouseListener {
 		Icon icon = new ImageIcon(imageReduite);
 		JLabel imgCommutateur = new JLabel();
 		imgCommutateur.setName(commutateur.toString());
-		imgCommutateur.setBorder(BorderFactory.createLineBorder(Color.RED));
 		imgCommutateur.setLayout(new BorderLayout());
 		imgCommutateur.setIcon(icon);
 		JLabel texte = new JLabel(commutateur.toString());
-		texte.setBorder(BorderFactory.createLineBorder(Color.RED));
 		imgCommutateur.add(texte, BorderLayout.SOUTH);
 		imgCommutateur.setBounds(x - largeur/2, y - hauteur/2, largeur + 50, hauteur);
 		imgCommutateur.repaint();
@@ -146,11 +148,9 @@ public class Accueil implements ActionListener, MouseListener {
 		Icon icon = new ImageIcon(imageReduite);
 		JLabel imgRouteur = new JLabel();
 		imgRouteur.setName(routeur.toString());
-		imgRouteur.setBorder(BorderFactory.createLineBorder(Color.RED));
 		imgRouteur.setLayout(new BorderLayout());
 		imgRouteur.setIcon(icon);
 		JLabel texte = new JLabel(routeur.toString());
-		texte.setBorder(BorderFactory.createLineBorder(Color.RED));
 		imgRouteur.add(texte, BorderLayout.SOUTH);
 		imgRouteur.setBounds(x - largeur/2, y - hauteur/2, largeur, hauteur);
 		imgRouteur.repaint();
@@ -175,9 +175,8 @@ public class Accueil implements ActionListener, MouseListener {
     	if (machineA != null && machineB != null) {
     		Liaison liaison = new Liaison();
     		liaison.lier(machineA, machineB);
+
     		if (liaison.getValidite()) {
-    			this.repere.setLabelA(this.labelsMachine.get(0));
-	    		this.repere.setLabelB(this.labelsMachine.get(1));
 	    		this.repere.revalidate();
 	    		this.repere.repaint();
 	    		this.labelsMachine.clear();
@@ -199,21 +198,19 @@ public class Accueil implements ActionListener, MouseListener {
     	}
     }
 
-    private void creerCarteReseau(JLabel label) {
-    	Machine machineCherche = null;
-    	for (Map.Entry<Machine, JLabel> machine : machines.entrySet()) {
-    		if (label.equals(machine.getValue())) {
-    			machineCherche = machine.getKey();
-    		}
-    	}
+    public void ouvrirMenu(JLabel label) {
+
+    	Machine machineCherche = getMachine(label);
     	if (machineCherche != null) {
-    		if (this.fenetresCarteR.containsKey(machineCherche)) {
-    			this.fenetresCarteR.get(machineCherche).getFenetre().setVisible(true);
+    		if (this.menus.containsKey(machineCherche)) {
+    			Menu menu = this.menus.get(machineCherche);
+    			menu.getFenetre().setContentPane(menu.getContenuPane());
+    			menu.getFenetre().setVisible(true);
     		}
     		else {
-    			FenetreCarteR fenetreCarteR = new FenetreCarteR(machineCherche);
-    			fenetreCarteR.getFenetre().setVisible(true);
-    			this.fenetresCarteR.put(machineCherche, fenetreCarteR);
+    			Menu menu = new Menu(machineCherche, this.repere);
+    			menu.getFenetre().setVisible(true);
+    			this.menus.put(machineCherche, menu);
     		}
     	}
     }
@@ -274,7 +271,7 @@ public class Accueil implements ActionListener, MouseListener {
 		else if (composant instanceof JLabel && composant.getName() != null) {
 				
 			JLabel label = (JLabel) composant;
-			creerCarteReseau(label);
+			ouvrirMenu(label);
 		}
 		else if (composant instanceof JLabel) {
 			JLabel label = (JLabel) composant;
@@ -282,7 +279,7 @@ public class Accueil implements ActionListener, MouseListener {
 				Container parent = label.getParent();
 				if (parent instanceof JLabel) {
 					JLabel labelParent = (JLabel) parent;
-					creerCarteReseau(labelParent);
+					ouvrirMenu(labelParent);
 				}
 			}
 		}

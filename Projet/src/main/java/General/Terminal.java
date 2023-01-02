@@ -1,4 +1,5 @@
 package General;
+
 import java.util.Scanner;
 import Outils.*;
 
@@ -19,7 +20,6 @@ public class Terminal {
     }
 
     public void fermerTerminal(){ //retire le terminal de la liste des terminaux de la machine, le rendant inutilisable
-        this.mach.getTerminaux().remove(this);
         this.run = false;
         this.mach = null;
     }
@@ -54,7 +54,7 @@ public class Terminal {
         }
     }
     
-    public void ping(String addrIPDest, boolean verbose){
+    public String ping(String addrIPDest, boolean verbose){
 
         final int NBR_PING = 4;
         boolean status;
@@ -62,24 +62,35 @@ public class Terminal {
         // Empêche l'affichage de la commande "traceroute"
         ICMP.commande = "ping";
 
-        if (mach instanceof Routeur) {
-            Routeur routeur = (Routeur) mach;
-            addrIPSrc = IPv4.getStrAdresse(routeur.getCarteRSelonRoute(addrIPDest).getIP().getAdresseIP());
+        if (this.mach.getCartesR().size() != 0) {
+            if (mach instanceof Routeur) {
+                Routeur routeur = (Routeur) mach;
+                addrIPSrc = IPv4.getStrAdresse(routeur.getCarteRSelonRoute(addrIPDest).getIP().getAdresseIP());
+            }
+            else {
+                addrIPSrc = IPv4.getStrAdresse(mach.getCartesR().get(0).getIP().getAdresseIP());
+            }
         }
         else {
-            addrIPSrc = IPv4.getStrAdresse(mach.getCartesR().get(0).getIP().getAdresseIP());
+            return "Aucune carte réseau existante";
         }
         // Affichage
-        System.out.println("\nPING " + addrIPDest + "\n");
+        String output = "PING " + addrIPDest + "\n";
         for (int i = 0; i < NBR_PING; i++) {
             // Requete ICMP
-            String output = "";
             if (verbose) {
                 output += "\n";
             }
             status = ICMP.executerRequete(mach, addrIPSrc, addrIPDest, verbose);
+            output += ICMP.pingVerboseOutput;
             if (status && ICMP.codeStatus == ICMP.FINISH) {
-                output += "Reply from " + addrIPDest + ": icmp_seq=" + (i + 1)
+                if (verbose) {
+                    output += "\nReply from ";
+                }
+                else {
+                    output += "Reply from ";
+                }
+                output += addrIPDest + ": icmp_seq=" + (i + 1)
                     + " ttl=" + ICMP.ttl + " time";
                 if (ICMP.tempsTotal < 1) {
                     output += "<1 ms";
@@ -97,32 +108,37 @@ public class Terminal {
             }
             if (verbose && i != NBR_PING - 1) {
                 output += "\n\n\n";
-            } 
-            System.out.println(output);
+            }
+            else if (i != NBR_PING - 1) {
+                output += "\n";
+            }
         }
+        return output;
     }
 
-    public void traceroute(String addrIPDest) {
+    public String traceroute(String addrIPDest) {
 
         boolean status;
+        String output = "";
         String addrIPSrc = null;
         ICMP.commande = "traceroute";
-
-        if (mach instanceof Routeur) {
-            Routeur routeur = (Routeur) mach;
-            addrIPSrc = IPv4.getStrAdresse(routeur.getCarteRSelonRoute(addrIPDest).getIP().getAdresseIP());
+        if (this.mach.getCartesR().size() != 0) {
+            if (mach instanceof Routeur) {
+                Routeur routeur = (Routeur) mach;
+                addrIPSrc = IPv4.getStrAdresse(routeur.getCarteRSelonRoute(addrIPDest).getIP().getAdresseIP());
+            }
+            else {
+                addrIPSrc = IPv4.getStrAdresse(mach.getCartesR().get(0).getIP().getAdresseIP());
+            }
         }
         else {
-            addrIPSrc = IPv4.getStrAdresse(mach.getCartesR().get(0).getIP().getAdresseIP());
+            return "Aucune carte réseau existante";
         }
 
         status = ICMP.executerRequete(mach, addrIPSrc, addrIPDest, false);
+        output = ICMP.tracerouteOutput;
 
-        /*
-        if (status && (ICMP.codeStatus == ICMP.FINISH || ICMP.codeStatus == ICMP.HOST_UNREACHABLE)) {
-            System.out.println("\n" + ICMP.outputTraceroute);
-        }*/
-
+        return output;
     }
     
     public String ifconfig(){ //affichage de la config de la machine
@@ -132,38 +148,130 @@ public class Terminal {
     
     // MAIN DU PROGRAMME DU TERMINAL
     //Permet de lancer les méthodes correspondant à l'input de l'utilisateur
-    public void on(){
-        Scanner sc = new Scanner(System.in);
-        while(this.run){
-            System.out.println("\nEntrez une commande : ");
-            String utilisation = sc.nextLine();
-            String input[] = utilisation.split(" ");
-            switch (input[0]) {
-                case "arp" -> {
-                    System.out.println(arp());
+    public String executer(String utilisation){
+        String input[] = utilisation.toLowerCase().split(" "); // séparer les mots entre les espaces dans un tableau de String
+        String output = "La commande \"" + utilisation + "\" n'a pas été trouvée";
+        switch (input[0]) {
+            case "arp" -> {
+                if (input.length == 1 && !(this.mach instanceof Commutateur)) {
+                    output = this.mach.tableARP();
                 }
-                case "ping" -> {
-                    if(input.length == 2){
-                        if(IPValide(input[1])){
-                            //ping(input[1], input[2]);
-                        }else{
-                            System.out.println("adresse ip non valide ...");
-                        }
-                    }else{
-                        System.out.println("Commande erronée ... (n'entrez qu'une adresse ip)");
+                else if (input.length == 2 && input[1].equals("-d") && !(this.mach instanceof Commutateur)) {
+                    this.mach.getTableARP().getTable().clear();
+                    output = "Le cache ARP a été vidé";
+                }
+                else if (input.length == 3 && input[1].equals("-d") && IPValide(input[2]) && !(this.mach instanceof Commutateur)) {
+                    boolean status = this.mach.getTableARP().getTable().containsKey(input[2]);
+                    if (status) {
+                        this.mach.getTableARP().getTable().remove(input[2]);
+                        output = "L'entrée \"" + input[2] + "\" a été vidé du cache ARP"; 
+                    }
+                    else {
+                        output = "Aucune entrée \"" + input[2] + "\" n'est renseignée dans la table ARP"; 
                     }
                 }
-                case "ifconfig" -> {
-                    System.out.println(this.ifconfig());
-                }
-                case "q"->{
-                    this.fermerTerminal();
-                }
-                default -> {
-                        System.out.println("commande non reconnue");
+                else {
+                    output = "Aucune table ARP existante";
                 }
             }
+            case "show" -> {
+                if (input.length == 2 && input[1].equals("mac-address-table")) {
+                    if (this.mach instanceof Commutateur) {
+                        Commutateur commutateur = (Commutateur) this.mach;
+                        output = commutateur.tableMAC();
+                    }
+                    else {
+                        output = "Aucune table MAC existante";
+                    }
+                }
+            }
+            case "clear" -> {
+                if (input.length == 2 && input[1].equals("mac-address-table")) {
+                    if (this.mach instanceof Commutateur) {
+                        Commutateur commutateur = (Commutateur) this.mach;
+                        output = commutateur.tableMAC();
+                    }
+                    else {
+                        output = "Aucune table MAC existante";
+                    }
+                }
+            } 
+            case "ip" -> {
+                if (input.length == 2 && input[1].equals("route") &&this.mach instanceof Routeur) {
+                    Routeur routeur = (Routeur) this.mach;
+                    output = routeur.tableRoutage();
+                }
+                else if (input.length == 4 && input[1].equals("route") && input[2].equals("delete") 
+                && IPValide(input[3].split("/")[0]) && Integer.parseInt(input[3].split("/")[1]) >= 0 
+                && Integer.parseInt(input[3].split("/")[1]) <= 32 && this.mach instanceof Routeur) {
+                    Routeur routeur = (Routeur) this.mach;
+                    Integer indice = routeur.getTableRoutage().getIndiceReseauMasque(input[3]);
+                    if (indice != null) {
+                        routeur.getTableRoutage().getTable().remove(indice);
+                        output = "L'entrée \"" + input[3].split("/")[0] + "\" a été vidé";
+                    }
+                    else {
+                        output = "Aucune entrée \"" + input[3].split("/")[0] + "\" n'est renseignée dans la table de routage"; 
+                    }
+                }
+                else if (input.length == 6 && input[1].equals("route") && input[2].equals("add") 
+                && IPValide(input[3].split("/")[0]) && Integer.parseInt(input[3].split("/")[1]) >= 0 
+                && Integer.parseInt(input[3].split("/")[1]) <= 32 && input[4].equals("via") 
+                && IPValide(input[5]) && this.mach instanceof Routeur) {
+                    this.ipRouteAdd(input[3].split("/")[0], Integer.parseInt(input[3].split("/")[1]), input[5]);
+                    output = "";
+                }
+                else if (this.mach instanceof Ordinateur || this.mach instanceof Commutateur) {
+                    output = "Aucune table de routage existante";
+                }
+                else {
+                    output = "Commande erronnée...";
+                }
+            } 
+            case "ping" -> {
+                if(input.length == 2) {
+                    if (IPValide(input[1])) {
+                        output = ping(input[1], false);
+                    }
+                    else{
+                        output = "ping: " + input[1] + " : Nom ou service inconnu";
+                    }
+                }
+                else if (input.length == 3 && input[1].equals("-v")) {
+                    if (IPValide(input[2])) {
+                        output = ping(input[2], true);
+                    }
+                    else {
+                        output = "ping: " + input[1] + " : Nom ou service inconnu";
+                    }
+                }
+                else{
+                    output = "Commande erronée...";
+                }
+            }
+        case "traceroute" -> {
+            if(input.length == 2) {
+                if (IPValide(input[1])) {
+                    output = traceroute(input[1]);
+                }
+                else{
+                    output = "traceroute: " + input[1] + " : Nom ou service inconnu";
+                }
+                }
+                else{
+                    output = "Commande erronée...";
+                }
+            }
+            case "ifconfig" -> {
+                if (input.length == 1) {
+                    output = this.mach.config();
+                }
+            }
+            case "" -> {
+                output = "";
+            }
         }
+        return output;
     }
     
     //-----------Getters--------------

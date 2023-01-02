@@ -34,18 +34,26 @@ public class Commutateur extends Machine {
 
     @Override
     // Permet d'ajouter une carte réseau à une machine
-    public void ajouterInterface(CarteReseau cr) {
+    public boolean ajouterInterface(CarteReseau cr) {
         
+        boolean validite = false;
         if (super.cartesR.size() == 0) {
             super.cartesR.add(cr);
             cr.setMachine(this);
+            validite = true;
         }
+        return validite;
     }
 
     @Override
     public String toString() {
 
         return "Commutateur n°" + this.id;
+    }
+
+    public String tableMAC() {
+
+        return this.tableMAC.toString();
     }
 
     public void afficherTableMAC() {

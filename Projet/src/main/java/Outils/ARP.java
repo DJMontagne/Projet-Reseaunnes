@@ -16,13 +16,11 @@ public class ARP {
 
 	public static String requete(Machine machineSrc, String strAddrIP) {
 
-		ICMP.verbose = true;
-
 		if (nbrEnvoieRequete == 0) {
-			System.out.print(ICMP.verbose ? "\nEnvoie d'une requête ARP...\n\n" : "");
+			ICMP.pingVerboseOutput += ICMP.verbose ? "\nEnvoie d'une requête ARP...\n\n" : "";
 		}
 		else if (nbrEnvoieRequete == 1) {
-			System.out.print(ICMP.verbose ? "\nRéponse de la requête ARP...\n\n" : "");
+			ICMP.pingVerboseOutput += ICMP.verbose ? "\nRéponse de la requête ARP...\n\n" : "";
 		}
 
 		CarteReseau crSrc = null;
@@ -50,10 +48,14 @@ public class ARP {
 					CarteReseau crDest = cr.getValue().get(i);
 					Machine machineDest = crDest.getMachine();
 					if (!machineDest.equals(commutateurAtteint) && !machineDest.equals(machineSrc)) {
-						System.out.print(ICMP.verbose ? machineCourante + " ---> " : "");
+						ICMP.pingVerboseOutput += ICMP.verbose ? machineCourante + " ---> " : "";
 						if (IPv4.estEgale(crDest.getIP().getAdresseIP(), addrIP)) {
+							if (machineDest instanceof Commutateur) {
+								Commutateur commutateur = (Commutateur) machineDest;
+								ARP.remplissageTableMAC(crSrc.getMAC().getAdresse(), machineCourante, commutateur);
+							}
 							adresseMAC = crDest.getMAC().getAdresse();
-							System.out.print(ICMP.verbose ? machineDest + "\n" : "");
+							ICMP.pingVerboseOutput += ICMP.verbose ? machineDest + "\n" : "";
 							// Appel méthode de préparation et d'ajout de contenus pour la table ARP
 							ARP.remplissageTableARP(machineSrc, machineDest);
 							// Reponse de la requete
@@ -67,7 +69,7 @@ public class ARP {
 							i = cr.getValue().size();
 						}
 						else {
-							System.out.print(ICMP.verbose ? machineDest + "   " : "");
+							ICMP.pingVerboseOutput += ICMP.verbose ? machineDest + "   " : "";
 							if (machineDest instanceof Commutateur) {
 								Commutateur commutateur = (Commutateur) machineDest;
 								ARP.remplissageTableMAC(crSrc.getMAC().getAdresse(), machineCourante, commutateur);
@@ -94,7 +96,7 @@ public class ARP {
 			}
 		}
 		if (adresseMAC == null) {
-				System.out.print(ICMP.verbose ? "\n\nL'hôte de destination n'a pas été trouvé, le paquet ARP se détruit...\n" : "");
+			ICMP.pingVerboseOutput += ICMP.verbose ? "\n\nL'hôte de destination n'a pas été trouvé, le paquet ARP se détruit...\n" : "";
 		}
 		return adresseMAC;
 	}

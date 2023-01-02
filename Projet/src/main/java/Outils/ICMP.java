@@ -32,6 +32,9 @@ public class ICMP {
 	public static boolean verbose;
 	public static String commande;
 
+	public static String pingVerboseOutput;
+	public static String tracerouteOutput;
+
 	public static boolean executerRequete(Machine mMachineSrc, String strAddrIPSrc, String strAddrIPDest, boolean mVerbose) {
 
 		boolean allerRetour = false;
@@ -50,6 +53,9 @@ public class ICMP {
 		machineSrc = mMachineSrc;
 		addrIPSrc = strAddrIPSrc;
 		addrIPDest = strAddrIPDest;
+
+		pingVerboseOutput = "";
+		tracerouteOutput = "";
 
 		aller = ICMP.requete();
 		if (aller) {
@@ -96,13 +102,13 @@ public class ICMP {
 	private static boolean requete() {
 
 		if (nbrEnvoieRequete == 0 && codeStatus == PROCESSING) {
-			System.out.print(verbose ? "Envoie d'un message ICMP Echo Request...\n" : "");
+			pingVerboseOutput += verbose ? "Envoie d'un message ICMP Echo Request...\n" : "";
 		}
 		else if (nbrEnvoieRequete == 0 && codeStatus == HOST_UNREACHABLE) {
-			System.out.print(verbose ? "\nEnvoie d'un message ICMP Host Unreachable...\n\n" : "");
+			pingVerboseOutput += verbose ? "\nEnvoie d'un message ICMP Host Unreachable...\n\n" : "";
 		}
 		else if (nbrEnvoieRequete == 1 && codeStatus == PROCESSING) {
-			System.out.print(verbose ? "\nEnvoie d'un message ICMP Echo Reply...\n" : "");
+			pingVerboseOutput += verbose ? "\nEnvoie d'un message ICMP Echo Reply...\n" : "";
 		}
 
 		boolean destinationAtteinte = false;
@@ -115,12 +121,6 @@ public class ICMP {
 			for (int j = 0; j < Reseau.getReseaux().size(); j++) {
 				for (int i = 0; i < Reseau.getReseaux().get(j).getLiaisons().size(); i++) {
 					for (Map.Entry<Machine, Machine> machine : Reseau.getReseaux().get(j).getLiaisons().get(i).getLiaison().entrySet()) {
-						// Simulation temps de réponse
-						try {
-							Thread.sleep(100);
-						}
-						catch (InterruptedException e) {
-						}
 						if (machine.getKey().equals(cpMachineSrc)) {
 							cpMachineSrc = machine.getKey();
 						}
@@ -128,7 +128,7 @@ public class ICMP {
 							cpMachineSrc = machine.getValue();
 						}
 						if (cpMachineSrc != null) {
-							System.out.print(verbose ? cpMachineSrc + " ---> " : "");
+							pingVerboseOutput += verbose ? cpMachineSrc + " ---> " : "";
 							CarteReseau crDest = null;
 							if (cpMachineSrc instanceof Routeur) {
 								ttl--;
@@ -155,12 +155,14 @@ public class ICMP {
 							double temps = calculTemps(cpMachineSrc, crDest.getMachine());
 							if (nbrEnvoieRequete == 0 && codeStatus == PROCESSING) {
 								double tempsArrondi = (double) Math.round(temps * 1000) / 1000;
-								System.out.print(commande == "traceroute" ? cptMachineAtteinte + "  " + crDest.getMAC().getAdresse()
-									+ "  (" + IPv4.getStrAdresse(crDest.getIP().getAdresseIP()) + ")  " + tempsArrondi + " ms\n" : "");
+								tracerouteOutput += commande == "traceroute" ? cptMachineAtteinte + "  " + crDest.getMAC().getAdresse()
+									+ "  (" + IPv4.getStrAdresse(crDest.getIP().getAdresseIP()) + ")  " + tempsArrondi + " ms" : "";
+								tracerouteOutput += commande == "traceroute" && crDest != null 
+									&& !IPv4.getStrAdresse(crDest.getIP().getAdresseIP()).equals(addrIPDest) ? "\n" : "";
 							}
 							// Si l'adresse IP de la carte réseau est égale à celle de destination
 							if (crDest != null && IPv4.getStrAdresse(crDest.getIP().getAdresseIP()).equals(addrIPDest)) {
-								System.out.print(verbose ? machineDest + "\n" : "");
+								pingVerboseOutput += verbose ? machineDest + "\n" : "";
 								destinationAtteinte = true;
 								return destinationAtteinte;
 							}
@@ -208,18 +210,18 @@ public class ICMP {
 		TableRoutage tableRoutage = routeur.getTableRoutage();
 
 		if (tableRoutage.existenceReseau(IPv4.getStrAdresse(addrReseauDest))) {
-			/*System.out.print(verbose ? "L'adresse réseau de destination " + IPv4.getStrAdresse(addrReseauDest) 
+			/*System.out.print(pingVerboseOutput += verbose ? "L'adresse réseau de destination " + IPv4.getStrAdresse(addrReseauDest) 
 				+ " est renseigné dans la table de routage\n"); */
 			if (tableARP.existence(addrIPDest)) {
-				/*System.out.print(verbose ? "L'adresse IP de destination " + addrIPDest + " est renseigné dans la table ARP\n");*/
+				/*System.out.print(pingVerboseOutput += verbose ? "L'adresse IP de destination " + addrIPDest + " est renseigné dans la table ARP\n");*/
 				interfaceRedirection = tableARP.getInterface(addrIPDest);
 				addrMacDest = tableARP.getMAC(addrIPDest);
 			}
 			else if (tableRoutage.existencePasserelle(IPv4.getStrAdresse(addrReseauDest))) {
-				/*System.out.print(verbose ? "\nL'adresse IP de destination " + addrIPDest + " n'est pas dans le même sous-réseau");*/
+				/*System.out.print(pingVerboseOutput += verbose ? "\nL'adresse IP de destination " + addrIPDest + " n'est pas dans le même sous-réseau");*/
 				String passerelle = tableRoutage.getPasserelle(IPv4.getStrAdresse(addrReseauDest));
 				if (tableARP.existence(passerelle)) {
-					System.out.print(verbose ? "\n\nLa passerelle du réseau de destination est renseigné dans la table ARP\n\n" : "");
+					pingVerboseOutput += verbose ? "\n\nLa passerelle du réseau de destination est renseigné dans la table ARP\n\n" : "";
 					interfaceRedirection = tableARP.getInterface(passerelle);
 					addrMacDest = tableARP.getMAC(passerelle);
 				}
@@ -232,7 +234,7 @@ public class ICMP {
 			}
 		}
 		else if (tableARP.existence(addrIPDest)) {
-			System.out.print(verbose ? "L'adresse IP de destination " + addrIPDest + " est renseigné dans la table ARP\n" : "");
+			pingVerboseOutput += verbose ? "L'adresse IP de destination " + addrIPDest + " est renseigné dans la table ARP\n" : "";
 			interfaceRedirection = tableARP.getInterface(addrIPDest);
 			addrMacDest = tableARP.getMAC(addrIPDest);
 		}
@@ -247,21 +249,21 @@ public class ICMP {
 				if (port.getKey().getNomInterface().equals(interfaceRequeteARP)) {
 					crMachineLiee = port.getValue().get(0);
 					Machine machineLiee = crMachineLiee.getMachine();
-					System.out.print(verbose ? "\n\nL'adresse IP de destination  " + addrIPDest 
-						+ " n'est pas renseigné dans la table ARP\n" + routeur + " détruit le paquet ICMP...\n" : "");
+					pingVerboseOutput += verbose ? "\n\nL'adresse IP de destination  " + addrIPDest 
+						+ " n'est pas renseigné dans la table ARP\n" + routeur + " détruit le paquet ICMP...\n" : "";
 					ARP.requete(routeur, addrIPDest);
-					System.out.print(verbose ? "" : "");
+					pingVerboseOutput += verbose ? "" : "";
 				}
 			}
 			else {
 				if (!machineSrc.equals(routeur) && !tableRoutage.existenceReseau(IPv4.getStrAdresse(addrReseauDest))) {
-					System.out.print(verbose ? "\n\nL'adresse réseau de destination n'est pas renseigné dans la table de routage\n" 
-						+ routeur + " détruit le paquet ICMP...\n" : "");
+					pingVerboseOutput += verbose ? "\n\nL'adresse réseau de destination n'est pas renseigné dans la table de routage\n" 
+						+ routeur + " détruit le paquet ICMP...\n" : "";
 					codeStatus = HOST_UNREACHABLE;
 				}
 				else if (!tableRoutage.existenceReseau(IPv4.getStrAdresse(addrReseauDest))) {
-					System.out.print(verbose ? "\n\nL'adresse réseau de destination n'est pas renseigné dans la table de routage\n" 
-						+ routeur + " détruit le paquet ICMP...\n" : "");
+					pingVerboseOutput += verbose ? "\n\nL'adresse réseau de destination n'est pas renseigné dans la table de routage\n" 
+						+ routeur + " détruit le paquet ICMP...\n" : "";
 					codeStatus = REQUEST_TIMED_OUT;
 				}
 				
@@ -295,35 +297,35 @@ public class ICMP {
 			&& IPv4.estEgale(addrReseauDest, crMachineSrc.getIP().getReseau())) {
 				memeSousReseau = true;
 				if (tableARP.existence(addrIPDest)) {
-					System.out.print(verbose ? "L'adresse IP de destination " + addrIPDest + " est renseigné dans la table ARP\n" : "");
+					pingVerboseOutput += verbose ? "L'adresse IP de destination " + addrIPDest + " est renseigné dans la table ARP\n" : "";
 					addrMacDest = tableARP.getMAC(addrIPDest);				}
 				else {
-					System.out.print(verbose ? "L'adresse IP de destination " + addrIPDest + " n'est pas renseigné dans la table ARP\n" : "");
+					pingVerboseOutput += verbose ? "L'adresse IP de destination " + addrIPDest + " n'est pas renseigné dans la table ARP\n" : "";
 					addrMacDest = ARP.requete(machineSrc, addrIPDest);
-					System.out.print(verbose ? "" : "");
+					pingVerboseOutput += verbose ? "" : "";
 				}
 			}
 			else if (tableARP.existence(IPv4.getStrAdresse(crMachineSrc.getIP().getPasserelle()))) {
-				System.out.print(verbose ? "L'adresse IP de destination " + addrIPDest + " n'est pas dans le même sous-réseau\n"
-					+ "La passerelle est renseigné dans la table ARP\n\n" : "");
+				pingVerboseOutput += verbose ? "L'adresse IP de destination " + addrIPDest + " n'est pas dans le même sous-réseau\n"
+					+ "La passerelle est renseigné dans la table ARP\n\n" : "";
 				addrMacDest = tableARP.getMAC(IPv4.getStrAdresse(crMachineSrc.getIP().getPasserelle()));
 			}
 			if (addrMacDest == null && !memeSousReseau) {
-				System.out.print(verbose ? "L'adresse IP de destination " + addrIPDest + " n'est pas dans le même sous-réseau\n" : "");
+				pingVerboseOutput += verbose ? "L'adresse IP de destination " + addrIPDest + " n'est pas dans le même sous-réseau\n" : "";
 				if (!IPv4.adresseVide(crMachineSrc.getIP().getPasserelle())) {
-					System.out.print(verbose ? "La passerelle n'est pas renseigné dans la table ARP\n" : "");
+					pingVerboseOutput += verbose ? "La passerelle n'est pas renseigné dans la table ARP\n" : "";
 					addrMacDest = ARP.requete(machineSrc, IPv4.getStrAdresse(crMachineSrc.getIP().getPasserelle()));
-					System.out.print(verbose ? "" : "");
+					pingVerboseOutput += verbose ? "\n" : "";
 				}
 				else {
-					System.out.print(verbose ? "La passerelle par défaut n'est pas renseigné\n" 
-						+ machineSrc + " détruit le paquet ICMP...\n" : "");
+					pingVerboseOutput += verbose ? "La passerelle par défaut n'est pas renseigné\n" 
+						+ machineSrc + " détruit le paquet ICMP...\n" : "";
 					codeStatus = REQUEST_TIMED_OUT;
 				}
 			}
 			else if (addrMacDest == null && memeSousReseau) {
-				System.out.print(verbose ? "La requête ARP a été interrompue après le délai," 
-					+ "le processus ARP détruit le paquet ICMP...\n" : "");
+				pingVerboseOutput += verbose ? "La requête ARP a été interrompue après le délai," 
+					+ "le processus ARP détruit le paquet ICMP...\n" : "";
 				codeStatus = REQUEST_TIMED_OUT;
 			}
 		}
@@ -335,8 +337,8 @@ public class ICMP {
 		// On considère que la vitesse correspond à celle de la vitesse de la lumière soit 299 792 458 m/s
 		final int VITESSE = 299792458;
 		double distance = (double) Math.sqrt(Math.pow((machine2.getX() - machine1.getX()), 2) + (Math.pow((machine2.getY() - machine1.getY()), 2)));
-		// On considère une échelle telle que 1 unité = 100m 
-		double temps = ((100 * distance) / VITESSE);
+		// On considère une échelle telle que 1 unité = 100 000m 
+		double temps = ((100000 * distance) / VITESSE);
 		tempsTotal += temps;
 
 		return temps;
