@@ -1,25 +1,23 @@
 # Les Réseaunnés
 
-## Backlog
+## Présentation
 
-- ETQ utilisateur, je veux pouvoir ajouter un ordinateur
-- ETQ utilisateur, je veux pouvoir ajouter un commutateur
-- ETQ utilisateur, je veux pouvoir ajouter un routeur
-- ETQ utilisateur, je veux pouvoir ajouter une carte réseau (interface) à un ordinateur ou un routeur
-- ETQ utilisateur, je veux pouvoir associer une carte réseau à un commutateur
-- ETQ utilisateur, je veux pouvoir configurer l'adresse IP d'une interface (l'adresse MAC sera automatique)
-- ETQ utilisateur, je veux voir la configuration générale d'un ordinateur
-- ETQ utilisateur, je veux voir la configuration générale de mon réseau (ordinateur et liaison entre eux)
-- ETQ utilisateur, je veux lancer un test ping entre deux ordinateurs
-- ETQ utilisateur, je veux connaitre la trace MAC, IP de ma trame suite à un ping (aller et retour)
-- ETQ utilisateur, je veux une visualisation graphique
-réussir
+Merci d'avoir téléchargé le projet des Réseaunnés. Il s'agit d'un simulateur réseau réalisé dans le cadre des projets transversaux du S3 de notre licence informatique. 
 
-## Getting started
+Cette application permet de simuler un réseau local avec des ordinateurs, des commutateurs, des routeurs et les liaisons entre ces machines. 
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## Installer le projet
+
+Pour installer ce projet il vous suffit de télécharger le fichier Réseaunnés.exe qui se trouve dans le dossier exe, ainsi que le dossier img.
+
+L'application utilise des fichiers du dossier img, alors il faut IMPÉRATIVEMENT que le dossier img et le fichier Réseaunnés.exe soit à la même place d'une arborescence. 
+
+Exemple : 
+-|Documents
+---|Réseaunnés.exe
+---|img
+-|Téléchargements
 
 ## Add your files
 
