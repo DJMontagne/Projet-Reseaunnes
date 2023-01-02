@@ -25,7 +25,7 @@ Exemple :
 - Pour configurer une carte réseau sur un ordinateur, cliquez dessus et sur configuration. Une fenêtre s'ouvre où vous pouvez renseigner le nom que vous voulez donner à votre interface, son adresse IP, son masque et sa passerelle. Seule la passerelle n'est pas obligatoire et est initalisée à 0.0.0.0 de base.
 - Cliquez ensuite sur le bouton + et fermez la fenêtre. 
 
-**Note**: Un ordinateur et un commutateur ne peuvent avoir qu'une carte réseau et le routeur peut en avoir 2, qui ne doivent pas correspondre au même réseau. [commandes](#commandes-du-Terminal)
+**Note**: Un ordinateur et un commutateur ne peuvent avoir qu'une carte réseau et le routeur peut en avoir 2, qui ne doivent pas correspondre au même réseau. [commandes](#commandes-du-terminal)
 
 - 
 
