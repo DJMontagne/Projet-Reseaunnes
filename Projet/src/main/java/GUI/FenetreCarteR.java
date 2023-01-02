@@ -104,7 +104,7 @@ public class FenetreCarteR implements KeyListener {
 
 	private void ajouterIconeAjout() {
 
-		Icon icon = new ImageIcon("src\\main\\java\\img\\ajout.png");
+		Icon icon = new ImageIcon("./img/ajout.png");
 		JLabel imgAjout = new JLabel();
 		imgAjout.setBorder(new EmptyBorder(0, 0, 0, 15));
 		imgAjout.setIcon(icon);
@@ -181,7 +181,7 @@ public class FenetreCarteR implements KeyListener {
 
 	private void ajouterIconeSuppr() {
 
-		Icon icon = new ImageIcon("src\\main\\java\\img\\supprimer.png");
+		Icon icon = new ImageIcon("./img/supprimer.png");
 		JLabel imgSuppr = new JLabel();
 		imgSuppr.setBorder(new EmptyBorder(0, 0, 0, 15));
 		imgSuppr.setIcon(icon);
@@ -259,7 +259,7 @@ public class FenetreCarteR implements KeyListener {
 				JOptionPane.showMessageDialog(new JFrame(), 
 					IPv4.getStrAdresse(carteR.getIP().getReseau()) + " " 
 					+ IPv4.getStrAdresse(carteR.getIP().getMasque()) + " est déjà utilisée"
-					, "Adresse réseau existant", JOptionPane.WARNING_MESSAGE);
+					, "Adresse réseau existante", JOptionPane.WARNING_MESSAGE);
 			}
 			carteR = null;
 		}
@@ -271,7 +271,7 @@ public class FenetreCarteR implements KeyListener {
 
 	private void afficherCarteReseau(CarteReseau carteR) {
 
-		Image image = new ImageIcon("src\\main\\java\\img\\carte_reseau.png").getImage();
+		Image image = new ImageIcon("./img/carte_reseau.png").getImage();
 		int largeur = 75;
 		int hauteur = 75;
 		Image imageReduite = image.getScaledInstance(largeur, hauteur, Image.SCALE_SMOOTH);
