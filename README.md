@@ -2,7 +2,7 @@
 
 ## Présentation
 
-Merci d'avoir téléchargé le projet des Réseaunnés. Il s'agit d'un simulateur réseau réalisé dans le cadre des projets transversaux du S3 de notre licence informatique. 
+Merci de vous pencher sur le projet des Réseaunnés. Il s'agit d'un simulateur réseau réalisé dans le cadre des projets transversaux du S3 de notre licence informatique. 
 
 Cette application permet de simuler un réseau local avec des ordinateurs, des commutateurs, des routeurs et les liaisons entre ces machines. 
 
