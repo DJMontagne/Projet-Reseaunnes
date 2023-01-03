@@ -42,23 +42,23 @@ Exemple :
 
 ## Commandes du Terminal
 
-- **ifconfig** : affiche la configuration de la machine
+- **ifconfig** : Affiche la configuration de la machine
 
-- **tracerroute "_adresse IP_"**: 
+- **traceroute "_adresse IP_"** : Permet d'obtenir la trace IP et MAC d'une requêtre ICMP de tous les équipements et le temps que la requête met à arriver à chaque équipemennt
 
-- **ping "_adresse IP_"** : envoie 4 requêtes ICMP à l'adresse renseignée
+- **ping "_adresse IP_"** : Envoie 4 requêtes ICMP à l'adresse renseignée
 
 - **ip "_paramètre_"** : 
-    - **route** :
-    - **route add** :
-    - **route delete** :
+    - **route** : Affiche la table de routage
+    - **route add "_adresse réseau/masque_" via "_passerelle_"** : Ajoute une entrée dans la table de routage
+    - **route delete "_adresse réseau/masque_"** : Supprime l'entrée spécifiée dans la table de routage
 
-- **clear mac-adress-table** : vide la table mac de la machine
+- **clear mac-adress-table** : Vide la table mac de la machine
 
-- **show mac-adress-table** : affiche la table mac de la machine
+- **show mac-adress-table** : Affiche la table mac de la machine
 
-- **arp** : affiche la table arp de la machine 
+- **arp** : Affiche la table arp de la machine 
 
-- **arp -d** : vide la table arp de la machine
+- **arp -d** : Vide la table arp de la machine
 
-- **arp -d "_adresse IP_"** : retire l'adresse ip renseignée de la table arp de la machine
+- **arp -d "_adresse IP_"** : Retire l'adresse ip renseignée de la table arp de la machine
