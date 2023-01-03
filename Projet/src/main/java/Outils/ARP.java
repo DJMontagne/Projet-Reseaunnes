@@ -17,7 +17,7 @@ public class ARP {
 	public static String requete(Machine machineSrc, String strAddrIP) {
 
 		if (nbrEnvoieRequete == 0) {
-			ICMP.pingVerboseOutput += ICMP.verbose ? "\nEnvoie d'une requête ARP...\n\n" : "";
+			ICMP.pingVerboseOutput += ICMP.verbose ? "\nEnvoi d'une requête ARP...\n\n" : "";
 		}
 		else if (nbrEnvoieRequete == 1) {
 			ICMP.pingVerboseOutput += ICMP.verbose ? "\nRéponse de la requête ARP...\n\n" : "";
@@ -97,6 +97,9 @@ public class ARP {
 		}
 		if (adresseMAC == null) {
 			ICMP.pingVerboseOutput += ICMP.verbose ? "\n\nL'hôte de destination n'a pas été trouvé, le paquet ARP se détruit...\n" : "";
+		}
+		else {
+			ICMP.pingVerboseOutput += ICMP.verbose ? "\n\nL'hôte de destination a été trouvé\n" : "";
 		}
 		return adresseMAC;
 	}

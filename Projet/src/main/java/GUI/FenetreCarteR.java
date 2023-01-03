@@ -104,7 +104,7 @@ public class FenetreCarteR implements KeyListener {
 
 	private void ajouterIconeAjout() {
 
-		Icon icon = new ImageIcon("./img/ajout.png");
+		Icon icon = new ImageIcon("img\\ajout.png");
 		JLabel imgAjout = new JLabel();
 		imgAjout.setBorder(new EmptyBorder(0, 0, 0, 15));
 		imgAjout.setIcon(icon);
@@ -180,7 +180,7 @@ public class FenetreCarteR implements KeyListener {
 
 	private void ajouterIconeSuppr() {
 
-		Icon icon = new ImageIcon("./img/supprimer.png");
+		Icon icon = new ImageIcon("img\\supprimer.png");
 		JLabel imgSuppr = new JLabel();
 		imgSuppr.setBorder(new EmptyBorder(0, 0, 0, 15));
 		imgSuppr.setIcon(icon);
@@ -210,15 +210,14 @@ public class FenetreCarteR implements KeyListener {
 								labelSuppr = label;
 							}
 							imgCartesR.remove(labelSuppr);
-							imgCartesR.invalidate();			
 							imgCartesR.repaint();
+							imgCartesR.revalidate();			
 							CarteReseau crSuppr = labelCr.get(labelSuppr);
 							ArrayList<Liaison> liaisonsSuppr = machine.getLiaisons(crSuppr);
 							for (int i = 0; i < liaisonsSuppr.size(); i++) {
 								Liaison liaison = liaisonsSuppr.get(i);
 								liaison.delier();
 							}
-							repere.invalidate();
 							repere.repaint();
 							machine.supprimerCarteR(crSuppr);
 							imgCartesR.removeMouseListener(this);
@@ -269,7 +268,7 @@ public class FenetreCarteR implements KeyListener {
 
 	private void afficherCarteReseau(CarteReseau carteR) {
 
-		Image image = new ImageIcon("./img/carte_reseau.png").getImage();
+		Image image = new ImageIcon("img\\carte_reseau.png").getImage();
 		int largeur = 75;
 		int hauteur = 75;
 		Image imageReduite = image.getScaledInstance(largeur, hauteur, Image.SCALE_SMOOTH);
@@ -332,7 +331,12 @@ public class FenetreCarteR implements KeyListener {
 		this.champsTexte.get(0).setText(this.crModifier.getNomInterface());
 		this.champsTexte.get(1).setText(IPv4.getStrAdresse(this.crModifier.getIP().getAdresseIP()));
 		this.champsTexte.get(2).setText(IPv4.getStrAdresse(this.crModifier.getIP().getMasque()));
-		this.champsTexte.get(3).setText(IPv4.getStrAdresse(this.crModifier.getIP().getPasserelle()));
+		if (IPv4.adresseVide(cr.getIP().getPasserelle())) {
+			this.champsTexte.get(3).setText("");
+		}
+		else {
+			this.champsTexte.get(3).setText(IPv4.getStrAdresse(this.crModifier.getIP().getPasserelle()));
+		}
 	}
 
 	private void modifierNomInterface(String nom) {

@@ -11,12 +11,9 @@ import java.util.Map;
 
 public class Repere extends JPanel {
 
-	private ArrayList<Line2D> lignes;
-	
 	public Repere() {
 
 		setLayout(null);
-	   	this.lignes = new ArrayList<>();
 	}
 
 	public JLabel getLabel(Machine machine) {
@@ -50,14 +47,10 @@ public class Repere extends JPanel {
 						int x2 = labelB.getX() + labelB.getWidth() / 2;
 						int y2 = labelB.getY() + labelB.getHeight() / 2;
 
-						Line2D ligne = new Line2D.Double(x1, y1, x2, y2);
-						this.lignes.add(ligne);
-
-						for (Line2D ligne2d : this.lignes) {
-							// Dessin de la ligne
-							g2d.setColor(Color.BLACK);
-							g2d.draw(ligne2d);
-						}
+						Line2D ligne2d = new Line2D.Double(x1, y1, x2, y2);
+						// Dessin de la ligne
+						g2d.setColor(Color.BLACK);
+						g2d.draw(ligne2d);
 					}
 	            }
 	        }
