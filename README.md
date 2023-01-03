@@ -44,11 +44,11 @@ Exemple :
 
 - **ifconfig** : affiche la configuration de la machine
 
-- **tracerroute _adresse IP_** : 
+- **tracerroute** "_adresse IP_": 
 
-- **ping _adresse IP_** : envoie 4 requêtes ICMP à l'adresse renseignée
+- **ping** "_adresse IP_" : envoie 4 requêtes ICMP à l'adresse renseignée
 
-- **ip _paramètre_** : 
+- **ip** "_paramètre_" : 
     - **route** :
     - **route add**:
     - **route delete**:
@@ -61,4 +61,4 @@ Exemple :
 
 - **arp -d**: vide la table arp de la machine
 
-- **arp -d _adresse IP_**: retire l'adresse ip renseignée de la table arp de la machine
+- **arp -d** "_adresse IP_": retire l'adresse ip renseignée de la table arp de la machine
