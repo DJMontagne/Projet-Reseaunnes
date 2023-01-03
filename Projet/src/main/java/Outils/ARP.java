@@ -13,6 +13,7 @@ import java.util.Map;
 public class ARP {
 	
         private static int nbrEnvoieRequete = 0;
+        private static boolean affichageMessage;
 
 	public static String requete(Machine machineSrc, String strAddrIP) {
 
@@ -98,8 +99,9 @@ public class ARP {
 		if (adresseMAC == null) {
 			ICMP.pingVerboseOutput += ICMP.verbose ? "\n\nL'hôte de destination n'a pas été trouvé, le paquet ARP se détruit...\n" : "";
 		}
-		else {
-			ICMP.pingVerboseOutput += ICMP.verbose ? "\n\nL'hôte de destination a été trouvé\n" : "";
+		else if (!affichageMessage) {
+			affichageMessage = true;
+			ICMP.pingVerboseOutput += ICMP.verbose ? "\nL'hôte de destination a été trouvé\n" : "";
 		}
 		return adresseMAC;
 	}

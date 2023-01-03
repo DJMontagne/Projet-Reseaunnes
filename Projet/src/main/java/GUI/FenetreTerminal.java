@@ -5,6 +5,8 @@ import Outils.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -26,7 +28,8 @@ public class FenetreTerminal {
 
 		this.contenuPane = (JPanel) this.fenetre.getContentPane();
 
-		this.contenuTerminalPane = new JPanel();
+		this.contenuTerminalPane = new JPanel(new BorderLayout());
+		this.contenuTerminalPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.contenuPane.add(contenuTerminalPane);
 
 		creerTerminal();
@@ -51,9 +54,8 @@ public class FenetreTerminal {
 		this.terminal.setBackground(new Color(0, 0, 0));
 		this.terminal.setForeground(new Color(255, 255, 255));
 		JScrollPane scrollPane = new JScrollPane(this.terminal);
-		scrollPane.setPreferredSize(new Dimension(this.fenetre.getWidth() - 50, this.fenetre.getHeight() - 60));
 		this.terminal.setText(this.machine + ":~$ ");
-		this.contenuTerminalPane.add(scrollPane);
+		this.contenuTerminalPane.add(scrollPane, BorderLayout.CENTER);
 
 		terminal.addKeyListener(new KeyListener() {
 

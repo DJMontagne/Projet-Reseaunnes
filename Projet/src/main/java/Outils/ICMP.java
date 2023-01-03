@@ -35,6 +35,8 @@ public class ICMP {
 	public static String pingVerboseOutput;
 	public static String tracerouteOutput;
 
+	private static boolean destinationAtteinte;
+
 	public static boolean executerRequete(Machine mMachineSrc, String strAddrIPSrc, String strAddrIPDest, boolean mVerbose) {
 
 		boolean allerRetour = false;
@@ -111,7 +113,7 @@ public class ICMP {
 			pingVerboseOutput += verbose ? "\nEnvoie d'un message ICMP Echo Reply...\n" : "";
 		}
 
-		boolean destinationAtteinte = false;
+		destinationAtteinte = false;
 		Machine cpMachineSrc = machineSrc;
 		int cptMachineAtteinte = 0;
 
@@ -128,12 +130,15 @@ public class ICMP {
 							cpMachineSrc = machine.getValue();
 						}
 						if (cpMachineSrc != null) {
-							pingVerboseOutput += verbose ? cpMachineSrc + " ---> " : "";
 							CarteReseau crDest = null;
 							if (cpMachineSrc instanceof Routeur) {
 								ttl--;
 								Routeur routeur = (Routeur) cpMachineSrc;
 								crDest = ICMP.redirectionSelonRoutage(routeur);
+								if (destinationAtteinte) {
+									pingVerboseOutput += verbose ? cpMachineSrc + "\n" : "";
+									return destinationAtteinte;
+								}
 							}
 							else if (cpMachineSrc instanceof Commutateur) {
 								Commutateur commutateur = (Commutateur) cpMachineSrc;
@@ -143,6 +148,7 @@ public class ICMP {
 								Ordinateur ordinateur = (Ordinateur) cpMachineSrc;
 								crDest = ICMP.redirectionSelonPort(ordinateur);
 							}
+							pingVerboseOutput += verbose ? cpMachineSrc + " ---> " : "";
 							try {
 								machineDest = crDest.getMachine();
 							}
@@ -208,6 +214,11 @@ public class ICMP {
 		String interfaceRequeteARP = null;
 		TableARP tableARP = routeur.getTableARP();
 		TableRoutage tableRoutage = routeur.getTableRoutage();
+
+		if (routeur.ipExistant(addrIPDest)) {
+			destinationAtteinte = true;
+			return crDest;
+		}
 
 		if (tableRoutage.existenceReseau(IPv4.getStrAdresse(addrReseauDest))) {
 			/*System.out.print(pingVerboseOutput += verbose ? "L'adresse réseau de destination " + IPv4.getStrAdresse(addrReseauDest) 
