@@ -122,6 +122,17 @@ public abstract class Machine {
         return carteReseau;
     }
 
+    public boolean existenceNomInterface(String nomInterface) {
+
+        boolean existenceNomInterface = false;
+        for (int i = 0; i < this.getCartesR().size(); i++) {
+            if (this.getCartesR().get(i).getNomInterface().equals(nomInterface)) {
+                existenceNomInterface = true;
+            }
+        }
+        return existenceNomInterface;
+    }
+
     public TableARP getTableARP() {
         return tableARP;
     }

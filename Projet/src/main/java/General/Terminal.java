@@ -53,6 +53,20 @@ public class Terminal {
             }    
         }
     }
+
+    public void ipRouteAdd(String strAddrReseau, int masqueDecimal, String passerelle, String nomInterface) {
+
+        if (this.mach instanceof Routeur) {
+            
+            Routeur routeur = (Routeur) this.mach;
+            TableRoutage tableRoutage = routeur.getTableRoutage();
+
+            String[] infosTableRoutage = {strAddrReseau + "/" + Integer.toString(masqueDecimal),
+                passerelle,
+                nomInterface};
+            tableRoutage.remplir(infosTableRoutage);
+        }
+    }
     
     public String ping(String addrIPDest, boolean verbose){
 
@@ -221,6 +235,18 @@ public class Terminal {
                 && IPValide(input[5]) && this.mach instanceof Routeur) {
                     this.ipRouteAdd(input[3].split("/")[0], Integer.parseInt(input[3].split("/")[1]), input[5]);
                     output = "";
+                }
+                else if (input.length == 8 && input[1].equals("route") && input[2].equals("add") 
+                && IPValide(input[3].split("/")[0]) && Integer.parseInt(input[3].split("/")[1]) >= 0 
+                && Integer.parseInt(input[3].split("/")[1]) <= 32 && input[4].equals("via") 
+                && IPValide(input[5]) && input[6].equals("dev") && this.mach instanceof Routeur) {
+                    if (this.mach.existenceNomInterface(input[7])) {
+                        this.ipRouteAdd(input[3].split("/")[0], Integer.parseInt(input[3].split("/")[1]), input[5], input[7]);
+                        output = "";
+                    }
+                    else {
+                        output = "L'interface \"" + input[7] + "\" n'existe pas";
+                    }
                 }
                 else if (this.mach instanceof Ordinateur || this.mach instanceof Commutateur) {
                     output = "Aucune table de routage existante";
