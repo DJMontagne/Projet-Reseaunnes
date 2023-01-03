@@ -9,7 +9,7 @@ Cette application permet de simuler un réseau local avec des ordinateurs, des c
 
 ## Installer le projet
 
-Pour installer ce projet il vous suffit de télécharger le fichier Réseaunnés.exe qui se trouve dans le dossier exe, ainsi que le dossier img.
+Pour installer ce projet il vous suffit de télécharger le fichier Réseaunnés.exe qui se trouve dans le dossier Simulateur_Réseau, ainsi que le dossier img.
 
 L'application utilise des fichiers du dossier img, alors il faut IMPÉRATIVEMENT que le dossier img et le fichier Réseaunnés.exe soient au même niveau d'une arborescence. 
 
