@@ -55,9 +55,9 @@ Exemple :
     - **route add "_adresse réseau/masque_" via "_passerelle_"** : Ajoute une entrée dans la table de routage
     - **route delete "_adresse réseau/masque_"** : Supprime l'entrée spécifiée dans la table de routage
 
-- **clear mac-adress-table** : Vide la table mac de la machine
+- **clear mac-address-table** : Vide la table mac de la machine
 
-- **show mac-adress-table** : Affiche la table mac de la machine
+- **show mac-address-table** : Affiche la table mac de la machine
 
 - **arp** : Affiche la table arp de la machine 
 
