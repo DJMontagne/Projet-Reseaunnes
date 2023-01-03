@@ -1,8 +1,11 @@
 package General;
 
-import Outils.*;
 import java.util.ArrayList;
 import java.util.Map;
+
+import Outils.IPv4;
+import Outils.Octet;
+import Outils.TableRoutage;
 
 public class Routeur extends Machine {
 

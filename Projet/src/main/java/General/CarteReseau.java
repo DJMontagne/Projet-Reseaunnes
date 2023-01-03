@@ -1,9 +1,7 @@
 package General;
 
-import Outils.*;
-import java.io.ObjectInputStream.GetField;
-import java.util.ArrayList;
-import java.util.Set;
+import Outils.IPv4;
+import Outils.MAC;
 
 public class CarteReseau {
     //Atributs

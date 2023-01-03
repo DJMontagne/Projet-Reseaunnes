@@ -1,18 +1,40 @@
 package GUI;
 
-import General.*;
-import Outils.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.event.MouseInputAdapter;
-import javax.swing.event.MouseInputListener;
+
+import General.CarteReseau;
+import General.Commutateur;
+import General.Liaison;
+import General.Machine;
+import General.Ordinateur;
+import General.Routeur;
+import Outils.IPv4;
+import Outils.Octet;
 
 public class FenetreCarteR implements KeyListener {
 

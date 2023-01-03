@@ -1,10 +1,5 @@
 package General;
 
-import Outils.*;
-import GUI.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-
 public class Ordinateur extends Machine {
 
 	public static final int NBR_PORT_FAST = 1;

@@ -1,8 +1,6 @@
 package Outils;
 
-import General.*;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author bpotetma

@@ -2,9 +2,9 @@ package Outils;
 
 
 /**
- * Cette classe permet d'initialiser une adresse IP, si l'adresse IP est donné comme argument
+ * Cette classe permet d'initialiser une adresse IP, si l'adresse IP est donnée comme argument
  * du constructeur (type String ou Octet[]) un masque par défaut ainsi qu'une adresse réseau
- * et broadcast sont générées. Si cet object est instancié sans paramètre une adresse par défaut 
+ * et broadcast sont générées. Si cet objet est instancié sans paramètre une adresse par défaut 
  * APIPA est généré automatiquement. Enfin si l'adresse IP, et un masque sont donnés en argument 
  * du constructeur alors, une adresse réseau et broadcast associées sont générées.
  * @author bpotetma
@@ -408,21 +408,21 @@ public class IPv4 {
 		return strAddr;
 	}
         
-        public static String getStrAdresseBinaire(Octet[] addr) {
-		
-		String strAddrBinaire = "";
-		for (int i = 0; i < IPv4.NBR_OCTET; i++) {
-			if (i != IPv4.NBR_OCTET - 1) {
-				strAddrBinaire += addr[i].toString() + ".";
-			}
-			else {
-				strAddrBinaire += addr[i].toString();
-			}
+	public static String getStrAdresseBinaire(Octet[] addr) {
+	
+	String strAddrBinaire = "";
+	for (int i = 0; i < IPv4.NBR_OCTET; i++) {
+		if (i != IPv4.NBR_OCTET - 1) {
+			strAddrBinaire += addr[i].toString() + ".";
 		}
-		return strAddrBinaire;
+		else {
+			strAddrBinaire += addr[i].toString();
+		}
+	}
+	return strAddrBinaire;
 	}
 	
-		// affichage d'une instance de cette classe
+	// affichage d'une instance de cette classe
 	@Override
 	public String toString() {
 

@@ -1,13 +1,20 @@
 package GUI;
 
-import General.*;
-import Outils.*;
-import java.awt.*;
-import javax.swing.*;
-import java.awt.geom.*;
-import java.util.ArrayList;
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import General.Liaison;
+import General.Machine;
+import Outils.Reseau;
 
 public class Repere extends JPanel {
 

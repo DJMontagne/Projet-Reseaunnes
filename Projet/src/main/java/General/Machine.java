@@ -1,9 +1,14 @@
 package General;
 
-import Outils.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import Outils.ARP;
+import Outils.IPv4;
+import Outils.Reseau;
+import Outils.TableARP;
+import Outils.TableRoutage;
 
 /**
  *

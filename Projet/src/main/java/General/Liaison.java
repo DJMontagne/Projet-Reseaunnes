@@ -1,9 +1,10 @@
 
 package General;
 
-import Outils.*;
 import java.util.HashMap;
 import java.util.Map;
+
+import Outils.Reseau;
 
 /**
  * @author bpotetma

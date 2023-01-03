@@ -5,8 +5,7 @@
 
 package General;
 
-import Outils.*;
-import GUI.*;
+import GUI.Accueil;
 
 /**
  *

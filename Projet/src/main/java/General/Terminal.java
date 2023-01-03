@@ -1,10 +1,11 @@
 package General;
 
-import java.util.Scanner;
-import Outils.*;
-
-import java.util.ArrayList;
 import java.util.Map;
+
+import Outils.ICMP;
+import Outils.IPv4;
+import Outils.Octet;
+import Outils.TableRoutage;
 
 /**
  *

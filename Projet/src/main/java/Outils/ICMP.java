@@ -1,9 +1,13 @@
 package Outils;
 
-import General.*;
-
 import java.util.ArrayList;
 import java.util.Map;
+
+import General.CarteReseau;
+import General.Commutateur;
+import General.Machine;
+import General.Ordinateur;
+import General.Routeur;
 
 /**
  * @author bpotetma
