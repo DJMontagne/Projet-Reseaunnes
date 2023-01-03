@@ -46,19 +46,19 @@ Exemple :
 
 - **tracerroute "_adresse IP_"**: 
 
-- **ping** "_adresse IP_" : envoie 4 requêtes ICMP à l'adresse renseignée
+- **ping "_adresse IP_"** : envoie 4 requêtes ICMP à l'adresse renseignée
 
-- **ip** _paramètre_ : 
+- **ip "_paramètre_"** : 
     - **route** :
-    - **route add**:
-    - **route delete**:
+    - **route add** :
+    - **route delete** :
 
-- **clear mac-adress-table**: vide la table mac de la machine
+- **clear mac-adress-table** : vide la table mac de la machine
 
-- **show mac-adress-table**: affiche la table mac de la machine
+- **show mac-adress-table** : affiche la table mac de la machine
 
-- **arp**: affiche la table arp de la machine 
+- **arp** : affiche la table arp de la machine 
 
-- **arp -d**: vide la table arp de la machine
+- **arp -d** : vide la table arp de la machine
 
-- **arp -d** "_adresse IP_": retire l'adresse ip renseignée de la table arp de la machine
+- **arp -d "_adresse IP_"** : retire l'adresse ip renseignée de la table arp de la machine
