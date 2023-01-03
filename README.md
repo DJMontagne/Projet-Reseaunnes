@@ -48,6 +48,8 @@ Exemple :
 
 - **ping "_adresse IP_"** : Envoie 4 requêtes ICMP à l'adresse renseignée
 
+**Note** : **-v** entre le ping et l'adresse IP permet d'activer le mode verbose
+
 - **ip "_paramètre_"** : 
     - **route** : Affiche la table de routage
     - **route add "_adresse réseau/masque_" via "_passerelle_"** : Ajoute une entrée dans la table de routage
