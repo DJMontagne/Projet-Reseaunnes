@@ -62,4 +62,15 @@ public class TableARP extends Table {
         }
         return nomInterface;
     }
+
+    public Integer getIndiceIP(String addrIP) {
+
+        Integer indice = null;
+        for (Map.Entry<Integer, String[]> entree : this.table.entrySet()) {
+            if (entree.getValue()[0].equals(addrIP)) {
+                indice = entree.getKey();
+            }
+        }
+        return indice;
+    }
 }

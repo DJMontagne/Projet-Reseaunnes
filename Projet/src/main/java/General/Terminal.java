@@ -161,9 +161,9 @@ public class Terminal {
                     output = "Le cache ARP a été vidé";
                 }
                 else if (input.length == 3 && input[1].equals("-d") && IPValide(input[2]) && !(this.mach instanceof Commutateur)) {
-                    boolean status = this.mach.getTableARP().getTable().containsKey(input[2]);
-                    if (status) {
-                        this.mach.getTableARP().getTable().remove(input[2]);
+                    Integer indice = this.mach.getTableARP().getIndiceIP(input[2]);
+                    if (indice != null) {
+                        this.mach.getTableARP().getTable().remove(indice);
                         output = "L'entrée \"" + input[2] + "\" a été vidé du cache ARP"; 
                     }
                     else {
