@@ -1,4 +1,4 @@
-# Les Réseaunnés
+# Les Réseaunnés (copie du projet depuis un serveur privé github de l'université, certaines instructions peuvent changer)
 
 ## Présentation
 
