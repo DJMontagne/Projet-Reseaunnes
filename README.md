@@ -1,4 +1,5 @@
-# Les Réseaunnés (copie du projet depuis un serveur privé github de l'université, certaines instructions peuvent changer)
+# Les Réseaunnés 
+## Copie du projet depuis un serveur privé github de l'université, certaines instructions peuvent changer
 
 ## Présentation
 
